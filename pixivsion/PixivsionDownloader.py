@@ -72,7 +72,12 @@ class HtmlDownloader(object):
                 data["author_page"] = author_a['href']
                 data["title"] = title_a.text
                 data["image_page"] = title_a["href"]
-                data["image"] = div.find("img", attrs={"class": "am__work__illust "})["src"]
+                image_img = div.find("img", attrs={"class": re.compile("am__work__illust\w*")})
+                if image_img:
+                    data["image"] = image_img["src"]
+                else:
+                    print(data["title"] + ":" + data[
+                        "image_page"] + ":" + "can't find image。please use quality=1 mode download")
                 data = parse_dict(data)
                 datas.append(data)
             except Exception, e:

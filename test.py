@@ -45,10 +45,15 @@ def test_redisFilter():
 
 def test_image_download():
     topics = ImageDownload.get_pixivsion_topics("http://www.pixivision.net/en/c/illustration/?p=1", IMAGE_SVAE_BASEPATH)
-    topic = topics[0]
-    t = DownloadThread(topic.href, topic.save_path, 1)
-    t.start()
+    ts = []
+    for topic in topics:
+        t = DownloadThread(topic.href, topic.save_path, 1)
+        t.start()
+        ts.append(t)
+    for t in ts:
+        t.join()
 
 
 if __name__ == '__main__':
-    test_image_download()
+    html = open("test.html").read()
+    print(HtmlDownloader.parse_illustration(html))

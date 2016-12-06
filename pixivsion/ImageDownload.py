@@ -26,7 +26,7 @@ class ImageDownload(object):
     def download_topics(cls, url, path, quality=2):
         illu_list = HtmlDownloader.parse_illustration(HtmlDownloader.download(url))
         for illu in illu_list:
-            filename = illu.title
+            filename = CommonUtils.filter_dir_name(illu.title)
             extension = os.path.splitext(illu.image)[1]
             id = CommonUtils.get_url_param(illu.image_page, "illust_id")
             if quality == 1:
