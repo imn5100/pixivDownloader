@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import threading
 
 from pixiv_config import IMAGE_QUALITY
 from pixivapi.PixivApi import PixivApi
@@ -22,19 +23,38 @@ class ImageDownload(object):
         return topic_list
 
     @classmethod
-    def download_topics(cls, url, path):
+    def download_topics(cls, url, path, quality=2):
         illu_list = HtmlDownloader.parse_illustration(HtmlDownloader.download(url))
         for illu in illu_list:
             filename = illu.title
             extension = os.path.splitext(illu.image)[1]
             id = CommonUtils.get_url_param(illu.image_page, "illust_id")
-            if IMAGE_QUALITY == 1:
+            if quality == 1:
                 # 通过api获取 插画原图地址，下载原图
                 detail = PixivApi.illust_detail(id)
-                download_url = detail.illust.meta_single_page.original_image_url
-                print(path + "/p_%s_%s%s" % (id, filename, extension))
-                PixivApi.download(download_url, path + "/p_%s_%s%s" % (id, filename, extension))
+                if detail:
+                    if detail.illust.page_count > 1:
+                        print("Illust Detail has other illust:\n Detail:" + str(detail))
+                        print(path + "/p_%s_%s%s" % (id, filename, extension))
+                        PixivApi.download(illu.image, path=path + "/p_%s_%s%s" % (id, filename, extension))
+                    else:
+                        download_url = detail.illust.meta_single_page.original_image_url
+                        print(path + "/p_%s_%s%s" % (id, filename, extension))
+                        PixivApi.download(download_url, path=path + "/p_%s_%s%s" % (id, filename, extension))
+                else:
+                    print(illu.title + " can't get detail id :" + id)
             else:
                 # 直接下载 pixivsion 展示图
                 print(path + "/p_%s_%s%s" % (id, filename, extension))
-                PixivApi.download(download_url, path + "/p_%s_%s%s" % (id, filename, extension))
+                PixivApi.download(illu.image, path=path + "/p_%s_%s%s" % (id, filename, extension))
+
+
+class DownloadThread(threading.Thread):
+    def __init__(self, url, path, quality=2):
+        threading.Thread.__init__(self)
+        self.url = url
+        self.path = path
+        self.quality = quality
+
+    def run(self):
+        ImageDownload.download_topics(self.url, self.path, self.quality)

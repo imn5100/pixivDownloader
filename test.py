@@ -4,7 +4,7 @@ import redis
 
 from pixiv_config import *
 from pixivapi.PixivApi import PixivApi
-from pixivsion.ImageDownload import ImageDownload
+from pixivsion.ImageDownload import ImageDownload, DownloadThread
 from pixivsion.PixivsionDownloader import HtmlDownloader
 from utils.RedisFilter import RedisFilter
 
@@ -44,8 +44,10 @@ def test_redisFilter():
 
 
 def test_image_download():
-    print(
-        ImageDownload.get_pixivsion_topics("http://www.pixivision.net/en/c/illustration/?p=1", IMAGE_SVAE_BASEPATH))
+    topics = ImageDownload.get_pixivsion_topics("http://www.pixivision.net/en/c/illustration/?p=1", IMAGE_SVAE_BASEPATH)
+    topic = topics[0]
+    t = DownloadThread(topic.href, topic.save_path, 1)
+    t.start()
 
 
 if __name__ == '__main__':

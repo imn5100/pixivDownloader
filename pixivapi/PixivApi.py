@@ -28,7 +28,7 @@ class PixivApi(object):
             'illust_id': illust_id
         }
         response = requests.get(url, params, headers=pixiv_config.HEADER, timeout=5)
-        if response.ok:
+        if response.ok and len(response.content) > 10:
             return parse_resp(response)
         else:
             return None

@@ -27,7 +27,7 @@ class DictObj(dict):
 # 将response转换为对象
 def parse_resp(resp):
     try:
-        return parse_json(resp.text)
+        return parse_json(resp.content)
     except Exception as e:
         raise PixivError("parse_json() error: %s" % e, header=resp.headers, body=resp.text)
 
