@@ -1,13 +1,11 @@
 # -*- coding: utf-8 -*-
-import os
-import urlparse
 
 import redis
 
 from pixiv_config import *
 from pixivapi.PixivApi import PixivApi
+from pixivsion.ImageDownload import ImageDownload
 from pixivsion.PixivsionDownloader import HtmlDownloader
-from utils import CommonUtils
 from utils.RedisFilter import RedisFilter
 
 
@@ -17,24 +15,15 @@ def test_pixivsion():
     for topic in topic_list:
         print(topic)
     # 创建特辑文件夹，写入特辑信息。
-    topic = topic_list[0]
-    path = "pixivsion_Col/" + CommonUtils.filter_dir_name(topic.title)
-    if not os.path.exists(path):
-        os.makedirs(path)
-    CommonUtils.write_topic(path + "/topic.txt", topic)
-    href = topic.href
+    href = topic_list[0].href
     illu_list = HtmlDownloader.parse_illustration(HtmlDownloader.download(href))
     for illu in illu_list:
-        filename = illu.title
-        extension = os.path.splitext(illu.image)[1]
-        id = CommonUtils.get_url_param(illu.image_page, "illust_id")
-        print(path + "/p_%s_%s%s" % (id, filename, extension))
-        PixivApi.download(illu.image, path + "/p_%s_%s%s" % (id, filename, extension))
+        print(illu)
 
 
 def test_api():
     detail = PixivApi.illust_detail(54809586)
-    print(detail.illust.meta_single_page.original_image_url)
+    print(detail.illust)
     related = PixivApi.illust_related(54809586)
     print(related)
 
@@ -54,5 +43,10 @@ def test_redisFilter():
     print(rFilter.is_contained(datas[2]))
 
 
+def test_image_download():
+    print(
+        ImageDownload.get_pixivsion_topics("http://www.pixivision.net/en/c/illustration/?p=1", IMAGE_SVAE_BASEPATH))
+
+
 if __name__ == '__main__':
-    test_pixivsion()
+    test_image_download()
