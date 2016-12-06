@@ -15,7 +15,7 @@ def get_url_param(url, param):
 
 
 def filter_dir_name(name):
-    return re.sub('[\/:*?"<>|]', '_', name)
+    return re.sub('[\/:*?"<>.|]', '', name).strip()
 
 
 def write_topic(file_path, topic):
