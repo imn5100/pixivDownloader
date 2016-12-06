@@ -16,3 +16,9 @@ BASE_URL = "http://www.pixivision.net"
 # illust detail url
 ILLUST_DETAIL = "https://app-api.pixiv.net/v1/illust/detail"
 ILLUST_RELATED = 'https://app-api.pixiv.net/v1/illust/related'
+# redis set 过滤器相关设置
+REDIS_IP = "127.0.0.1"
+REDIS_PORT = 6379
+REDIS_FILTER_KEY = "setFilter:Pixivsion"
+#将存储空间分为三块 避免单set过大
+BLOCK_NUM = 3
