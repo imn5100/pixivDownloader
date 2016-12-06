@@ -13,7 +13,7 @@ class HtmlDownloader(object):
         count = 0  # 失败重试次数
         while count <= RETRY_TIME:
             try:
-                r = requests.get(url=url, headers=HEADER, timeout=TIMEOUT)
+                r = requests.get(url=url, headers=CRAWLER_HEADER, timeout=TIMEOUT)
                 r.encoding = encoding
                 if (not r.ok) or len(r.content) < 300:
                     count += 1
@@ -27,7 +27,7 @@ class HtmlDownloader(object):
 
     # 获取pixivsion 插画专题列表
     @classmethod
-    def parse_illustration_list(cls, html):
+    def parse_illustration_topic(cls, html):
         if not html:
             return None
         main = BeautifulSoup(html)

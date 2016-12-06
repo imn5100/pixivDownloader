@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import redis
-from BeautifulSoup import BeautifulSoup
 
 from pixiv_config import *
 from pixivapi.PixivApi import PixivApi
@@ -9,9 +8,13 @@ from utils.RedisFilter import RedisFilter
 
 
 def test_pixivsion():
-    banner_list = HtmlDownloader.parse_illustration_list(HtmlDownloader.download(BASE_URL))
-    print(banner_list)
-    print(banner_list[0].href)
+    topic_list = HtmlDownloader.parse_illustration_topic(HtmlDownloader.download(BASE_URL))
+    for topic in topic_list:
+        print(topic)
+    href = topic_list[0].href
+    illu_list = HtmlDownloader.parse_illustration(HtmlDownloader.download(href))
+    for illu in illu_list:
+        print(illu)
 
 
 def test_api():
@@ -37,4 +40,4 @@ def test_redisFilter():
 
 
 if __name__ == '__main__':
-    test_redisFilter()
+    test_pixivsion()

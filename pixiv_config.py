@@ -4,12 +4,25 @@
 TIMEOUT = 5
 # 失败重试次数
 RETRY_TIME = 3
-# 爬虫及api请求头
+# api请求头
 HEADER = {
     'App-OS': 'ios',
     'App-OS-Version': '9.3.3',
     'App-Version': '6.0.9',
     'User-Agent': 'PixivIOSApp/6.0.9 (iOS 9.3.3; iPhone8,1)',
+}
+# 爬虫请求头
+CRAWLER_HEADER = {
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    # Pixivsion 支持多语言，可以通过改变 Accept-Language  改变获取的插画专题描述语言。
+    # ja  日文
+    # zh 中文
+    # en 或留空 英文
+    'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
+    'Connection': 'keep-alive',
+    'Accept-Encoding': 'gzip, deflate',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36',
+    'Referer': 'http://www.pixivision.net'
 }
 # pixivision 网址
 BASE_URL = "http://www.pixivision.net"
@@ -20,5 +33,5 @@ ILLUST_RELATED = 'https://app-api.pixiv.net/v1/illust/related'
 REDIS_IP = "127.0.0.1"
 REDIS_PORT = 6379
 REDIS_FILTER_KEY = "setFilter:Pixivsion"
-#将存储空间分为三块 避免单set过大
+# 将存储空间分为三块 避免单set过大
 BLOCK_NUM = 3
