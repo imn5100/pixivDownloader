@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import redis
+from BeautifulSoup import BeautifulSoup
 
 from pixiv_config import *
 from pixivapi.PixivApi import PixivApi

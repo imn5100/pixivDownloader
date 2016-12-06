@@ -33,7 +33,7 @@ def parse_resp(resp):
 
 
 # 将dict 转换为对象
-def parse_obj(data_dict):
+def parse_dict(data_dict):
     o = DictObj()
     for k, v in data_dict.items():
         o[str(k)] = v
@@ -42,4 +42,4 @@ def parse_obj(data_dict):
 
 # 将json串转换为对象
 def parse_json(json_str):
-    return json.loads(json_str, object_hook=parse_obj)
+    return json.loads(json_str, object_hook=parse_dict)

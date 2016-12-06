@@ -4,7 +4,7 @@ import requests
 from pixiv_config import *
 from BeautifulSoup import BeautifulSoup
 
-from pixivapi.PixivUtils import parse_obj
+from pixivapi.PixivUtils import parse_dict
 
 
 class HtmlDownloader(object):
@@ -25,6 +25,7 @@ class HtmlDownloader(object):
                 continue
         return None
 
+    # 获取pixivsion 插画专题列表
     @classmethod
     def parse_illustration_list(cls, html):
         if not html:
@@ -44,20 +45,24 @@ class HtmlDownloader(object):
                 tags = li.findAll("div", attrs={"class": "tls__list-item small"})
                 for tag in tags:
                     data["tags"].append(tag.text)
-                data = parse_obj(data)
+                data = parse_dict(data)
                 datas.append(data)
             except Exception, e:
                 print(e.message)
                 continue
         return datas
 
+    # 获取专题中的 插画列表
     @classmethod
     def parse_illustration(cls, html):
         if not html:
             return None
         main = BeautifulSoup(html)
-        divs = main.findAll("div", attrs={"class": re.compile('am__work gtm__illust-collection-illusts-\d*')})
         datas = []
+        title_data = HtmlDownloader.find_title_image(main)
+        if title_data:
+            datas.append(title_data)
+        divs = main.findAll("div", attrs={"class": re.compile('am__work gtm__illust-collection-illusts-\d*')})
         for div in divs:
             try:
                 data = {}
@@ -68,9 +73,28 @@ class HtmlDownloader(object):
                 data["title"] = title_a.text
                 data["image_page"] = title_a["href"]
                 data["image"] = div.find("img", attrs={"class": "am__work__illust "})["src"]
-                data = parse_obj(data)
+                data = parse_dict(data)
                 datas.append(data)
             except Exception, e:
                 print(e.message)
                 continue
         return datas
+
+    # 用于标题展示的插画需要单独获取
+    @classmethod
+    def find_title_image(cls, main):
+        try:
+            aie_info = main.find("div", attrs={"class": "aie__icon-title-container"})
+            data = {"image": aie_info.find("img", attrs={"class": "aie__uesr-icon"})["src"]}
+            user_container = aie_info.find("div", attrs={"class": "aie__title-user-name-container"})
+            image_a = user_container.find("p", attrs={"class": "aie__title"}).find("a")
+            data["image_page"] = image_a['href']
+            data["title"] = image_a.text
+            user_a = user_container.find("p", attrs={"class": "aie__user-name"}).find("a")
+            data["author_page"] = user_a["href"]
+            data["author"] = user_a.text
+            data = parse_dict(data)
+            return data
+        except Exception, e:
+            print(e)
+            return None

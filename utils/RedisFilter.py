@@ -31,8 +31,8 @@ class RedisFilter(object):
     def block_index(cls, value, block_num=3):
         if BLOCK_NUM:
             block_num = BLOCK_NUM
-        return str(hash(value) % block_num + 1)
+        return hash(value) % block_num + 1
 
     @classmethod
     def get_key(cls, value):
-        return REDIS_FILTER_KEY + RedisFilter.block_index(value)
+        return REDIS_FILTER_KEY + str(RedisFilter.block_index(value))
