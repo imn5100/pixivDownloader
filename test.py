@@ -1,20 +1,35 @@
 # -*- coding: utf-8 -*-
+import os
+import urlparse
+
 import redis
 
 from pixiv_config import *
 from pixivapi.PixivApi import PixivApi
 from pixivsion.PixivsionDownloader import HtmlDownloader
+from utils import CommonUtils
 from utils.RedisFilter import RedisFilter
 
 
 def test_pixivsion():
-    topic_list = HtmlDownloader.parse_illustration_topic(HtmlDownloader.download(BASE_URL))
+    topic_list = HtmlDownloader.parse_illustration_topic(
+            HtmlDownloader.download("http://www.pixivision.net/en/c/illustration/?p=1"))
     for topic in topic_list:
         print(topic)
-    href = topic_list[0].href
+    # 创建特辑文件夹，写入特辑信息。
+    topic = topic_list[0]
+    path = "pixivsion_Col/" + CommonUtils.filter_dir_name(topic.title)
+    if not os.path.exists(path):
+        os.makedirs(path)
+    CommonUtils.write_topic(path + "/topic.txt", topic)
+    href = topic.href
     illu_list = HtmlDownloader.parse_illustration(HtmlDownloader.download(href))
     for illu in illu_list:
-        print(illu)
+        filename = illu.title
+        extension = os.path.splitext(illu.image)[1]
+        id = CommonUtils.get_url_param(illu.image_page, "illust_id")
+        print(path + "/p_%s_%s%s" % (id, filename, extension))
+        PixivApi.download(illu.image, path + "/p_%s_%s%s" % (id, filename, extension))
 
 
 def test_api():

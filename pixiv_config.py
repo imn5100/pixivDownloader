@@ -17,8 +17,8 @@ CRAWLER_HEADER = {
     # Pixivsion 支持多语言，可以通过改变 Accept-Language  改变获取的插画专题描述语言。
     # ja  日文
     # zh 中文
-    # en 或留空 英文
-    'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
+    # en 或空或其他无法解析语言 英文
+    'Accept-Language': 'zh',
     'Connection': 'keep-alive',
     'Accept-Encoding': 'gzip, deflate',
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36',
@@ -26,6 +26,8 @@ CRAWLER_HEADER = {
 }
 # pixivision 网址
 BASE_URL = "http://www.pixivision.net"
+# 拉取插画专题 url
+LINK_URL = "http://www.pixivision.net/en/c/illustration/?p=%s"
 # illust detail url
 ILLUST_DETAIL = "https://app-api.pixiv.net/v1/illust/detail"
 ILLUST_RELATED = 'https://app-api.pixiv.net/v1/illust/related'
