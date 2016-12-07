@@ -30,7 +30,7 @@ if __name__ == '__main__':
     elif download_type == 2:
         while True:
             url = raw_input('请输入需要下载的连接:\n')
-            if re.match("http://www.pixivision.net/(zh|ja|en)/a/\d*", url.strip()):
+            if re.match("http://www.pixivision.net/(zh|ja|en|zh-tw)/a/\d*", url.strip()):
                 break
             else:
                 print ("输入连接不支持，请输入Pixivision 站特辑网址")

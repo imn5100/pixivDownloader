@@ -16,7 +16,8 @@ CRAWLER_HEADER = {
     'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
     # Pixivision 支持多语言，可以通过改变 Accept-Language  改变获取的插画专题描述语言。
     # ja  日文
-    # zh 中文
+    # zh 中文简体
+    # zh-tw 中文繁体
     # en 或空或其他无法解析语言 英文
     'Accept-Language': 'zh',
     'Connection': 'keep-alive',
