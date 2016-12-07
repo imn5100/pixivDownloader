@@ -4,8 +4,8 @@ import redis
 
 from pixiv_config import *
 from pixivapi.PixivApi import PixivApi
-from pixivsion.ImageDownload import ImageDownload, IlluDownloadThread
-from pixivsion.PixivisionDownloader import HtmlDownloader
+from pixivision.ImageDownload import ImageDownload, IlluDownloadThread
+from pixivision.PixivisionDownloader import HtmlDownloader
 from utils.RedisFilter import RedisFilter
 
 

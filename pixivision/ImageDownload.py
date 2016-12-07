@@ -4,7 +4,7 @@ import threading
 
 from pixiv_config import IMAGE_SVAE_BASEPATH
 from pixivapi.PixivApi import PixivApi
-from pixivsion.PixivisionDownloader import HtmlDownloader
+from pixivision.PixivisionDownloader import HtmlDownloader
 from utils import CommonUtils
 
 
@@ -40,7 +40,7 @@ class ImageDownload(object):
                     else:
                         print(illu.title + " can't get detail id :" + id)
                 else:
-                    # 直接下载 pixivsion 展示图
+                    # 直接下载 pixivision 展示图
                     print(path + "/p_%s_%s%s" % (id, filename, extension))
                     PixivApi.download(illu.image, path=path + "/p_%s_%s%s" % (id, filename, extension))
             except Exception, e:

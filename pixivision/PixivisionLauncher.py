@@ -2,7 +2,7 @@
 import threading
 
 from pixiv_config import *
-from pixivsion.ImageDownload import ImageDownload, IlluDownloadThread
+from pixivision.ImageDownload import ImageDownload, IlluDownloadThread
 
 
 class PixivisionLauncher(threading.Thread):
