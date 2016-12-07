@@ -2,14 +2,15 @@
 import os
 import threading
 
+from pixiv_config import IMAGE_SVAE_BASEPATH
 from pixivapi.PixivApi import PixivApi
-from pixivsion.PixivsionDownloader import HtmlDownloader
+from pixivsion.PixivisionDownloader import HtmlDownloader
 from utils import CommonUtils
 
 
 class ImageDownload(object):
     @classmethod
-    def get_pixivsion_topics(cls, url, path):
+    def get_pixivision_topics(cls, url, path):
         topic_list = HtmlDownloader.parse_illustration_topic(HtmlDownloader.download(url))
         for topic in topic_list:
             # 创建特辑文件夹，写入特辑信息。
@@ -22,7 +23,7 @@ class ImageDownload(object):
         return topic_list
 
     @classmethod
-    def download_topics(cls, url, path, quality=2):
+    def download_topics(cls, url, path, quality=1):
         illu_list = HtmlDownloader.parse_illustration(HtmlDownloader.download(url))
         for illu in illu_list:
             try:
@@ -43,7 +44,7 @@ class ImageDownload(object):
                     print(path + "/p_%s_%s%s" % (id, filename, extension))
                     PixivApi.download(illu.image, path=path + "/p_%s_%s%s" % (id, filename, extension))
             except Exception, e:
-                print("Download Illu Fail:" + e.message + " Illustration :" + str(illu))
+                print("Download Illu Fail:" + e + " Illustration :" + str(illu))
                 continue
 
     @classmethod
@@ -74,8 +75,8 @@ class ImageDownload(object):
         return download_url
 
 
-class DownloadThread(threading.Thread):
-    def __init__(self, url, path, quality=2):
+class IlluDownloadThread(threading.Thread):
+    def __init__(self, url, path=IMAGE_SVAE_BASEPATH, quality=1):
         threading.Thread.__init__(self, name="Download-" + url)
         self.url = url
         self.path = path

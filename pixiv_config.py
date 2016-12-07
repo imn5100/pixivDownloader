@@ -38,7 +38,7 @@ REDIS_FILTER_KEY = "setFilter:Pixivsion"
 # 将存储空间分为三块 避免单set过大
 BLOCK_NUM = 3
 
-# Image quality  图片质量 1 最高级，使用api下载原图 2 pixivsion 展示用图
+# Image quality  图片质量 1 最高级，使用api下载原图(找不到原图会下载大图，找不到大图下载展示图) 2 pixivsion 展示用图
 IMAGE_QUALITY = 1
 # 存储插画的基本目录
 IMAGE_SVAE_BASEPATH = "z_pixivsion_download"
