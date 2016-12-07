@@ -88,6 +88,13 @@ class ImageDownload(object):
             else:
                 print("can't get detail id:" + id)
 
+    @classmethod
+    def download_byurl(cls, url):
+        if CommonUtils.get_url_param(url, "illust_id"):
+            ImageDownload.download_image_byid(id)
+        else:
+            PixivApi.download(url.strip())
+
 
 class IlluDownloadThread(threading.Thread):
     def __init__(self, url, path=IMAGE_SVAE_BASEPATH, quality=1):

@@ -41,13 +41,9 @@ if __name__ == '__main__':
                            quality=pixiv_config.IMAGE_QUALITY).start()
     elif download_type == 3:
         url = str(raw_input("请输入Pixiv图片url:")).strip()
-        id = CommonUtils.get_url_param(url, "illust_id")
-        if id:
-            ImageDownload.download_image_byid(id)
-            print("下载完成")
-        else:
-            PixivApi.download(url.strip())
-            print("下载完成:" + os.path.abspath(os.path.basename(url)))
+        ImageDownload.download_byurl(url)
+        print("下载完成")
     elif download_type == 4:
         id = int(raw_input("请输入Pixiv插画ID:"))
         ImageDownload.download_image_byid(id)
+        print("下载完成")
