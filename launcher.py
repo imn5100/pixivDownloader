@@ -6,6 +6,7 @@ import pixiv_config
 from pixivapi.PixivApi import PixivApi
 from pixivision.ImageDownload import IlluDownloadThread, ImageDownload
 from pixivision.PixivisionLauncher import PixivisionLauncher
+from utils import CommonUtils
 
 
 def set_int(intNum):
@@ -39,9 +40,14 @@ if __name__ == '__main__':
         IlluDownloadThread(url.strip(), path=pixiv_config.IMAGE_SVAE_BASEPATH,
                            quality=pixiv_config.IMAGE_QUALITY).start()
     elif download_type == 3:
-        url = raw_input("请输入Pixiv图片url:")
-        PixivApi.download(url.strip())
-        print("下载完成:" + os.path.abspath(os.path.basename(url.strip())))
+        url = str(raw_input("请输入Pixiv图片url:")).strip()
+        id = CommonUtils.get_url_param(url, "illust_id")
+        if id:
+            ImageDownload.download_image_byid(id)
+            print("下载完成")
+        else:
+            PixivApi.download(url.strip())
+            print("下载完成:" + os.path.abspath(os.path.basename(url)))
     elif download_type == 4:
         id = int(raw_input("请输入Pixiv插画ID:"))
         ImageDownload.download_image_byid(id)

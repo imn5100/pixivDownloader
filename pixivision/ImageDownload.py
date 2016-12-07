@@ -78,9 +78,13 @@ class ImageDownload(object):
     def download_image_byid(cls, id):
         if id:
             detail = PixivApi.illust_detail(id)
+            print(detail)
             if detail:
                 download_url = ImageDownload.get_image_url(None, detail)
-                PixivApi.download(download_url)
+                if download_url:
+                    PixivApi.download(download_url)
+                else:
+                    print("download by id fail,can't find download url")
             else:
                 print("can't get detail id:" + id)
 
