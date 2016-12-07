@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import re
+
 import requests
-from pixiv_config import *
 from BeautifulSoup import BeautifulSoup
 
+from pixiv_config import *
 from pixivapi.PixivUtils import parse_dict
 
 

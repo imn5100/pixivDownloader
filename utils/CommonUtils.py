@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 import codecs
 import os
-import urlparse
-
 import re
+import urlparse
 
 
 def get_url_param(url, param):
