@@ -9,7 +9,7 @@ from pixivision.PixivisionDownloader import HtmlDownloader
 from utils.RedisFilter import RedisFilter
 
 
-def test_pixivsion():
+def test_pixivision():
     topic_list = HtmlDownloader.parse_illustration_topic(
             HtmlDownloader.download("http://www.pixivision.net/en/c/illustration/?p=1"))
     for topic in topic_list:

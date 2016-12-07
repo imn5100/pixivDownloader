@@ -26,7 +26,7 @@ class HtmlDownloader(object):
                 continue
         return None
 
-    # 获取pixivsion 插画专题列表
+    # 获取pixivision 插画专题列表
     @classmethod
     def parse_illustration_topic(cls, html):
         if not html:

@@ -1,3 +1,3 @@
-# pixivsion_pixivapi
-Pixiv Api For Pixivsion And Crawler.
+# pixivision_pixivapi
+Pixiv Api For Pixivision And Crawler.
 
