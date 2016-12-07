@@ -48,7 +48,7 @@ class HtmlDownloader(object):
                 data = parse_dict(data)
                 datas.append(data)
             except Exception, e:
-                print(e.message)
+                print("Get Topics Warning" + e.message)
                 continue
         return datas
 
@@ -63,6 +63,9 @@ class HtmlDownloader(object):
         if title_data:
             datas.append(title_data)
         divs = main.findAll("div", attrs={"class": re.compile('am__work gtm__illust-collection-illusts-\d*')})
+        # 适配某些专题页面
+        if not divs:
+            divs = main.findAll("div", attrs={"class": "am__work"})
         for div in divs:
             try:
                 data = {}
@@ -73,6 +76,9 @@ class HtmlDownloader(object):
                 data["title"] = title_a.text
                 data["image_page"] = title_a["href"]
                 image_img = div.find("img", attrs={"class": re.compile("am__work__illust\w*")})
+                # 适配动图
+                if not image_img:
+                    image_img = div.find("img", attrs={"class": "ugoira-poster"})
                 if image_img:
                     data["image"] = image_img["src"]
                 else:
@@ -81,11 +87,11 @@ class HtmlDownloader(object):
                 data = parse_dict(data)
                 datas.append(data)
             except Exception, e:
-                print(e.message)
+                print("Parse illustrations Warning:" + e.message)
                 continue
         return datas
 
-    # 用于标题展示的插画需要单独获取
+    # 用于标题展示的插画需要单独获取,某些专题没有该部分，忽视
     @classmethod
     def find_title_image(cls, main):
         try:
@@ -101,5 +107,5 @@ class HtmlDownloader(object):
             data = parse_dict(data)
             return data
         except Exception, e:
-            print(e)
+            print("Get topic Title Warning:" + e.message)
             return None

@@ -54,6 +54,10 @@ def test_image_download():
         t.join()
 
 
-if __name__ == '__main__':
+def test_html_parse_byfile():
     html = open("test.html").read()
     print(HtmlDownloader.parse_illustration(html))
+
+
+if __name__ == '__main__':
+    test_image_download()

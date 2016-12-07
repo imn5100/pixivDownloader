@@ -51,7 +51,7 @@ class ImageDownload(object):
 
 class DownloadThread(threading.Thread):
     def __init__(self, url, path, quality=2):
-        threading.Thread.__init__(self)
+        threading.Thread.__init__(self, name="Download-" + url)
         self.url = url
         self.path = path
         self.quality = quality
