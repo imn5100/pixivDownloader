@@ -74,6 +74,16 @@ class ImageDownload(object):
         print("Download " + show_msg[flag])
         return download_url
 
+    @classmethod
+    def download_image_byid(cls, id):
+        if id:
+            detail = PixivApi.illust_detail(id)
+            if detail:
+                download_url = ImageDownload.get_image_url(None, detail)
+                PixivApi.download(download_url)
+            else:
+                print("can't get detail id:" + id)
+
 
 class IlluDownloadThread(threading.Thread):
     def __init__(self, url, path=IMAGE_SVAE_BASEPATH, quality=1):
