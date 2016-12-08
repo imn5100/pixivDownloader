@@ -44,7 +44,8 @@ class ImageDownload(object):
                     print(path + "/p_%s_%s%s" % (id, filename, extension))
                     PixivApi.download(illu.image, path=path + "/p_%s_%s%s" % (id, filename, extension))
             except Exception, e:
-                print("Download Illu Fail:" + e + " Illustration :" + str(illu))
+                print("Download Illu Fail:" + " Illustration :" + str(illu))
+                print(e)
                 continue
 
     @classmethod
@@ -86,7 +87,7 @@ class ImageDownload(object):
                 else:
                     print("download by id fail,can't find download url")
             else:
-                print("can't get detail id:" + id)
+                print("can't get detail id:" + str(id))
 
     @classmethod
     def download_byurl(cls, url):
@@ -104,4 +105,6 @@ class IlluDownloadThread(threading.Thread):
         self.quality = quality
 
     def run(self):
+        if not os.path.exists(self.path):
+            os.makedirs(self.path)
         ImageDownload.download_topics(self.url, self.path, self.quality)

@@ -49,7 +49,8 @@ class HtmlDownloader(object):
                 data = parse_dict(data)
                 datas.append(data)
             except Exception, e:
-                print("Get Topics Warning" + e.message)
+                print("Get Topics Warning")
+                print(e)
                 continue
         return datas
 
@@ -88,7 +89,8 @@ class HtmlDownloader(object):
                 data = parse_dict(data)
                 datas.append(data)
             except Exception, e:
-                print("Parse illustrations Warning:" + e.message)
+                print("Parse illustrations Warning:")
+                print(e)
                 continue
         return datas
 
@@ -108,5 +110,6 @@ class HtmlDownloader(object):
             data = parse_dict(data)
             return data
         except Exception, e:
-            print("Get topic Title Warning:" + e.message)
+            print("Get topic Title Warning:")
+            print(e)
             return None
