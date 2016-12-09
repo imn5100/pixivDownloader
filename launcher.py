@@ -27,7 +27,6 @@ def main_for_zh():
         url = pixiv_config.LINK_URL % page_index
         print("充能ing...")
         PixivisionLauncher(url, save_path=pixiv_config.IMAGE_SVAE_BASEPATH, quality=pixiv_config.IMAGE_QUALITY).start()
-        print("下载结束")
     elif download_type == 2:
         while True:
             url = raw_input('请输入需要下载的链接:\n')
@@ -39,15 +38,12 @@ def main_for_zh():
         print("充能ing...")
         IlluDownloadThread(url.strip(), path=pixiv_config.IMAGE_SVAE_BASEPATH,
                            quality=pixiv_config.IMAGE_QUALITY).start()
-        print("下载完成")
     elif download_type == 3:
         url = str(raw_input("请输入Pixiv图片url:")).strip()
         ImageDownload.download_byurl(url)
-        print("下载结束")
     elif download_type == 4:
         id = int(raw_input("请输入Pixiv插画ID:"))
         ImageDownload.download_image_byid(id)
-        print("下载结束")
     else:
         print("退出!")
         return
@@ -72,7 +68,6 @@ def main_for_en():
         url = pixiv_config.LINK_URL % page_index
         print("Charging...")
         PixivisionLauncher(url, save_path=pixiv_config.IMAGE_SVAE_BASEPATH, quality=pixiv_config.IMAGE_QUALITY).start()
-        print("Download Ends")
     elif download_type == 2:
         while True:
             url = raw_input('Please enter a Pixivision URL to download:\n')
@@ -85,7 +80,6 @@ def main_for_en():
         print("Charging...")
         IlluDownloadThread(url.strip(), path=pixiv_config.IMAGE_SVAE_BASEPATH,
                            quality=pixiv_config.IMAGE_QUALITY).start()
-        print("Download Ends")
     elif download_type == 3:
         url = str(raw_input("Please enter the Pixiv image url:")).strip()
         ImageDownload.download_byurl(url)
@@ -93,7 +87,6 @@ def main_for_en():
     elif download_type == 4:
         id = int(raw_input("Please enter a Pixiv illustration ID:"))
         ImageDownload.download_image_byid(id)
-        print("Download Ends")
     else:
         print("Exit!")
         return

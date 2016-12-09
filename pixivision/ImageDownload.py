@@ -2,13 +2,43 @@
 import os
 import threading
 
-from pixiv_config import IMAGE_SVAE_BASEPATH
+import redis
+
+from pixiv_config import IMAGE_SVAE_BASEPATH, USE_FILTER, REDIS_IP, REDIS_PORT
 from pixivapi.PixivApi import PixivApi
 from pixivision.PixivisionDownloader import HtmlDownloader
 from utils import CommonUtils
+from utils.RedisFilter import RedisFilter
+
+
+# redis filter 过滤装饰器 过滤已下载过的链接
+def redisFilterDecp(r=None):
+    def _deco(func):
+        def new_fun(cls, url, save_path, quality):
+            if USE_FILTER:
+                redis_filter = RedisFilter(r)
+                if not redis_filter.is_contained(url):
+                    rt = func(cls, url, save_path, quality)
+                    redis_filter.add(url)
+                    print("Redis Filter Add url success: " + url)
+                    return rt
+                else:
+                    print("The URL has been filtered: " + url)
+            else:
+                return func(cls, url, save_path, quality)
+
+        return new_fun
+
+    return _deco
 
 
 class ImageDownload(object):
+    # redis 连接只需要一个，在类中共享
+    if USE_FILTER:
+        r = redis.Redis(REDIS_IP, REDIS_PORT)
+    else:
+        r = None
+
     @classmethod
     def get_pixivision_topics(cls, url, path):
         topic_list = HtmlDownloader.parse_illustration_topic(HtmlDownloader.download(url))
@@ -23,8 +53,11 @@ class ImageDownload(object):
         return topic_list
 
     @classmethod
+    @redisFilterDecp(r)
     def download_topics(cls, url, path, quality=1):
         illu_list = HtmlDownloader.parse_illustration(HtmlDownloader.download(url))
+        if not illu_list:
+            return
         for illu in illu_list:
             try:
                 filename = CommonUtils.filter_dir_name(illu.title)

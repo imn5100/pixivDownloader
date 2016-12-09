@@ -38,6 +38,7 @@ REDIS_PORT = 6379
 REDIS_FILTER_KEY = "setFilter:Pixivision"
 # 将存储空间分为三块 避免单set过大
 BLOCK_NUM = 3
+USE_FILTER = False
 
 # Image quality  图片质量 1 最高级，使用api下载原图(找不到原图会下载大图，找不到大图下载展示图) 2 pixivision 展示用图
 IMAGE_QUALITY = 1
