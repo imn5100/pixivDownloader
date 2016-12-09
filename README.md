@@ -14,6 +14,7 @@
      修改__CRAWLER_HEADER__中__Accept-Language__，获取4中不同语言的特辑描述。<br>
      修改__IMAGE_SVAE_BASEPATH__，指定图片存储位置。<br>
      修改__IMAGE_QUALITY__，指定下载的图片质量。<br>
+       修改__USE_FILTER__,True时，启动RedisFilter，自动过滤重复下载的特辑，为False时会重复下载会覆盖原文件。<br>
 ~~~
 python launcher.py
 ~~~
