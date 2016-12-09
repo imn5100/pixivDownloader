@@ -5,16 +5,17 @@
 * 项目主要用于 Pixivision的插画特辑信息爬取和图片下载<br>
 	支持图片质量：普通图和原图|大图下载<br>
       	支持以下下载方式：<br>
-          Pixivision插画特辑列表页<br>
-          Pixivision插画特辑详情页<br>
-          Pixiv插画url<br>
-          Pixiv插画ID<br>
+          1.  Pixivision插画特辑列表页<br>
+          2.  Pixivision插画特辑详情页<br>
+          3.  Pixiv插画url<br>
+          4.  Pixiv插画ID<br>
  
 * 核心配置文件__pixiv_config.py__<br>
-     修改__CRAWLER_HEADER__中__Accept-Language__，获取4中不同语言的特辑描述。<br>
-     修改__IMAGE_SVAE_BASEPATH__，指定图片存储位置。<br>
-     修改__IMAGE_QUALITY__，指定下载的图片质量。<br>
-       修改__USE_FILTER__,True时，启动RedisFilter，自动过滤重复下载的特辑，为False时会重复下载会覆盖原文件。<br>
+     1.  修改__CRAWLER_HEADER__中__Accept-Language__，获取4中不同语言的特辑描述。<br>
+     2.  修改__IMAGE_SVAE_BASEPATH__，指定图片存储位置。<br>
+     3.  修改__IMAGE_QUALITY__，指定下载的图片质量。<br>
+     4.  修改__USE_FILTER__,True时，启动RedisFilter，自动过滤重复下载的特辑，为False时会重复下载会覆盖原文件。<br>
+     
 ~~~
 python launcher.py
 ~~~
