@@ -118,8 +118,8 @@ class HtmlDownloader(object):
     def get_title(cls, html):
         try:
             main = BeautifulSoup(html)
-            data = {"title": main.find("h1", attrs={"class": "am__title "}).text}
-            data["description"] = main.find("meta", attrs={"name": "description"})["content"]
+            data = {"title": main.find("meta", attrs={"property": "og:title"})["content"],
+                    "description": main.find("meta", attrs={"name": "description"})["content"]}
             return data
         except Exception, e:
             print("Get topic Title and description Fail")
