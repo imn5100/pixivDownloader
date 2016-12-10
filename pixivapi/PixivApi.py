@@ -3,7 +3,7 @@ import os
 import shutil
 
 import requests
-
+import time
 import pixiv_config
 from PixivUtils import *
 
@@ -27,11 +27,19 @@ class PixivApi(object):
             'include_stats': 'true',
             'illust_id': illust_id
         }
-        response = requests.get(url, params, headers=pixiv_config.HEADER, timeout=5)
-        if response.ok and len(response.content) > 10:
-            return parse_resp(response)
-        else:
-            return None
+        count = 0  # 失败重试次数
+        while count <= pixiv_config.RETRY_TIME:
+            try:
+                response = requests.get(url, params, headers=pixiv_config.HEADER, timeout=8)
+                if response.ok and len(response.content) > 10:
+                    return parse_resp(response)
+                else:
+                    return None
+            # 多线程请求，容易被拒绝设置重试三次，每次重试间隔2s
+            except Exception:
+                time.sleep(2)
+                count += 1
+                continue
 
     # 获取关联作品
     @classmethod
