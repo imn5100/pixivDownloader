@@ -15,7 +15,14 @@
      2. 修改__IMAGE_SVAE_BASEPATH__，指定图片存储位置。<br>
      3. 修改__IMAGE_QUALITY__，指定下载的图片质量。<br>
      4. 修改__USE_FILTER__，True：启动RedisFilter，自动过滤重复下载的特辑。False:重复下载特辑会覆盖原文件。<br>
-     
+
+运行：
 ~~~
-python launcher.py
+python  launcher.py 
 ~~~
+启动Pixivision全站爬虫(需配置Pixivision总页数pixiv_config.PAGE_NUM):
+~~~
+python launcher_plus.py
+~~~
+
+PS:因网络问题，下载失败很难避免。运行完毕后，若有提示下载失败的插画，可以通过查看download_error.log文件获取下载失败的插画详情。运行launcher.py 使用url或ID下载。
