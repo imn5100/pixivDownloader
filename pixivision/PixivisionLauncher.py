@@ -17,13 +17,13 @@ def start(url, save_path=IMAGE_SVAE_BASEPATH, quality=1):
 
 
 class PixivisionLauncher(threading.Thread):
+    def run(self):
+        start(self.url, save_path=self.save_path, quality=self.quality)
+
     def __init__(self, url, save_path=IMAGE_SVAE_BASEPATH, quality=1):
         threading.Thread.__init__(self, name="PisivisionLauncher_" + url)
         self.url = url
         self.save_path = save_path
         self.quality = quality
-
-    def run(self):
-        start(self.url, save_path=self.save_path, quality=self.quality)
 
 

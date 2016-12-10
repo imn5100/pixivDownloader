@@ -3,7 +3,7 @@ import logging
 import sys
 
 formatter = logging.Formatter('%(name)-12s %(asctime)s %(levelname)-8s %(message)s', '%a, %d %b %Y %H:%M:%S', )
-file_handler = logging.FileHandler("test.log")
+file_handler = logging.FileHandler("download_error.log")
 file_handler.setFormatter(formatter)
 stream_handler = logging.StreamHandler(sys.stderr)
 download_fail_logger = logging.getLogger("Download_Fail")

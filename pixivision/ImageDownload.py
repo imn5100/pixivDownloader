@@ -6,6 +6,7 @@ from pixiv_config import IMAGE_SVAE_BASEPATH, USE_FILTER, REDIS_IP, REDIS_PORT
 from pixivapi.PixivApi import PixivApi
 from pixivision.PixivisionDownloader import HtmlDownloader
 from utils import CommonUtils
+from utils.LoggerUtil import error_log
 
 
 # redis filter 过滤装饰器 过滤已下载过的链接
@@ -84,8 +85,8 @@ class ImageDownload(object):
                     print(path + "/p_%s_%s%s" % (id, filename, extension))
                     PixivApi.download(illu.image, path=path + "/p_%s_%s%s" % (id, filename, extension))
             except Exception, e:
-                print("Download Illu Fail:" + " Illustration :" + str(illu))
-                print(e)
+                error_log("Download Illu Fail:" + " Illustration :" + str(illu))
+                error_log(e)
                 continue
 
     @classmethod
@@ -149,7 +150,7 @@ class IlluDownloadThread(threading.Thread):
             try:
                 os.makedirs(self.path)
             except Exception, e:
-                print("make dir Fail:" + self.path)
-                print(e)
+                error_log("make dir Fail:" + self.path)
+                error_log(e)
                 return
         ImageDownload.download_topics(self.url, self.path, self.quality)
