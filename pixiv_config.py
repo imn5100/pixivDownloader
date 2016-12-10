@@ -29,6 +29,8 @@ CRAWLER_HEADER = {
 BASE_URL = "http://www.pixivision.net"
 # 拉取插画专题 url
 LINK_URL = "http://www.pixivision.net/en/c/illustration/?p=%s"
+# Pixivision全站总页数,用于全站爬取 2016/12/10
+PAGE_NUM = 62
 # illust detail url
 ILLUST_DETAIL = "https://app-api.pixiv.net/v1/illust/detail"
 ILLUST_RELATED = 'https://app-api.pixiv.net/v1/illust/related'
