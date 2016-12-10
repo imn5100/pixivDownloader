@@ -2,13 +2,10 @@
 import os
 import threading
 
-import redis
-
 from pixiv_config import IMAGE_SVAE_BASEPATH, USE_FILTER, REDIS_IP, REDIS_PORT
 from pixivapi.PixivApi import PixivApi
 from pixivision.PixivisionDownloader import HtmlDownloader
 from utils import CommonUtils
-from utils.RedisFilter import RedisFilter
 
 
 # redis filter 过滤装饰器 过滤已下载过的链接
@@ -16,6 +13,7 @@ def redisFilterDecp(r=None):
     def _deco(func):
         def new_fun(cls, url, save_path, quality):
             if USE_FILTER:
+                from utils.RedisFilter import RedisFilter
                 redis_filter = RedisFilter(r)
                 if not redis_filter.is_contained(url):
                     rt = func(cls, url, save_path, quality)
@@ -35,6 +33,7 @@ def redisFilterDecp(r=None):
 class ImageDownload(object):
     # redis 连接只需要一个，在类中共享
     if USE_FILTER:
+        import redis
         r = redis.Redis(REDIS_IP, REDIS_PORT)
     else:
         r = None
