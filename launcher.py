@@ -35,9 +35,9 @@ def main_for_zh():
             else:
                 print ("输入连接不支持，请输入Pixivision 站特辑网址。栗子:http://www.pixivision.net/zh/a/1906 ")
                 continue
+        save_path = raw_input("请输入有效存储路径：\n")
         print("充能ing...")
-        IlluDownloadThread(url.strip(), path=pixiv_config.IMAGE_SVAE_BASEPATH,
-                           quality=pixiv_config.IMAGE_QUALITY).start()
+        IlluDownloadThread(url.strip(), path=save_path, quality=pixiv_config.IMAGE_QUALITY).start()
     elif download_type == 3:
         url = str(raw_input("请输入Pixiv图片url:")).strip()
         ImageDownload.download_byurl(url)
@@ -77,9 +77,9 @@ def main_for_en():
                 print (
                     "The input URL is not supported, enter the Pixivision Station URL,Example:http://www.pixivision.net/en/a/1906 ")
                 continue
+        save_path = raw_input("Please enter a valid storage path:\n")
         print("Charging...")
-        IlluDownloadThread(url.strip(), path=pixiv_config.IMAGE_SVAE_BASEPATH,
-                           quality=pixiv_config.IMAGE_QUALITY).start()
+        IlluDownloadThread(url.strip(), path=save_path, quality=pixiv_config.IMAGE_QUALITY).start()
     elif download_type == 3:
         url = str(raw_input("Please enter the Pixiv image url:")).strip()
         ImageDownload.download_byurl(url)

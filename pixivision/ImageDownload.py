@@ -138,5 +138,10 @@ class IlluDownloadThread(threading.Thread):
 
     def run(self):
         if not os.path.exists(self.path):
-            os.makedirs(self.path)
+            try:
+                os.makedirs(self.path)
+            except Exception, e:
+                print("make dir Fail:" + self.path)
+                print(e)
+                return
         ImageDownload.download_topics(self.url, self.path, self.quality)
