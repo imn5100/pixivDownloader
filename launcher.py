@@ -37,7 +37,7 @@ def main_for_zh():
                 continue
         save_path = raw_input("请输入有效存储路径：\n")
         print("充能ing...")
-        IlluDownloadThread(url.strip(), path=save_path, quality=pixiv_config.IMAGE_QUALITY).start()
+        IlluDownloadThread(url.strip(), path=save_path.decode("utf-8"), quality=pixiv_config.IMAGE_QUALITY).start()
     elif download_type == 3:
         url = str(raw_input("请输入Pixiv图片url:")).strip()
         ImageDownload.download_byurl(url)
@@ -79,7 +79,7 @@ def main_for_en():
                 continue
         save_path = raw_input("Please enter a valid storage path:\n")
         print("Charging...")
-        IlluDownloadThread(url.strip(), path=save_path, quality=pixiv_config.IMAGE_QUALITY).start()
+        IlluDownloadThread(url.strip(), path=save_path.decode("utf-8"), quality=pixiv_config.IMAGE_QUALITY).start()
     elif download_type == 3:
         url = str(raw_input("Please enter the Pixiv image url:")).strip()
         ImageDownload.download_byurl(url)

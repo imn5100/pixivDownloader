@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import redis
+from BeautifulSoup import BeautifulSoup
 
 from pixiv_config import *
 from pixivapi.PixivApi import PixivApi
@@ -44,7 +45,8 @@ def test_redisFilter():
 
 
 def test_image_download():
-    topics = ImageDownload.get_pixivision_topics("http://www.pixivision.net/en/c/illustration/?p=2", IMAGE_SVAE_BASEPATH)
+    topics = ImageDownload.get_pixivision_topics("http://www.pixivision.net/en/c/illustration/?p=2",
+                                                 IMAGE_SVAE_BASEPATH)
     ts = []
     for topic in topics:
         t = IlluDownloadThread(topic.href, topic.save_path, 1)
@@ -56,8 +58,9 @@ def test_image_download():
 
 def test_html_parse_byfile():
     html = open("test.html").read()
-    print(HtmlDownloader.parse_illustration(html))
+    print(HtmlDownloader.get_title(html))
 
 
 if __name__ == '__main__':
-    test_image_download()
+    # test_image_download()
+    test_html_parse_byfile()

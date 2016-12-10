@@ -113,3 +113,15 @@ class HtmlDownloader(object):
             print("Get topic Title Warning:")
             print(e)
             return None
+
+    @classmethod
+    def get_title(cls, html):
+        try:
+            main = BeautifulSoup(html)
+            data = {"title": main.find("h1", attrs={"class": "am__title "}).text}
+            data["description"] = main.find("div", attrs={"class": "am__description _medium-editor-text"}).text
+            return data
+        except Exception, e:
+            print("Get topic Title and description Fail")
+            print(e)
+            return None

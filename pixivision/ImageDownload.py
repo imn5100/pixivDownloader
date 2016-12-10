@@ -54,7 +54,12 @@ class ImageDownload(object):
     @classmethod
     @redisFilterDecp(r)
     def download_topics(cls, url, path, quality=1):
-        illu_list = HtmlDownloader.parse_illustration(HtmlDownloader.download(url))
+        html = HtmlDownloader.download(url)
+        illu_list = HtmlDownloader.parse_illustration(html)
+        title_des = HtmlDownloader.get_title(html)
+        if title_des and illu_list:
+            title_des["size"] = len(illu_list)
+            CommonUtils.write_topic_des(path + "/topic.txt", title_des)
         if not illu_list:
             return
         for illu in illu_list:
