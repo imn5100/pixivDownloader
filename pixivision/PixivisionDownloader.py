@@ -119,7 +119,7 @@ class HtmlDownloader(object):
         try:
             main = BeautifulSoup(html)
             data = {"title": main.find("h1", attrs={"class": "am__title "}).text}
-            data["description"] = main.find("div", attrs={"class": "am__description _medium-editor-text"}).text
+            data["description"] = main.find("meta", attrs={"name": "description"})["content"]
             return data
         except Exception, e:
             print("Get topic Title and description Fail")
