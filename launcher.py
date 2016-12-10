@@ -23,7 +23,9 @@ def main_for_zh():
         exit()
     if download_type == 1:
         page_index = raw_input("请输入需要下载的页面页码,如果是不存在页码将下载失败\n")
-        page_index = set_int(page_index) + 1
+        page_index = set_int(page_index)
+        if page_index == 0:
+            page_index = 1
         url = pixiv_config.LINK_URL % page_index
         print("充能ing...")
         PixivisionLauncher(url, save_path=pixiv_config.IMAGE_SVAE_BASEPATH, quality=pixiv_config.IMAGE_QUALITY).start()
@@ -64,7 +66,9 @@ def main_for_en():
     if download_type == 1:
         page_index = raw_input(
                 "Please enter the page number to be downloaded. If the page number does not exist, the download will fail\n")
-        page_index = set_int(page_index) + 1
+        page_index = set_int(page_index)
+        if page_index == 0:
+            page_index = 1
         url = pixiv_config.LINK_URL % page_index
         print("Charging...")
         PixivisionLauncher(url, save_path=pixiv_config.IMAGE_SVAE_BASEPATH, quality=pixiv_config.IMAGE_QUALITY).start()

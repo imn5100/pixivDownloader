@@ -41,6 +41,9 @@ class ImageDownload(object):
     @classmethod
     def get_pixivision_topics(cls, url, path):
         topic_list = HtmlDownloader.parse_illustration_topic(HtmlDownloader.download(url))
+        if not topic_list:
+            print(url + " not find any illustration topic")
+            return
         for topic in topic_list:
             # 创建特辑文件夹，写入特辑信息。
             # 需要过滤掉特殊字符，否则会创建文件夹失败。
