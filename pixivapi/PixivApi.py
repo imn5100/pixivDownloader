@@ -13,7 +13,10 @@ class PixivApi(object):
     def download(cls, url, prefix='', path=None, referer='https://app-api.pixiv.net/'):
         if not path:
             path = prefix + os.path.basename(url)
-        response = requests.get(url, headers={'Referer': referer}, stream=True)
+        if os.path.exists(path):
+            print("continue!")
+            return
+        response = requests.get(url, headers={'Referer': referer}, timeout=30, stream=True)
         with open(path, 'wb') as out_file:
             shutil.copyfileobj(response.raw, out_file)
         del response
