@@ -9,9 +9,10 @@ def start(url, save_path=IMAGE_SVAE_BASEPATH, quality=1):
     topics = ImageDownload.get_pixivision_topics(url, save_path)
     ts = []
     for topic in topics:
-        t = IlluDownloadThread(topic.href, topic.save_path, quality)
-        t.start()
-        ts.append(t)
+        if topic.has_key("save_path"):
+            t = IlluDownloadThread(topic.href, topic.save_path, quality)
+            t.start()
+            ts.append(t)
     for t in ts:
         t.join()
 
@@ -25,5 +26,3 @@ class PixivisionLauncher(threading.Thread):
         self.url = url
         self.save_path = save_path
         self.quality = quality
-
-
