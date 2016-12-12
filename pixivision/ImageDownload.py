@@ -43,7 +43,7 @@ class ImageDownload(object):
     def get_pixivision_topics(cls, url, path):
         topic_list = HtmlDownloader.parse_illustration_topic(HtmlDownloader.download(url))
         if not topic_list:
-            print(url + " not find any illustration topic")
+            error_log(url + " not find any illustration topic")
             return
         for topic in topic_list:
             try:

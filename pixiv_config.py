@@ -29,7 +29,7 @@ CRAWLER_HEADER = {
 BASE_URL = "http://www.pixivision.net"
 # 拉取插画专题 url
 LINK_URL = "http://www.pixivision.net/en/c/illustration/?p=%s"
-# Pixivision全站总页数,用于全站爬取 2016/12/10
+# Pixivision全站总页数,用于全站爬取 2016/12/12
 PAGE_NUM = 62
 # illust detail url
 ILLUST_DETAIL = "https://app-api.pixiv.net/v1/illust/detail"
@@ -41,7 +41,8 @@ REDIS_FILTER_KEY = "setFilter:Pixivision"
 # 将存储空间分为三块 避免单set过大
 BLOCK_NUM = 3
 USE_FILTER = False
-
+# 是否覆盖已下载的插画,False 时，已下载的插画会跳过下载，True时，无论插画是否存在，都会下载，并覆盖原文件
+OVERRIDE_IMAGE = False
 # Image quality  图片质量 1 最高级，使用api下载原图(找不到原图会下载大图，找不到大图下载展示图) 2 pixivision 展示用图
 IMAGE_QUALITY = 1
 # 存储插画的基本目录

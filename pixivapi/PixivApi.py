@@ -13,7 +13,7 @@ class PixivApi(object):
     def download(cls, url, prefix='', path=None, referer='https://app-api.pixiv.net/'):
         if not path:
             path = prefix + os.path.basename(url)
-        if os.path.exists(path):
+        if os.path.exists(path) and not pixiv_config.OVERRIDE_IMAGE:
             print("continue!")
             return
         response = requests.get(url, headers={'Referer': referer}, timeout=60, stream=True)
