@@ -16,7 +16,7 @@ class PixivApi(object):
         if os.path.exists(path):
             print("continue!")
             return
-        response = requests.get(url, headers={'Referer': referer}, timeout=30, stream=True)
+        response = requests.get(url, headers={'Referer': referer}, timeout=60, stream=True)
         with open(path, 'wb') as out_file:
             shutil.copyfileobj(response.raw, out_file)
         del response
