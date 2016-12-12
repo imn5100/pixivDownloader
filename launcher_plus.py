@@ -11,7 +11,7 @@ def run_by_pool():
     # 9:49     # 14:15
     # Pixivision全站插图爬取
     from twisted.python.threadpool import ThreadPool
-    urls = [LINK_URL % n for n in range(1, PAGE_NUM + 1)]
+    urls = [LINK_URL % n for n in range(1, 2)]
     # 5*20 最大100线程在运行
     error_log("start：" + str(time.time()))
     pool = ThreadPool(minthreads=1, maxthreads=5)
@@ -27,6 +27,7 @@ def run_by_pool():
             break
 
 
+# 没有安装 twisted 时，只能使用 顺序线程下载。
 def run_by_list():
     error_log("start：" + str(time.time()))
     # Pixivision全站插图爬取

@@ -2,7 +2,7 @@
 import os
 import threading
 
-from pixiv_config import IMAGE_SVAE_BASEPATH, USE_FILTER, REDIS_IP, REDIS_PORT
+from pixiv_config import IMAGE_SVAE_BASEPATH, USE_FILTER, REDIS_IP, REDIS_PORT, IMAGE_USE_ORG_NAME
 from pixivapi.PixivApi import PixivApi
 from pixivision.PixivisionDownloader import HtmlDownloader
 from utils import CommonUtils
@@ -81,8 +81,12 @@ class ImageDownload(object):
                     detail = PixivApi.illust_detail(id)
                     if detail:
                         download_url = ImageDownload.get_image_url(illu, detail)
-                        print(path + "/p_%s_%s%s" % (id, filename, extension))
-                        PixivApi.download(download_url, path=path + "/p_%s_%s%s" % (id, filename, extension))
+                        if IMAGE_USE_ORG_NAME:
+                            save_path = path + "/p_%s_%s%s" % (id, filename, extension)
+                        else:
+                            save_path = path + "/p_%s%s" % (id, extension)
+                        print(save_path)
+                        PixivApi.download(download_url, path=save_path)
                     else:
                         print(illu.title + " can't get detail id :" + id)
                 else:
