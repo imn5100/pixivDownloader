@@ -43,7 +43,7 @@ BLOCK_NUM = 3
 USE_FILTER = False
 # 是否覆盖已下载的插画,False 时，已下载的插画会跳过下载，True时，无论插画是否存在，都会下载，并覆盖原文件
 OVERRIDE_IMAGE = False
-# Image quality  图片质量 1 最高级，使用api下载原图(找不到原图会下载大图，找不到大图下载展示图) 2 pixivision 展示用图
+# Image quality  图片质量 1 最高级，使用api下载原图(找不到原图会下载大图，找不到大图下载展示图) 2 pixivision 展示用图(大小和画质都有压缩)
 IMAGE_QUALITY = 1
 # 存储插画的基本目录
 IMAGE_SVAE_BASEPATH = "z_pixivision_download"
