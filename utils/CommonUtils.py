@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-import codecs
+
 import os
-import re
-import urlparse
 
 
 def get_url_param(url, param):
+    import urlparse
     try:
         result = urlparse.urlparse(url)
         return urlparse.parse_qs(result.query)[param][0]
@@ -14,10 +13,12 @@ def get_url_param(url, param):
 
 
 def filter_dir_name(name):
+    import re
     return re.sub('[\/:*?"<>.|]', '', name).strip()
 
 
 def write_topic(file_path, topic):
+    import codecs
     topic_file = codecs.open(file_path, 'w', encoding='utf-8')
     topic_file.write("Label = " + topic.label + "\n")
     topic_file.write("Title = " + topic.title + "\n")
@@ -31,6 +32,7 @@ def write_topic(file_path, topic):
 
 
 def write_topic_des(file_path, data):
+    import codecs
     try:
         flag = 0
         # topic.txt 不存在时 需要填写 title信息，否则不需要
@@ -53,7 +55,7 @@ def check_image(dir):
         # windows系统获取的文件夹名称为GBK编码
         image_fls = os.listdir(dir)
         for image_fl in image_fls:
-            # 文件夹名称
+            # 文件夹名称 widnows获取为gbk，liunx如果默认编码为utf-8则不需要这一步
             image_fl = image_fl.decode("gbk")
             # 检查是否有特辑描述文件
             base_path = dir + "/" + image_fl
@@ -64,6 +66,7 @@ def check_image(dir):
 
 
 def check_num(base_path):
+    import re
     true_image_num = len(os.listdir(base_path))
     content = open(base_path + "/topic.txt", "r").read()
     res = re.search("IlluNum = \d*", content)

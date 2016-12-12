@@ -46,13 +46,18 @@ class ImageDownload(object):
             print(url + " not find any illustration topic")
             return
         for topic in topic_list:
-            # 创建特辑文件夹，写入特辑信息。
-            # 需要过滤掉特殊字符，否则会创建文件夹失败。
-            save_path = path + "/" + CommonUtils.filter_dir_name(topic.title)
-            if not os.path.exists(save_path):
-                os.makedirs(save_path)
-            CommonUtils.write_topic(save_path + "/topic.txt", topic)
-            topic['save_path'] = save_path
+            try:
+                # 需要过滤掉特殊字符，否则会创建文件夹失败。
+                # 创建特辑文件夹，写入特辑信息。
+                save_path = path + "/" + CommonUtils.filter_dir_name(topic.title)
+                if not os.path.exists(save_path):
+                    os.makedirs(save_path)
+                CommonUtils.write_topic(save_path + "/topic.txt", topic)
+                topic['save_path'] = save_path
+            except Exception, e:
+                continue
+                error_log("Create topic path fail,topic url:" + topic.Href)
+                error_log(e)
         return topic_list
 
     @classmethod

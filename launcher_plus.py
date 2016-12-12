@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import os
 import time
 
 from pixiv_config import LINK_URL, PAGE_NUM, IMAGE_SVAE_BASEPATH, IMAGE_QUALITY
@@ -9,16 +9,20 @@ from utils.LoggerUtil import error_log
 
 # 使用线程池，不需要等线程*全部*顺序执行完毕再开启下个线程
 def run_by_pool():
-    # 9:49
+    # 9:49     # 14:05
     # Pixivision全站插图爬取
-    # 目前有62页 共61*20+ 5 特辑（2016/12/10 2:44数据）
     from twisted.python.threadpool import ThreadPool
-    urls = [LINK_URL % n for n in range(1, 63)]
+    urls = [LINK_URL % n for n in range(1, PAGE_NUM + 1)]
     # 5*20 最大100线程在运行
-    pool = ThreadPool(minthreads=0, maxthreads=5)
+    pool = ThreadPool(minthreads=1, maxthreads=5)
     for url in urls:
         pool.callInThread(start, url, save_path="E://imageDownLoad//z_pixivision_download")
     pool.start()
+    while True:
+        # 每20s判断一次线程池状态，没有线程正在运行则停止下载进程
+        time.sleep(20)
+        if len(pool.working) == 0:
+            exit()
 
 
 def run_by_list():
