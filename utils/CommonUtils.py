@@ -81,4 +81,4 @@ def check_num(base_path):
 
 
 if __name__ == '__main__':
-    check_image("E:/imageDownLoad/pixivision")
+    check_image("E:/imageDownLoad/z_pixivision_download")
