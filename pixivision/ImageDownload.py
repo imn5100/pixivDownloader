@@ -141,8 +141,9 @@ class ImageDownload(object):
 
     @classmethod
     def download_byurl(cls, url):
-        if CommonUtils.get_url_param(url, "illust_id"):
-            ImageDownload.download_image_byid(id)
+        illust_id = CommonUtils.get_url_param(url, "illust_id")
+        if id:
+            ImageDownload.download_image_byid(illust_id)
         else:
             PixivApi.download(url.strip())
 
