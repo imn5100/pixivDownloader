@@ -20,7 +20,7 @@
 ~~~
 python  launcher.py 
 ~~~
-启动Pixivision全站爬虫(需配置Pixivision总页数pixiv_config.PAGE_NUM):
+启动Pixivision全站插画爬虫(需配置Pixivision总页数pixiv_config.PAGE_NUM):
 ~~~
 python launcher_plus.py
 ~~~
