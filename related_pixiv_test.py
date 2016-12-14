@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import os
-import time
 from Queue import Queue
 from threading import Thread
 
