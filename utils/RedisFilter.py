@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from pixiv_config import BLOCK_NUM, REDIS_FILTER_KEY
-
 
 class RedisFilter(object):
-    def __init__(self, server):
+    def __init__(self, server, block_num=3, filter_key='default_filter'):
+        self.block_num = block_num
+        self.filter_key = filter_key
         self.server = server
 
     def add(self, data):
@@ -27,12 +27,8 @@ class RedisFilter(object):
     def is_contained(self, data):
         return self.server.sismember(RedisFilter.get_key(data), data)
 
-    @classmethod
-    def block_index(cls, value, block_num=3):
-        if BLOCK_NUM:
-            block_num = BLOCK_NUM
-        return hash(value) % block_num + 1
+    def block_index(self, value):
+        return hash(value) % self.block_num + 1
 
-    @classmethod
-    def get_key(cls, value):
-        return REDIS_FILTER_KEY + str(RedisFilter.block_index(value))
+    def get_key(self, value):
+        return self.filter_key + str(self.block_index(value))

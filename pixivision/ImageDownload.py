@@ -2,7 +2,8 @@
 import os
 import threading
 
-from pixiv_config import IMAGE_SVAE_BASEPATH, USE_FILTER, REDIS_IP, REDIS_PORT, IMAGE_USE_ORG_NAME
+from pixiv_config import IMAGE_SVAE_BASEPATH, USE_FILTER, REDIS_IP, REDIS_PORT, IMAGE_USE_ORG_NAME, BLOCK_NUM, \
+    REDIS_FILTER_KEY
 from pixivapi.PixivApi import PixivApi
 from pixivision.PixivisionDownloader import HtmlDownloader
 from utils import CommonUtils
@@ -15,7 +16,7 @@ def redisFilterDecp(r=None):
         def new_fun(cls, url, save_path, quality):
             if USE_FILTER:
                 from utils.RedisFilter import RedisFilter
-                redis_filter = RedisFilter(r)
+                redis_filter = RedisFilter(r, block_num=BLOCK_NUM, filter_key=REDIS_FILTER_KEY)
                 if not redis_filter.is_contained(url):
                     rt = func(cls, url, save_path, quality)
                     redis_filter.add(url)
