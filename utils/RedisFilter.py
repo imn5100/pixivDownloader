@@ -7,25 +7,25 @@ class RedisFilter(object):
         self.server = server
 
     def add(self, data):
-        self.server.sadd(RedisFilter.get_key(data), data)
+        self.server.sadd(self.get_key(data), data)
 
     def remove(self, data):
-        self.server.srem(RedisFilter.get_key(data), data)
+        self.server.srem(self.get_key(data), data)
 
     def add_all(self, datas):
         p = self.server.pipeline()
         for data in datas:
-            p.sadd(RedisFilter.get_key(data), data)
+            p.sadd(self.get_key(data), data)
         p.execute()
 
     def remove_all(self, datas):
         p = self.server.pipeline()
         for data in datas:
-            p.srem(RedisFilter.get_key(data), data)
+            p.srem(self.get_key(data), data)
         p.execute()
 
     def is_contained(self, data):
-        return self.server.sismember(RedisFilter.get_key(data), data)
+        return self.server.sismember(self.get_key(data), data)
 
     def block_index(self, value):
         return hash(value) % self.block_num + 1
