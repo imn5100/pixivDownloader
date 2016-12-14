@@ -25,4 +25,5 @@ python  launcher.py
 python launcher_plus.py
 ~~~
 
-PS:因网络问题，下载失败很难避免。运行完毕后，若有提示下载失败的插画，可以通过查看download_error.log文件获取下载失败的插画详情。运行launcher.py 使用url或ID下载。
+PS:因网络问题，下载失败很难避免。运行完毕后，若有提示下载失败的插画，可以通过查看download_error.log文件获取下载失败的插画详情。运行launcher.py 使用url或ID下载。<br>
+实现思路：参考我的博客文章[shawblog.me](https://shawblog.me/blog/112.html)
