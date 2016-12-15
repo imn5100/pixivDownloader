@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+import codecs
 import os
 
 
@@ -80,5 +80,16 @@ def check_num(base_path):
         print("Not found IlluNum.\tPath:" + base_path + "/topic.txt")
 
 
+def writeFile(target, path):
+    target_file = codecs.open(target, 'w', encoding='utf-8')
+    path_files = os.listdir(path)
+    for path_file in path_files:
+        path_file = codecs.open(path + "/" + path_file, 'r', encoding='utf-8')
+        target_file.write(path_file.read())
+        path_file.close()
+    target_file.close()
+
+
 if __name__ == '__main__':
-    check_image("E:/imageDownLoad/z_pixivision_download")
+    # check_image("E:/imageDownLoad/z_pixivision_download")
+    writeFile("E:/download/syntaxhighlighter_3.0.83/brush.js", "E:/download/syntaxhighlighter_3.0.83/tfile")
