@@ -24,6 +24,9 @@ python  launcher.py
 ~~~
 python launcher_plus.py
 ~~~
-
+启动关联下载，通过Pixiv插画id下载关联作品,需自定义关联深度，每次向下关联可获取20-30副插画，因为越向下关联性越差，质量也会变低，因此关联深度不能设置太大。
+~~~
+python launcher_related.py
+~~~
 PS:因网络问题，下载失败很难避免。运行完毕后，若有提示下载失败的插画，可以通过查看download_error.log文件获取下载失败的插画详情。运行launcher.py 使用url或ID下载。<br>
 实现思路：参考我的博客文章[shawblog.me](https://shawblog.me/blog/112.html)
