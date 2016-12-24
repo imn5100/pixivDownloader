@@ -48,18 +48,20 @@ def producer_put_work(related, queue, i_filter):
                 continue
 
 
-def test_relate_illust():
+def relate_illust(seed):
     queue = Queue()
     r = redis.Redis(REDIS_IP, REDIS_PORT)
     i_filter = RedisFilter(r, 5, "setFilter2:PixivRelated")
-
+    save_path = "E:/imageDownLoad/related_%s" % str(seed)
+    if not os.path.exists(save_path):
+        os.mkdir(save_path)
     # 启动消费者下载器
     for i in range(3):
-        t = Thread(target=consumer_download_work, args=(queue, "E:/imageDownLoad/related_download", i_filter))
+        t = Thread(target=consumer_download_work, args=(queue, save_path, i_filter))
         t.daemon = True
         t.start()
 
-    related = PixivApi.illust_related(54809586)
+    related = PixivApi.illust_related(seed)
     # 解析返回json串，将下载url放入队列
     producer_put_work(related, queue, i_filter)
     url = related.next_url
@@ -82,4 +84,6 @@ def test_relate_illust():
 
 
 if __name__ == '__main__':
-    test_relate_illust()
+    seed = int(raw_input(
+            "Please enter a Pixiv illustration ID as the seed of the associated download:\n请输入Pixiv插画id作为关联下载的种子\n"))
+    relate_illust(seed)

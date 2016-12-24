@@ -47,8 +47,11 @@ OVERRIDE_IMAGE = False
 # Image quality  图片质量 1 最高级，使用api下载原图(找不到原图会下载大图，找不到大图下载展示图) 2 pixivision 展示用图(大小和画质都有压缩)
 IMAGE_QUALITY = 1
 # 存储插画的基本目录
-IMAGE_SVAE_BASEPATH = "z_pixivision_download"
+IMAGE_SVAE_BASEPATH = "E:/imageDownLoad/z_pixivision_download"
 # 文件命名是否使用原文件名（即插画作者的命名）
 # 因为插画原名经常出现颜文字和各种奇怪的符号，这里不使用图片标题进行命名，用pixiv 的id进行命名会很大地减少文件错误，提高下载正确率，
 # 缺点是 会丢失原文件名字。
-IMAGE_USE_ORG_NAME = False
+IMAGE_USE_ORG_NAME = True
+# model in (daily,weekly,male,female)
+# p is Page index
+RANKING_URL = "http://www.pixiv.net/ranking.php?format=json&mode=%s&p=%d"
