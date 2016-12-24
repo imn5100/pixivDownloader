@@ -3,16 +3,12 @@ import os
 from Queue import Queue
 from threading import Thread
 
-import redis
-
-from pixiv_config import REDIS_IP, REDIS_PORT
 from pixivapi.PixivApi import PixivApi
 from pixivapi.PixivUtils import parse_json
 from pixivision.PixivisionDownloader import HtmlDownloader
-from utils.RedisFilter import RedisFilter
 
 
-def consumer_download_work(queue, save_path, i_filter):
+def consumer_download_work(queue, save_path):
     while True:
         try:
             illust = queue.get()
@@ -28,7 +24,6 @@ def consumer_download_work(queue, save_path, i_filter):
             PixivApi.download(url, path=image_save_path)
             print("download " + image_save_path + "\n")
         except Exception, e:
-            i_filter.remove(illust.id)
             print("download Fail  remove id" + str(illust.id))
             print(e)
             continue
@@ -36,38 +31,30 @@ def consumer_download_work(queue, save_path, i_filter):
             queue.task_done()
 
 
-def producer_put_work(related, queue, i_filter):
+def producer_put_work(related, queue):
     if related and related.has_key("illusts"):
         for illust in related.illusts:
-            if not i_filter.is_contained(illust.id):
-                # 加入下载队列
-                queue.put(illust)
-                i_filter.add(illust.id)
-            else:
-                print("contained:" + str(illust.id))
-                continue
+            queue.put(illust)
 
 
-def relate_illust(seed):
+def relate_illust(seed, depth=2, image_path='imageDownload'):
     queue = Queue()
-    r = redis.Redis(REDIS_IP, REDIS_PORT)
-    i_filter = RedisFilter(r, 5, "setFilter2:PixivRelated")
-    save_path = "E:/imageDownLoad/related_%s" % str(seed)
+    save_path = (image_path + "/related_%s") % str(seed)
     if not os.path.exists(save_path):
         os.mkdir(save_path)
     # 启动消费者下载器
     for i in range(3):
-        t = Thread(target=consumer_download_work, args=(queue, save_path, i_filter))
+        t = Thread(target=consumer_download_work, args=(queue, save_path))
         t.daemon = True
         t.start()
 
     related = PixivApi.illust_related(seed)
     # 解析返回json串，将下载url放入队列
-    producer_put_work(related, queue, i_filter)
+    producer_put_work(related, queue)
     if related.has_key("next_url"):
         url = related.next_url
     else:
-        print("There is no next URL，（没有查询到关联作品）")
+        print("There is no next URL，（无法查询到关联作品）")
         return
     count = 1
     while True:
@@ -82,9 +69,9 @@ def relate_illust(seed):
             break
         print("Depth :" + str(count) + " Associated illust:" + str(len(related2.illusts)))
         print("Next URL:" + related2.next_url)
-        producer_put_work(related2, queue, i_filter)
+        producer_put_work(related2, queue)
         # 需要到达的深度
-        if count == 2:
+        if count == depth:
             print("producer completed!")
             break
         count += 1
@@ -92,6 +79,13 @@ def relate_illust(seed):
 
 
 if __name__ == '__main__':
+    depth = raw_input(
+            "Please enter a number  as the depth of the associated download:\n请输入关联下载的深度。(每次拉取的关联作品会作为下一拉取的关联的种子，深度即向下关联拉取的次数,每次向下关联越拉取20-30副插画)\n")
     seed = int(raw_input(
             "Please enter a Pixiv illustration ID as the seed of the associated download:\n请输入Pixiv插画id作为关联下载的种子\n"))
-    relate_illust(seed)
+    image_path = raw_input("Please enter illustration save path，请输入插画存储位置\n")
+    try:
+        depth = int(depth)
+    except:
+        depth = 2
+    relate_illust(seed, depth, image_path)
