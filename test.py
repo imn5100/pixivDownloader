@@ -3,6 +3,7 @@
 import redis
 
 from pixiv_config import *
+from pixivapi.AuthPixivApi import AuthPixivApi
 from pixivapi.PixivApi import PixivApi
 from pixivision.ImageDownload import ImageDownload, IlluDownloadThread
 from pixivision.PixivisionDownloader import HtmlDownloader
@@ -63,5 +64,11 @@ def test_html_parse_byfile():
     print(HtmlDownloader.get_title(html))
 
 
+def test_auth_api():
+    api = AuthPixivApi("*", "*", "IX6oSiDtu9O0Giljfytmuckm4EY8tzOiPabWKIHLkLs")
+    obj = api.search_works("艦これ")
+    print(obj)
+
+
 if __name__ == '__main__':
-    test_redisFilter()
+    test_auth_api()
