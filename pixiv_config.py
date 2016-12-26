@@ -72,9 +72,10 @@ PIXIV_PAGE_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
                   'Chrome/50.0.2661.102 Safari/537.36'
 }
-# 关键字搜索页面search  page type in(illust,ugoira,manga)
+# 关键字搜索页面search  page type in(illust,ugoira,manga) &scd=2016-11-26&order=date
 PIXIV_SEARCH_URL = "http://www.pixiv.net/search.php?word=%s&type=%s&p=%d"
 PIXIV_LOGIN_KEY = "https://accounts.pixiv.net/login"
 PIXIV_LOGIN_URL = "https://accounts.pixiv.net/api/login"
 # 下载阈值、收藏数>THRESHOLD 才进行下载
-DOWNLOAD_THRESHOLD = 500
+DOWNLOAD_THRESHOLD = 100
+

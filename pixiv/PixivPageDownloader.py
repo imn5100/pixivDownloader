@@ -19,6 +19,9 @@ class PixivHtmlParser(object):
         # 获取搜索结果中插画
         lis = section.findAll("li", attrs={"class": "image-item"})
         datas = []
+        if not lis:
+            print("search result is empty")
+            return datas
         for li in lis:
             try:
                 data = {"url": PIXIV_URL + li.find("a",
@@ -35,7 +38,11 @@ class PixivHtmlParser(object):
                 except Exception, e:
                     print("Parse User Warning")
                     print(e.message)
-                data["mark_count"] = li.find("a", attrs={"class": "bookmark-count _ui-tooltip"}).text
+                count_a = li.find("a", attrs={"class": "bookmark-count _ui-tooltip"})
+                if count_a:
+                    data["mark_count"] = li.find("a", attrs={"class": "bookmark-count _ui-tooltip"}).text
+                else:
+                    data["mark_count"] = 0
                 data = parse_dict(data)
                 datas.append(data)
             except Exception, e:
@@ -53,6 +60,9 @@ class PixivHtmlParser(object):
         section = main.find("section", attrs={"class": "popular-introduction"})
         lis = section.findAll("li", attrs={"class": "image-item"})
         datas = []
+        if not lis:
+            print("search result is empty")
+            return datas
         for li in lis:
             try:
                 data = {"url": PIXIV_URL + li.find("a", attrs={"class": re.compile("work  _work\w*")})["href"],

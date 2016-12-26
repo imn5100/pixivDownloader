@@ -8,14 +8,14 @@ import pixiv_config
 from pixivapi.PixivUtils import PixivError, parse_json, parse_resp
 
 
-def requests_call(method, url, headers={}, params=None, data=None, stream=False):
+def requests_call(method, url, **kwargs):
     try:
         if method.upper() == 'GET':
-            return requests.get(url, params=params, headers=headers, stream=stream)
+            return requests.get(url, **kwargs)
         elif method.upper() == 'POST':
-            return requests.post(url, params=params, data=data, headers=headers, stream=stream)
+            return requests.post(url, **kwargs)
         elif method.upper() == 'DELETE':
-            return requests.delete(url, params=params, data=data, headers=headers, stream=stream)
+            return requests.delete(url, **kwargs)
     except Exception as e:
         raise PixivError('requests %s %s error: %s' % (method, url, e))
     raise PixivError('Unknow method: %s' % method)
@@ -35,12 +35,12 @@ class AuthPixivApi(object):
         if self.access_token is None:
             raise PixivError('Authentication required! Call login() first!')
 
-    def auth_requests_call(self, method, url, headers={}, params=None, data=None, stream=False):
+    def auth_requests_call(self, method, url, headers={}, **kwargs):
         self.require_auth()
         headers['Referer'] = 'http://spapi.pixiv.net/'
         headers['User-Agent'] = 'PixivIOSApp/6.0.9'
         headers['Authorization'] = 'Bearer %s' % self.access_token
-        return requests_call(method, url, headers, params, data, stream)
+        return requests_call(method, url, headers=headers, **kwargs)
 
     def login(self, username, password):
         return self.auth(username=username, password=password)
@@ -93,7 +93,7 @@ class AuthPixivApi(object):
         if os.path.exists(path) and (not pixiv_config.OVERRIDE_IMAGE):
             print("continue!")
             return
-        response = self.auth_requests_call("get", url, headers={'Referer': 'https://app-api.pixiv.net/'}, timeout=60,
+        response = self.auth_requests_call("get", url, timeout=60,
                                            stream=True)
         with open(path, 'wb') as out_file:
             shutil.copyfileobj(response.raw, out_file)
