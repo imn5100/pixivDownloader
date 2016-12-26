@@ -52,8 +52,29 @@ IMAGE_SVAE_BASEPATH = "E:/imageDownLoad/z_pixivision_download"
 # 因为插画原名经常出现颜文字和各种奇怪的符号，这里不使用图片标题进行命名，用pixiv 的id进行命名会很大地减少文件错误，提高下载正确率，
 # 缺点是 会丢失原文件名字。
 IMAGE_USE_ORG_NAME = True
+
+#################################################
+# 以下为pixiv主站网页请求相关配置
 # model in (daily,weekly,male,female)
 # p is Page index
 RANKING_URL = "http://www.pixiv.net/ranking.php?format=json&mode=%s&p=%d"
-# 关键字搜索页面search  page
-SEARCH_PAGE = "http://www.pixiv.net/search.php?word=%s&type=illust"
+# p站网址
+PIXIV_URL = "http://www.pixiv.net"
+# pixiv 页面请求请求头
+PIXIV_PAGE_HEADERS = {
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Accept-Encoding': 'gzip, deflate, sdch',
+    'Accept-Language': 'zh-CN,zh;q=0.8,en;q=0.6',
+    'Connection': 'keep-alive',
+    'Host': 'accounts.pixiv.net',
+    'Referer': 'http://www.pixiv.net/',
+    'Upgrade-Insecure-Requests': '1',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
+                  'Chrome/50.0.2661.102 Safari/537.36'
+}
+# 关键字搜索页面search  page type in(illust,ugoira,manga)
+PIXIV_SEARCH_URL = "http://www.pixiv.net/search.php?word=%s&type=%s&p=%d"
+PIXIV_LOGIN_KEY = "https://accounts.pixiv.net/login"
+PIXIV_LOGIN_URL = "https://accounts.pixiv.net/api/login"
+# 下载阈值、收藏数>THRESHOLD 才进行下载
+DOWNLOAD_THRESHOLD = 500

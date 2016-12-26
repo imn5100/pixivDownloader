@@ -2,6 +2,7 @@
 
 import redis
 
+from pixiv.PixivPageDownloader import PixivHtmlParser
 from pixiv_config import *
 from pixivapi.AuthPixivApi import AuthPixivApi
 from pixivapi.PixivApi import PixivApi
@@ -64,6 +65,20 @@ def test_html_parse_byfile():
     print(HtmlDownloader.get_title(html))
 
 
+def test_pixiv_html_parse_byfile():
+    html = open("test.html").read()
+    search_result = PixivHtmlParser.parse_search_result(html)
+    pop_result = PixivHtmlParser.parse_popular_introduction(html)
+    print(search_result)
+    print(len(search_result))
+    print(pop_result)
+    print(len(pop_result))
+    print("after filter")
+    search_result = filter(lambda data: data.has_key("mark_count") and int(data.mark_count) > 1500, search_result)
+    print(search_result)
+    print(len(search_result))
+
+
 def test_auth_api():
     api = AuthPixivApi("*", "*", access_token="qC-MDpoHtD3ZuN24Ow5LLD-4H3Phs0YtB0S9Dn-E8L0")
     obj = api.search_works("艦これ")
@@ -73,4 +88,4 @@ def test_auth_api():
 
 
 if __name__ == '__main__':
-    test_auth_api()
+    test_pixiv_html_parse_byfile()
