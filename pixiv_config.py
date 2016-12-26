@@ -55,3 +55,5 @@ IMAGE_USE_ORG_NAME = True
 # model in (daily,weekly,male,female)
 # p is Page index
 RANKING_URL = "http://www.pixiv.net/ranking.php?format=json&mode=%s&p=%d"
+# 关键字搜索页面search  page
+SEARCH_PAGE = "http://www.pixiv.net/search.php?word=%s&type=illust"

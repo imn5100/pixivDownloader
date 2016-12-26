@@ -65,9 +65,11 @@ def test_html_parse_byfile():
 
 
 def test_auth_api():
-    api = AuthPixivApi("*", "*", "IX6oSiDtu9O0Giljfytmuckm4EY8tzOiPabWKIHLkLs")
+    api = AuthPixivApi("*", "*", access_token="qC-MDpoHtD3ZuN24Ow5LLD-4H3Phs0YtB0S9Dn-E8L0")
     obj = api.search_works("艦これ")
     print(obj)
+    resp_page = api.auth_requests_call("get", "http://www.pixiv.net/search.php?word=艦これ&type=illust")
+    print(resp_page.content)
 
 
 if __name__ == '__main__':

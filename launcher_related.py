@@ -80,7 +80,8 @@ def relate_illust(seed, depth=2, image_path='imageDownload'):
 
 if __name__ == '__main__':
     depth = raw_input(
-            "Please enter a number  as the depth of the associated download:\n请输入关联下载的深度。(每次拉取的关联作品会作为下一拉取的关联的种子，深度即向下关联拉取的次数,每次向下关联越拉取20-30副插画)\n")
+            "Please enter a number  as the depth of the associated download:\n请输入关联下载的深度。\
+            (每次拉取的关联作品会作为下一拉取的关联的种子，深度即向下关联拉取的次数,每次向下关联越拉取20-30副插画)\n")
     seed = int(raw_input(
             "Please enter a Pixiv illustration ID as the seed of the associated download:\n请输入Pixiv插画id作为关联下载的种子\n"))
     image_path = raw_input("Please enter illustration save path，请输入插画存储位置\n")

@@ -8,6 +8,19 @@ import pixiv_config
 from pixivapi.PixivUtils import PixivError, parse_json, parse_resp
 
 
+def requests_call(method, url, headers={}, params=None, data=None, stream=False):
+    try:
+        if method.upper() == 'GET':
+            return requests.get(url, params=params, headers=headers, stream=stream)
+        elif method.upper() == 'POST':
+            return requests.post(url, params=params, data=data, headers=headers, stream=stream)
+        elif method.upper() == 'DELETE':
+            return requests.delete(url, params=params, data=data, headers=headers, stream=stream)
+    except Exception as e:
+        raise PixivError('requests %s %s error: %s' % (method, url, e))
+    raise PixivError('Unknow method: %s' % method)
+
+
 class AuthPixivApi(object):
     def __init__(self, username, password, access_token=None):
         self.username = username
@@ -18,18 +31,6 @@ class AuthPixivApi(object):
         if not access_token:
             self.login(username, password)
 
-    def requests_call(self, method, url, headers={}, params=None, data=None, stream=False):
-        try:
-            if method == 'GET':
-                return requests.get(url, params=params, headers=headers, stream=stream)
-            elif method == 'POST':
-                return requests.post(url, params=params, data=data, headers=headers, stream=stream)
-            elif method == 'DELETE':
-                return requests.delete(url, params=params, data=data, headers=headers, stream=stream)
-        except Exception as e:
-            raise PixivError('requests %s %s error: %s' % (method, url, e))
-        raise PixivError('Unknow method: %s' % method)
-
     def require_auth(self):
         if self.access_token is None:
             raise PixivError('Authentication required! Call login() first!')
@@ -39,7 +40,7 @@ class AuthPixivApi(object):
         headers['Referer'] = 'http://spapi.pixiv.net/'
         headers['User-Agent'] = 'PixivIOSApp/6.0.9'
         headers['Authorization'] = 'Bearer %s' % self.access_token
-        return self.requests_call(method, url, headers, params, data, stream)
+        return requests_call(method, url, headers, params, data, stream)
 
     def login(self, username, password):
         return self.auth(username=username, password=password)
