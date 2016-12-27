@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
+from Queue import Queue
+from threading import Thread
 
 from pixiv import PixivDataDownloader
 from pixiv_config import IMAGE_USE_ORG_NAME
@@ -42,12 +44,31 @@ def download_topics(illu_list, path, auth_api):
             continue
 
 
+def download_queue(queue, path, auth_api):
+    while True:
+        try:
+            illust_list = queue.get()
+            download_topics(illust_list, path, auth_api)
+        except Exception, e:
+            print(e)
+            continue
+        finally:
+            queue.task_done()
+
+
 if __name__ == '__main__':
-    username = "*@QQ.COM"
+    username = "*"
     password = "*"
     data_handler = PixivDataDownloader.PixivDataHandler(username, password)
     auth_api = AuthPixivApi(username, password)
-    for p in range(1, 3):
-        result = data_handler.search("miku", page=p)
+    page = 5
+    queue = Queue()
+    for i in range(page):
+        t = Thread(target=download_queue, args=(queue, "E://download", auth_api))
+        t.daemon = True
+        t.start()
+    for p in range(1, page):
+        result = data_handler.search("みぅな", page=p)
         print(result)
-        download_topics(result, "E://download/", auth_api)
+        queue.put(result)
+    queue.join()

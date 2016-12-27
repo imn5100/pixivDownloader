@@ -20,8 +20,18 @@ class PixivHtmlParser(object):
         lis = section.findAll("li", attrs={"class": "image-item"})
         datas = []
         if not lis:
-            print("search result is empty")
-            return datas
+            try:
+                # 特殊处理首页用推荐的情况
+                uls = main.findAll("ul", attrs={"class": "_image-items autopagerize_page_element"})
+                if len(uls) >= 2:
+                    ul = uls[1]
+                    lis = ul.findAll("li", attrs={"class": "image-item"})
+                if not lis:
+                    print("search normal result is empty")
+                    return datas
+            except:
+                print("search normal result is empty")
+                return datas
         for li in lis:
             try:
                 data = {"url": PIXIV_URL + li.find("a",
@@ -58,10 +68,13 @@ class PixivHtmlParser(object):
             return None
         main = BeautifulSoup(html)
         section = main.find("section", attrs={"class": "popular-introduction"})
-        lis = section.findAll("li", attrs={"class": "image-item"})
         datas = []
+        if not section:
+            print("search popular result is empty")
+            return datas
+        lis = section.findAll("li", attrs={"class": "image-item"})
         if not lis:
-            print("search result is empty")
+            print("search popular result is empty")
             return datas
         for li in lis:
             try:

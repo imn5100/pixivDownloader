@@ -73,8 +73,8 @@ def test_pixiv_html_parse_byfile():
     print(len(search_result))
     print(pop_result)
     print(len(pop_result))
-    print("after filter")
-    search_result = filter(lambda data: data.has_key("mark_count") and int(data.mark_count) > 1500, search_result)
+    print("normal result after filter：")
+    search_result = filter(lambda data: data.has_key("mark_count") and int(data.mark_count) > 1000, search_result)
     print(search_result)
     print(len(search_result))
 
