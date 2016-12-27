@@ -7,6 +7,7 @@ from pixiv import PixivDataDownloader
 from pixiv.PixivImageDownloader import download_queue
 from pixivapi.AuthPixivApi import AuthPixivApi
 from pixiv_config import USERNAME, PASSWORD, DOWNLOAD_THRESHOLD, SEARCH_KEYWORD, SEARCH_PAGE, SEARCH_SAVE_PATH
+from utils import CommonUtils
 
 if __name__ == '__main__':
     type = raw_input("Please chose run mode.1.Use pixiv_config file to search. 2. Enter the parameters manually:\n")
@@ -31,6 +32,7 @@ if __name__ == '__main__':
         download_threshold = int(raw_input("Please enter the minimum number of illustration's bookmarks:\n"))
         keyword = raw_input("Please enter search keyword:\n")
     queue = Queue()
+    path = path + "/" + CommonUtils.filter_dir_name("search_" + keyword)
     thread_num = page if page <= 30 else 30
     for i in range(thread_num):
         t = Thread(target=download_queue, args=(queue, path, auth_api))

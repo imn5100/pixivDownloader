@@ -81,12 +81,12 @@ PIXIV_LOGIN_URL = "https://accounts.pixiv.net/api/login"
 # 下载阈值、收藏数>THRESHOLD 才进行下载
 DOWNLOAD_THRESHOLD = 100
 # 搜索页数
-SEARCH_PAGE = 5
-# 存储位置
-SEARCH_SAVE_PATH = "E:/download"
+SEARCH_PAGE = 3
+# 存储位置 必须为有效路径否则会报错
+SEARCH_SAVE_PATH = "E:/imageDownload/search"
 # 搜索关键字
 SEARCH_KEYWORD = "U-511"
 # Pixiv账户用户名或id
-USERNAME = "**"
+USERNAME = "*"
 # Pixiv 账户密码
-PASSWORD = "**"
+PASSWORD = "*"
