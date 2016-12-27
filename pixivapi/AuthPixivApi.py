@@ -84,7 +84,6 @@ class AuthPixivApi(object):
             self.refresh_token = token.response.refresh_token
         except:
             raise PixivError('Get access_token error! Response: %s' % (token), header=r.headers, body=r.text)
-        print(token)
         return token
 
     def download(self, url, prefix='', path=None):

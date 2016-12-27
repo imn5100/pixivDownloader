@@ -19,7 +19,7 @@ CRAWLER_HEADER = {
     # zh 中文简体
     # zh-tw 中文繁体
     # en 或空或其他无法解析语言 英文
-    'Accept-Language': 'zh',
+    'Accept-Language': 'en',
     'Connection': 'keep-alive',
     'Accept-Encoding': 'gzip, deflate',
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36',
@@ -51,9 +51,9 @@ IMAGE_SVAE_BASEPATH = "E:/imageDownLoad/z_pixivision_download"
 # 文件命名是否使用原文件名（即插画作者的命名）
 # 因为插画原名经常出现颜文字和各种奇怪的符号，这里不使用图片标题进行命名，用pixiv 的id进行命名会很大地减少文件错误，提高下载正确率，
 # 缺点是 会丢失原文件名字。
-IMAGE_USE_ORG_NAME = True
+IMAGE_USE_ORG_NAME = False
 
-#################################################
+####################################
 # 以下为pixiv主站网页请求相关配置
 # model in (daily,weekly,male,female)
 # p is Page index
@@ -76,5 +76,17 @@ PIXIV_PAGE_HEADERS = {
 PIXIV_SEARCH_URL = "http://www.pixiv.net/search.php?word=%s&type=%s&p=%d"
 PIXIV_LOGIN_KEY = "https://accounts.pixiv.net/login"
 PIXIV_LOGIN_URL = "https://accounts.pixiv.net/api/login"
+#######################################
+# 下载设置
 # 下载阈值、收藏数>THRESHOLD 才进行下载
 DOWNLOAD_THRESHOLD = 100
+# 搜索页数
+SEARCH_PAGE = 5
+# 存储位置
+SEARCH_SAVE_PATH = "E:/download"
+# 搜索关键字
+SEARCH_KEYWORD = "U-511"
+# Pixiv账户用户名或id
+USERNAME = "**"
+# Pixiv 账户密码
+PASSWORD = "**"

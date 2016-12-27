@@ -63,9 +63,9 @@ class PixivDataHandler(object):
                 continue
         return None
 
-    def search(self, word, page=1, type='illust'):
+    def search(self, word, page=1, search_type='illust', download_threshold=DOWNLOAD_THRESHOLD):
         if word:
-            url = (PIXIV_SEARCH_URL % (word, type, int(page)))
+            url = (PIXIV_SEARCH_URL % (word, search_type, int(page)))
         else:
             raise PixivError('search word can not be null')
         print(url)
@@ -77,7 +77,7 @@ class PixivDataHandler(object):
             pop_result = []
         if search_result:
             search_result = filter(
-                    lambda data: (data.has_key("mark_count") and int(data.mark_count) > DOWNLOAD_THRESHOLD),
+                    lambda data: (data.has_key("mark_count") and int(data.mark_count) > download_threshold),
                     search_result)
             pop_result.extend(search_result)
         return pop_result
