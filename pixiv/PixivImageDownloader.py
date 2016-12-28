@@ -4,7 +4,7 @@ from Queue import Queue
 from threading import Thread
 
 from pixiv import PixivDataDownloader
-from pixiv_config import IMAGE_USE_ORG_NAME
+from pixiv_config import IMAGE_USE_ORG_NAME, P_LIMIT
 from pixivapi.AuthPixivApi import AuthPixivApi
 from pixivapi.PixivApi import PixivApi
 from utils import CommonUtils
@@ -48,6 +48,9 @@ def download_illustration(illu_list, path, auth_api):
                         download(illust_id, illu.title, path, url, auth_api)
                     # 多图插画
                     else:
+                        if detail.page_count > P_LIMIT:
+                            print("Pixiv id:%s,name:%s P>limit,Skip download" + illust_id)
+                            continue
                         urls = detail.meta_pages
                         # 获取多图
                         if len(urls) > 1:
@@ -72,8 +75,10 @@ def download_illustration(illu_list, path, auth_api):
                 except Exception, e:
                     error_log("Download fail:")
                     error_log(e)
+                    continue
             else:
                 print(illu.title + " can't get detail id :" + illust_id)
+                continue
         else:
             continue
 

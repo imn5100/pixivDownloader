@@ -39,7 +39,8 @@ class PixivDataHandler(object):
                 }
             response = self.session.post(PIXIV_LOGIN_URL, data=post_data, headers=PIXIV_PAGE_HEADERS)
             res_obj = parse_resp(response)
-            if res_obj.body.has_key("successed"):
+            # 返回json 抽风了，一下successed,一下success 这里都验证一下
+            if res_obj.body.has_key("successed") or res_obj.body.has_key("success"):
                 return self.session
             else:
                 raise PixivError('username or password wrong!.')
