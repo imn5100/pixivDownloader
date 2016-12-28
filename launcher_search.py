@@ -38,7 +38,7 @@ if __name__ == '__main__':
     # 如果爬取页数大于30，则最多开启30个进程进行队列任务下载
     thread_num = page if page <= 30 else 30
     for i in range(thread_num):
-        t = Thread(target=download_queue, args=(queue, path, auth_api))
+        t = Thread(target=download_queue, name="Thread" + str(i), args=(queue, path, auth_api))
         t.daemon = True
         t.start()
     for p in range(1, page + 1):

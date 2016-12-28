@@ -86,7 +86,7 @@ P_LIMIT = 55
 SEARCH_PAGE = 3
 # 存储位置 必须为有效路径否则会报错
 SEARCH_SAVE_PATH = "E:/imageDownload/search"
-# 搜索关键字   关键字前面的'u'标示 不能去掉，否在创建文件夹会出现乱码
+# 搜索关键字 u表示 unicode 类型，否则会创建文件夹失败
 SEARCH_KEYWORD = u"艦これ 1000users入り"
 # Pixiv账户用户名或id
 USERNAME = "*"
