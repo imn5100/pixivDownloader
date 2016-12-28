@@ -26,7 +26,12 @@ def download_illustration(illu_list, path, auth_api):
     if not illu_list:
         return
     if not os.path.exists(path):
-        os.mkdir(path)
+        try:
+            os.makedirs(path)
+        except Exception, e:
+            error_log("make dir Fail:" + path)
+            error_log(e)
+            return
     for illu in illu_list:
         if illu.has_key("url") and illu.has_key("title"):
             illust_id = CommonUtils.get_url_param(illu.url, "illust_id")

@@ -42,4 +42,5 @@ PS②:关于搜索下载，在没有会员的情况下，很难搜到高质量�
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.增加爬取页数。 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.适当调整配置参数“DOWNLOAD_THRESHOLD”即_下载的插画的最小收藏数_的设置。<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.减小搜索关键字范围。 <br>
-         
+
+PS③:因python2的编码问题。如果在控制台输入中文||日文出现字符编码异常，请保证控制台运行环境字符编码为UTF-8后重试。

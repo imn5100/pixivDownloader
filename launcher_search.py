@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-import getpass
 from Queue import Queue
 from threading import Thread
 
 from pixiv import PixivDataDownloader
 from pixiv.PixivImageDownloader import download_queue
-from pixivapi.AuthPixivApi import AuthPixivApi
 from pixiv_config import USERNAME, PASSWORD, DOWNLOAD_THRESHOLD, SEARCH_KEYWORD, SEARCH_PAGE, SEARCH_SAVE_PATH
+from pixivapi.AuthPixivApi import AuthPixivApi
 from utils import CommonUtils
 
 if __name__ == '__main__':
@@ -14,6 +13,7 @@ if __name__ == '__main__':
     if type == "1":
         username = USERNAME
         password = PASSWORD
+        print ("Loading")
         data_handler = PixivDataDownloader.PixivDataHandler(username, password)
         auth_api = AuthPixivApi(username, password)
         print("Login success!!!!")
@@ -23,7 +23,8 @@ if __name__ == '__main__':
         keyword = SEARCH_KEYWORD
     else:
         username = raw_input("Please enter your pixiv accounts eamil or pixiv ID\n")
-        password = getpass.getpass('Enter password:\n ')
+        password = raw_input('Enter password:\n ')
+        print ("Loading")
         data_handler = PixivDataDownloader.PixivDataHandler(username, password)
         auth_api = AuthPixivApi(username, password)
         print("Login success!!!!")
@@ -31,8 +32,10 @@ if __name__ == '__main__':
         page = int(raw_input("Please enter the total number of pages you want to crawl:\n"))
         download_threshold = int(raw_input("Please enter the minimum number of illustration's bookmarks:\n"))
         keyword = raw_input("Please enter search keyword:\n")
+        keyword = keyword.decode("utf-8")
     queue = Queue()
     path = path + "/" + CommonUtils.filter_dir_name("search_" + keyword)
+    # 如果爬取页数大于30，则最多开启30个进程进行队列任务下载
     thread_num = page if page <= 30 else 30
     for i in range(thread_num):
         t = Thread(target=download_queue, args=(queue, path, auth_api))

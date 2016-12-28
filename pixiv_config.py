@@ -79,13 +79,13 @@ PIXIV_LOGIN_URL = "https://accounts.pixiv.net/api/login"
 #######################################
 # 下载设置
 # 下载阈值、收藏数>THRESHOLD 才进行下载
-DOWNLOAD_THRESHOLD = 100
+DOWNLOAD_THRESHOLD = 500
 # 搜索页数
 SEARCH_PAGE = 3
 # 存储位置 必须为有效路径否则会报错
 SEARCH_SAVE_PATH = "E:/imageDownload/search"
-# 搜索关键字
-SEARCH_KEYWORD = "U-511"
+# 搜索关键字   关键字前面的'u'标示 不能去掉，否在创建文件夹会出现乱码
+SEARCH_KEYWORD = u"夕立"
 # Pixiv账户用户名或id
 USERNAME = "*"
 # Pixiv 账户密码
