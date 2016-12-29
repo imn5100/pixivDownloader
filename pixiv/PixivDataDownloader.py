@@ -52,7 +52,7 @@ class PixivDataHandler(object):
         count = 0  # 失败重试次数
         while count <= RETRY_TIME:
             try:
-                r = self.session.get(url=url, headers=PIXIV_PAGE_HEADERS, timeout=TIMEOUT)
+                r = self.session.get(url=url, timeout=TIMEOUT)
                 r.encoding = encoding
                 if (not r.ok) or len(r.content) < 300:
                     count += 1
@@ -71,14 +71,18 @@ class PixivDataHandler(object):
             raise PixivError('search word can not be null')
         print(url)
         html = self.request_page(url)
+        if not html:
+            print("Get Page is None!URL:" + url)
+            return []
         search_result = PixivHtmlParser.parse_search_result(html)
         pop_result = PixivHtmlParser.parse_popular_introduction(html)
         if not pop_result:
             pop_result = []
         if search_result:
-            # 过滤收藏数不超过 阈值的插画信息
+            # 过滤数据不完整和收藏数不超过阈值的插画信息
             search_result = filter(
-                    lambda data: (data.has_key("mark_count") and int(data.mark_count) > download_threshold),
+                    lambda data: (data.has_key("url") and data.has_key("title") and data.has_key("mark_count") and int(
+                            data.mark_count) > download_threshold),
                     search_result)
             pop_result.extend(search_result)
         return pop_result

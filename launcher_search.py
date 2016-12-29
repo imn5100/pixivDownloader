@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 from Queue import Queue
 from threading import Thread
 
@@ -35,14 +36,27 @@ if __name__ == '__main__':
         keyword = keyword.decode("utf-8")
     queue = Queue()
     path = path + "/" + CommonUtils.filter_dir_name("search_" + keyword)
-    # 如果爬取页数大于30，则最多开启30个进程进行队列任务下载
-    thread_num = page if page <= 30 else 30
+    # 默认消费者下载线程数为10个，可根据下载量和机器性能适当增加
+    thread_num = 10
+    if not os.path.exists(path):
+        os.makedirs(path)
     for i in range(thread_num):
         t = Thread(target=download_queue, name="Thread" + str(i), args=(queue, path, auth_api))
         t.daemon = True
         t.start()
+    # 因为搜索的结果量不大，直接使用set在内存中过滤重复元素，不需要使用redisFilter
+    set_filter = set()
     for p in range(1, page + 1):
         result = data_handler.search(keyword, page=p, download_threshold=download_threshold)
         print(result)
-        queue.put(result)
+
+        for illu in result:
+            if illu.url in set_filter:
+                continue
+            else:
+                # 拆分插画列表放入队列，减少任务分配不均的概率
+                queue.put(illu)
+                # 放入队列成功后才能放入set
+                set_filter.add(illu.url)
+    # 等待队列任务完成
     queue.join()
