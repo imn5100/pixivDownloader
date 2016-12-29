@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import redis
+import time
 
 from pixiv.PixivPageDownloader import PixivHtmlParser
 from pixiv_config import *
@@ -88,4 +89,6 @@ def test_auth_api():
 
 
 if __name__ == '__main__':
-    test_pixiv_html_parse_byfile()
+    start = time.time()
+    PixivApi.download("http://i3.pixiv.net/img-original/img/2016/12/24/01/00/01/60514190_p0.png")
+    print ((time.time() - start) * 1000)
