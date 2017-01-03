@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 
 import redis
 import time
@@ -9,6 +10,7 @@ from pixivapi.AuthPixivApi import AuthPixivApi
 from pixivapi.PixivApi import PixivApi
 from pixivision.ImageDownload import ImageDownload, IlluDownloadThread
 from pixivision.PixivisionDownloader import HtmlDownloader
+from utils.MessageHandler import RedisMessageClient, PixivDownloadHandler
 from utils.RedisFilter import RedisFilter
 
 
@@ -88,7 +90,23 @@ def test_auth_api():
     print(resp_page.content)
 
 
+def test_msg_sub(channel):
+    pixiv_api = AuthPixivApi("*", "*")
+    handler = PixivDownloadHandler(pixiv_api)
+    sub_client = RedisMessageClient(handler)
+    sub_client.run_sub(channel)
+
+
+def test_msg_pub(channel):
+    pub_client = RedisMessageClient()
+    pub_client.pub(channel, json.dumps({
+        "url": "https://i.pximg.net/c/600x1200_90/img-master/img/2016/01/20/10/41/21/54809586_p0_master1200.jpg",
+        "path": "D:/54809586.jpg"}))
+
+
 if __name__ == '__main__':
-    start = time.time()
-    PixivApi.download("http://i3.pixiv.net/img-original/img/2016/12/24/01/00/01/60514190_p0.png")
-    print ((time.time() - start) * 1000)
+    channle = "test_chanel"
+    test_msg_sub(channle)
+    # while True:
+    #     test_msg_pub(channle)
+    #     time.sleep(5)
