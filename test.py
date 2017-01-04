@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import json
+from threading import Thread
 
 import redis
 import time
@@ -90,6 +91,7 @@ def test_auth_api():
     print(resp_page.content)
 
 
+# 模拟订阅消息
 def test_msg_sub(channel):
     pixiv_api = AuthPixivApi("*", "*")
     handler = PixivDownloadHandler(pixiv_api)
@@ -97,16 +99,43 @@ def test_msg_sub(channel):
     sub_client.run_sub(channel)
 
 
+# 模拟redis消息推送
 def test_msg_pub(channel):
     pub_client = RedisMessageClient()
-    pub_client.pub(channel, json.dumps({
-        "url": "https://i.pximg.net/c/600x1200_90/img-master/img/2016/01/20/10/41/21/54809586_p0_master1200.jpg",
-        "path": "D:/54809586.jpg"}))
+    pub_client.pub(channel, json.dumps({"topic": "download",
+                                        "url": "https://i4.pixiv.net/img-original/img/2016/09/13/12/23/34/58959975_p0.jpg"}))
+    pub_client.pub(channel, json.dumps({"topic": "download",
+                                        "url": "https://i1.pixiv.net/img-original/img/2015/12/27/22/22/00/54279980_p0.jpg"}))
+    pub_client.pub(channel, json.dumps({"topic": "download",
+                                        "url": "https://i1.pixiv.net/img-original/img/2014/05/28/01/21/50/43748656_p0.jpg"}))
+    pub_client.pub(channel, json.dumps({"topic": "download",
+                                        "url": "https://i1.pixiv.net/img-original/img/2016/08/20/00/16/23/58541644_p0.png"}))
+
+
+def download_test(url):
+    print("start download:" + str(time.time()))
+    PixivApi.download(url)
+    # 取最终一个url下载结束时间
+    print("url:" + url + " end:" + str(time.time()))
+
+
+def download_thread_test():
+    urls = ["https://i4.pixiv.net/img-original/img/2016/09/13/12/23/34/58959975_p0.jpg",
+            "https://i1.pixiv.net/img-original/img/2015/12/27/22/22/00/54279980_p0.jpg",
+            "https://i1.pixiv.net/img-original/img/2014/05/28/01/21/50/43748656_p0.jpg",
+            "https://i1.pixiv.net/img-original/img/2016/08/20/00/16/23/58541644_p0.png"]
+    ts = []
+    for url in urls:
+        t = Thread(target=download_test, args=(url,))
+        t.daemon = True
+        t.start()
+        ts.append(t)
+    for t in ts:
+        t.join()
 
 
 if __name__ == '__main__':
-    channle = "test_chanel"
-    test_msg_sub(channle)
-    # while True:
-    #     test_msg_pub(channle)
-    #     time.sleep(5)
+    # channle = "task_message"
+    # test_msg_sub(channle)
+    # test_msg_pub(channle)
+    download_thread_test()
