@@ -30,8 +30,8 @@ BASE_URL = "http://www.pixivision.net"
 # 拉取插画专题 url
 LINK_URL = "http://www.pixivision.net/en/c/illustration/?p=%s"
 ILLUST_DETAIL_PAGE = "http://www.pixiv.net/member_illust.php?mode=medium&illust_id=%s"
-# Pixivision全站总页数,用于全站爬取 2016/12/27
-PAGE_NUM = 63
+# Pixivision全站总页数,用于全站爬取 2016/1/9
+PAGE_NUM = 65
 # illust detail url
 ILLUST_DETAIL = "https://app-api.pixiv.net/v1/illust/detail"
 ILLUST_RELATED = 'https://app-api.pixiv.net/v1/illust/related'
