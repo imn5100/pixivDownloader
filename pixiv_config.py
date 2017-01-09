@@ -19,7 +19,7 @@ CRAWLER_HEADER = {
     # zh 中文简体
     # zh-tw 中文繁体
     # en 或空或其他无法解析语言 英文
-    'Accept-Language': 'en',
+    'Accept-Language': 'zh',
     'Connection': 'keep-alive',
     'Accept-Encoding': 'gzip, deflate',
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36',
