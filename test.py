@@ -104,12 +104,12 @@ def test_msg_pub(channel):
     pub_client = RedisMessageClient()
     pub_client.pub(channel, json.dumps({"topic": "download",
                                         "url": "https://i4.pixiv.net/img-original/img/2016/09/13/12/23/34/58959975_p0.jpg"}))
-    pub_client.pub(channel, json.dumps({"topic": "download",
-                                        "url": "https://i1.pixiv.net/img-original/img/2015/12/27/22/22/00/54279980_p0.jpg"}))
-    pub_client.pub(channel, json.dumps({"topic": "download",
-                                        "url": "https://i1.pixiv.net/img-original/img/2014/05/28/01/21/50/43748656_p0.jpg"}))
-    pub_client.pub(channel, json.dumps({"topic": "download",
-                                        "url": "https://i1.pixiv.net/img-original/img/2016/08/20/00/16/23/58541644_p0.png"}))
+    # pub_client.pub(channel, json.dumps({"topic": "download",
+    #                                     "url": "https://i1.pixiv.net/img-original/img/2015/12/27/22/22/00/54279980_p0.jpg"}))
+    # pub_client.pub(channel, json.dumps({"topic": "download",
+    #                                     "url": "https://i1.pixiv.net/img-original/img/2014/05/28/01/21/50/43748656_p0.jpg"}))
+    # pub_client.pub(channel, json.dumps({"topic": "download",
+    #                                     "url": "https://i1.pixiv.net/img-original/img/2016/08/20/00/16/23/58541644_p0.png"}))
 
 
 def download_test(url):
@@ -135,7 +135,7 @@ def download_thread_test():
 
 
 if __name__ == '__main__':
-    # channle = "task_message"
+    channle = "task_message"
     # test_msg_sub(channle)
     # test_msg_pub(channle)
-    download_thread_test()
+    test_msg_pub(channle)
