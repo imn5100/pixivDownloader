@@ -91,5 +91,5 @@ def writeFile(target, path):
 
 
 if __name__ == '__main__':
-    # check_image("E:/imageDownLoad/z_pixivision_download")
-    writeFile("E:/download/syntaxhighlighter_3.0.83/brush.js", "E:/download/syntaxhighlighter_3.0.83/tfile")
+    check_image("E:/imageDownLoad/z_pixivision_download")
+    # writeFile("E:/download/syntaxhighlighter_3.0.83/brush.js", "E:/download/syntaxhighlighter_3.0.83/tfile")
