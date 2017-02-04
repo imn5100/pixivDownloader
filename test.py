@@ -66,7 +66,7 @@ def test_image_download():
 
 def test_html_parse_byfile():
     html = open("test.html").read()
-    print(HtmlDownloader.get_title(html))
+    print(HtmlDownloader.parse_illustration(html))
 
 
 def test_pixiv_html_parse_byfile():
@@ -135,7 +135,4 @@ def download_thread_test():
 
 
 if __name__ == '__main__':
-    channle = "task_message"
-    # test_msg_sub(channle)
-    # test_msg_pub(channle)
-    test_msg_pub(channle)
+    test_html_parse_byfile()

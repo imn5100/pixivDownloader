@@ -37,7 +37,10 @@ def write_topic_des(file_path, data):
         # topic.txt 不存在时 需要填写 title信息，否则不需要
         if not os.path.exists(file_path):
             flag = 1
-        topic_file = codecs.open(file_path, 'a', encoding='utf-8')
+        topic_file = codecs.open(file_path, 'r+', encoding='utf-8')
+        # 已写入过 下载数量则跳过写入
+        if topic_file.readall().find("IlluNum"):
+            return
         topic_file.write("description = " + data["description"] + "\n")
         topic_file.write("IlluNum = " + str(data["size"]) + "\n")
         if flag == 1:

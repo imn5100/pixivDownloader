@@ -23,7 +23,7 @@ def check_image(dir):
                 print("Not found topic.txt.\tPath：" + base_path.encode("utf-8"))
 
 
-# 检查
+# 检查是否下载完全
 def check_num(base_path):
     true_image_num = len(os.listdir(base_path))
     content = open(base_path + "/topic.txt", "r").read()
@@ -42,6 +42,7 @@ def check_num(base_path):
         completion(base_path, content)
 
 
+# 获取topic文件中的href ，补全下载
 def completion(base_path, content):
     href_str = re.search(r"Href = [a-zA-z]+://[^\s]*", content).group()
     if href_str:
