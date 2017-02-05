@@ -34,6 +34,10 @@ python launcher_related.py
 ~~~
 python launcher_search.py
 ~~~
+运行Pixivision全站插画爬虫补全脚本：
+~~~
+python launcher_check_completion.py
+~~~
 实现思路：参考我的博客文章[shawblog.me](https://shawblog.me/blog/112.html)<br>
 
 PS①:因网络问题，下载失败很难避免。运行完毕后，若有提示下载失败的插画，可以通过查看download_error.log文件获取下载失败的插画详情。运行launcher.py 选择使用url或ID补充下载。<br>

@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import os
 import re
 
+from pixiv_config import IMAGE_SVAE_BASEPATH
 from pixivision.ImageDownload import IlluDownloadThread
 
 
@@ -55,4 +56,4 @@ def completion(base_path, content):
 
 if __name__ == '__main__':
     # 运行补全检查 前请保证下载时和检查时的命名规范相同，否则会下载两次同样的插画 不同的命名
-    check_image("E:/imageDownLoad/z_pixivision_download")
+    check_image(IMAGE_SVAE_BASEPATH)
