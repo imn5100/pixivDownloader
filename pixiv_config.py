@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-
+from __future__ import unicode_literals
 # 获取代理网页超时时间5s
 TIMEOUT = 5
 # 失败重试次数
@@ -47,7 +47,7 @@ OVERRIDE_IMAGE = False
 # Image quality  图片质量 1 最高级，使用api下载原图(找不到原图会下载大图，找不到大图下载展示图) 2 pixivision 展示用图(大小和画质都有压缩)
 IMAGE_QUALITY = 1
 # 存储插画的基本目录
-IMAGE_SVAE_BASEPATH = "E:/imageDownLoad/z_pixivision_download"
+IMAGE_SVAE_BASEPATH = u"E:/imageDownLoad/z_pixivision_download"
 # 文件命名是否使用原文件名（即插画作者的命名）
 # 因为插画原名经常出现颜文字和各种奇怪的符号，这里不使用图片标题进行命名，用pixiv 的id进行命名会很大地减少文件错误，提高下载正确率，
 # 缺点是 会丢失原文件名字。
@@ -79,16 +79,16 @@ PIXIV_LOGIN_URL = "https://accounts.pixiv.net/api/login"
 #######################################
 # 下载设置
 # 下载阈值、收藏数>THRESHOLD 才进行下载
-DOWNLOAD_THRESHOLD = 1000
+DOWNLOAD_THRESHOLD = 500
 # 多图作品限制P数，多p插画 大于 P_LIMIT 张跳过下载。有些插画太多了，严重影响整体下载速度。
 P_LIMIT = 50
 # 搜索页数
 SEARCH_PAGE = 3
 # 存储位置 必须为有效路径否则会报错
-SEARCH_SAVE_PATH = "E:/imageDownload/search"
+SEARCH_SAVE_PATH = u"E:/imageDownload/search"
 # 搜索关键字 u表示 unicode 类型，否则会创建文件夹失败
-SEARCH_KEYWORD = u"VOCALOID 1000users入り"
+SEARCH_KEYWORD = u"艦これ"
 # Pixiv账户用户名或id
-USERNAME = "*"
+USERNAME = ""
 # Pixiv 账户密码
-PASSWORD = "*"
+PASSWORD = ""
