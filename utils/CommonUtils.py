@@ -39,7 +39,7 @@ def write_topic_des(file_path, data):
             flag = 1
         topic_file = codecs.open(file_path, 'r+', encoding='utf-8')
         # 已写入过 下载数量则跳过写入
-        if topic_file.readall().find("IlluNum"):
+        if topic_file.read().find("IlluNum"):
             return
         topic_file.write("description = " + data["description"] + "\n")
         topic_file.write("IlluNum = " + str(data["size"]) + "\n")
