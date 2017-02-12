@@ -134,5 +134,11 @@ def download_thread_test():
         t.join()
 
 
+def test_html_parse_byfile_for_search():
+    html = open("test.html").read()
+    print(PixivHtmlParser.parse_popular_introduction(html))
+    print(PixivHtmlParser.parse_search_result(html))
+
+
 if __name__ == '__main__':
-    test_html_parse_byfile()
+    test_html_parse_byfile_for_search()
