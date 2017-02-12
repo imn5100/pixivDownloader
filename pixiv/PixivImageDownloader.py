@@ -46,6 +46,10 @@ def download_illustration(illu, path, auth_api):
                     urls = detail.meta_pages
                     # 获取多图
                     if len(urls) > 1:
+                        # 多图放入一个文件夹中
+                        path += "/p_%s" % illust_id
+                        if not os.path.exists(path):
+                            os.mkdir(path)
                         for index in range(len(urls)):
                             try:
                                 url = urls[index].image_urls.original if \
@@ -53,7 +57,9 @@ def download_illustration(illu, path, auth_api):
                                 extension = os.path.splitext(url)[1]
                                 if IMAGE_USE_ORG_NAME:
                                     save_path = path + "/p_%s_%s_%d%s" % (
-                                        illust_id, CommonUtils.filter_dir_name(illu.title), index, extension)
+                                        illust_id,
+                                        CommonUtils.filter_dir_name(illu.title),
+                                        index, extension)
                                 else:
                                     save_path = path + "/p_%s_%d%s" % (illust_id, index, extension)
                                 print(save_path)
