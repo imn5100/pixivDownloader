@@ -94,5 +94,5 @@ USERNAME = "*"
 # Pixiv 账户密码
 PASSWORD = "*"
 # 如果不想反复登录，可以在第一次登陆后，从控制台获取输出的cookie信息。配置于此。（反复重复登陆 除了会收到Pixiv寄出的安全提示邮件外暂无其他影响）
-PIXIV_COOKIES = {'device_token': '*', 'p_ab_id': '3',
-                'PHPSESSID': '*'}
+# 不使用cookies 请保持 赋值为None
+PIXIV_COOKIES = None
