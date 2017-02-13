@@ -22,7 +22,7 @@ if __name__ == '__main__':
             data_handler = PixivDataDownloader.PixivDataHandler(cookies=PIXIV_COOKIES)
         else:
             data_handler = PixivDataDownloader.PixivDataHandler(username, password)
-        # 这里可以使用两种api进行下载， AuthPixivApi和PixivApi 。 AuthPixivApi需要登录，但能下载更多限制级别的插画。通常情况PixivApi即可满足需求。
+        # 这里可以使用两种api进行下载， AuthPixivApi和PixivApi 。 AuthPixivApi需要登录，但能下载更多限制级别的插画（Pixiv账号未限制情况下）。通常情况PixivApi即可满足需求。
         auth_api = PixivApi()
         print("Login success!!!!")
         download_threshold = DOWNLOAD_THRESHOLD
