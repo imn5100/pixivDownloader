@@ -7,6 +7,7 @@ from pixiv import PixivDataDownloader
 from pixiv.PixivImageDownloader import download_queue
 from pixiv_config import USERNAME, PASSWORD, DOWNLOAD_THRESHOLD, SEARCH_KEYWORD, SEARCH_PAGE, SEARCH_SAVE_PATH
 from pixivapi.AuthPixivApi import AuthPixivApi
+from pixivapi.PixivApi import PixivApi
 from utils import CommonUtils
 
 if __name__ == '__main__':
@@ -16,7 +17,7 @@ if __name__ == '__main__':
         password = PASSWORD
         print ("Loading")
         data_handler = PixivDataDownloader.PixivDataHandler(username, password)
-        auth_api = AuthPixivApi(username, password)
+        auth_api = PixivApi()
         print("Login success!!!!")
         download_threshold = DOWNLOAD_THRESHOLD
         path = SEARCH_SAVE_PATH

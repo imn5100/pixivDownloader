@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+
 # 获取代理网页超时时间5s
 TIMEOUT = 5
 # 失败重试次数
@@ -79,16 +80,16 @@ PIXIV_LOGIN_URL = "https://accounts.pixiv.net/api/login"
 #######################################
 # 下载设置
 # 下载阈值、收藏数>THRESHOLD 才进行下载
-DOWNLOAD_THRESHOLD = 500
+DOWNLOAD_THRESHOLD = 1000
 # 多图作品限制P数，多p插画 大于 P_LIMIT 张跳过下载。有些插画太多了，严重影响整体下载速度。
-P_LIMIT = 50
+P_LIMIT = 10
 # 搜索页数
-SEARCH_PAGE = 3
+SEARCH_PAGE = 2
 # 存储位置 必须为有效路径否则会报错
 SEARCH_SAVE_PATH = u"E:/imageDownload/search"
 # 搜索关键字 u表示 unicode 类型，否则会创建文件夹失败
-SEARCH_KEYWORD = u"艦これ"
+SEARCH_KEYWORD = u"1000users入り"
 # Pixiv账户用户名或id
-USERNAME = ""
+USERNAME = "*"
 # Pixiv 账户密码
-PASSWORD = ""
+PASSWORD = "*"
