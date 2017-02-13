@@ -19,11 +19,16 @@ def get_post_key(content):
 
 
 class PixivDataHandler(object):
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
+    def __init__(self, username=None, password=None, cookies=None):
         self.session = requests.session()
-        self.login()
+        if username and password:
+            self.username = username
+            self.password = password
+            self.login()
+        elif cookies:
+            self.session.cookies = requests.utils.cookiejar_from_dict(cookies)
+        else:
+            raise PixivError('Please input username and password  or  input cookies!')
 
     # 模拟页面登录pixiv
     def login(self):
