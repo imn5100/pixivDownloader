@@ -15,7 +15,6 @@ Pixiv And Pixivision Illustrations Crawler And Downloader.<br>
      1. 修改__CRAWLER_HEADER__中__Accept-Language__，获取4中不同语言的特辑描述。<br>
      2. 修改__IMAGE_SVAE_BASEPATH__，指定图片存储位置。<br>
      3. 修改__IMAGE_QUALITY__，指定下载的图片质量。<br>
-     4. 修改__USE_FILTER__，True：启动RedisFilter，自动过滤重复下载的特辑。False:重复下载特辑会覆盖原文件。<br>
      *. 更多详细配置请看文件注释。
 
 运行菜单：
