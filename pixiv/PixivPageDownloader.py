@@ -17,8 +17,19 @@ class PixivHtmlParser(object):
         # 找到搜索结果section
         section = main.find("section", attrs={"class": "column-search-result"})
         # 获取搜索结果中插画
-        lis = section.findAll("li", attrs={"class": re.compile("image-item\s*")})
         datas = []
+        # 直接搜索section的class失败。则搜索ul 获取image item
+        if not section:
+            try:
+                # 特殊处理首页用推荐的情况
+                section = main.find("ul", attrs={"class": "_image-items autopagerize_page_element"})
+                if not section:
+                    print("search normal result is empty")
+                    return datas
+            except:
+                print("search normal result is empty")
+                return datas
+        lis = section.findAll("li", attrs={"class": re.compile("image-item\s*")})
         if not lis:
             try:
                 # 特殊处理首页用推荐的情况

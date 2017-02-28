@@ -19,11 +19,16 @@ def get_post_key(content):
 
 
 class PixivDataHandler(object):
-    def __init__(self, username, password):
-        self.username = username
-        self.password = password
+    def __init__(self, username=None, password=None, cookies=None):
         self.session = requests.session()
-        self.login()
+        if username and password:
+            self.username = username
+            self.password = password
+            self.login()
+        elif cookies:
+            self.session.cookies = requests.utils.cookiejar_from_dict(cookies)
+        else:
+            raise PixivError('Please input username and password  or  input cookies!')
 
     # 模拟页面登录pixiv
     def login(self):
@@ -41,6 +46,7 @@ class PixivDataHandler(object):
             res_obj = parse_resp(response)
             # 返回json 抽风了，一下successed,一下success 这里都验证一下
             if res_obj.body.has_key("successed") or res_obj.body.has_key("success"):
+                print("Login Success getCookies:" + str(requests.utils.dict_from_cookiejar(self.session.cookies)))
                 return self.session
             else:
                 raise PixivError('username or password wrong!.')

@@ -5,8 +5,10 @@ from threading import Thread
 
 from pixiv import PixivDataDownloader
 from pixiv.PixivImageDownloader import download_queue
-from pixiv_config import USERNAME, PASSWORD, DOWNLOAD_THRESHOLD, SEARCH_KEYWORD, SEARCH_PAGE, SEARCH_SAVE_PATH
+from pixiv_config import USERNAME, PASSWORD, DOWNLOAD_THRESHOLD, SEARCH_KEYWORD, SEARCH_PAGE, SEARCH_SAVE_PATH, \
+    PIXIV_COOKIES
 from pixivapi.AuthPixivApi import AuthPixivApi
+from pixivapi.PixivApi import PixivApi
 from utils import CommonUtils
 
 if __name__ == '__main__':
@@ -15,8 +17,13 @@ if __name__ == '__main__':
         username = USERNAME
         password = PASSWORD
         print ("Loading")
-        data_handler = PixivDataDownloader.PixivDataHandler(username, password)
-        auth_api = AuthPixivApi(username, password)
+        # PixivDataDownloader.PixivDataHandler() 也可以不登陆进行数据爬取，但不登陆就没有人气推荐作品。爬取的插画质量会低很多，所以干脆强制要求登录了。
+        if len(PIXIV_COOKIES) >= 3:
+            data_handler = PixivDataDownloader.PixivDataHandler(cookies=PIXIV_COOKIES)
+        else:
+            data_handler = PixivDataDownloader.PixivDataHandler(username, password)
+        # 这里可以使用两种api进行下载， AuthPixivApi和PixivApi 。 AuthPixivApi需要登录，但能下载更多限制级别的插画（Pixiv账号未限制情况下）。通常情况PixivApi即可满足需求。
+        auth_api = PixivApi()
         print("Login success!!!!")
         download_threshold = DOWNLOAD_THRESHOLD
         path = SEARCH_SAVE_PATH

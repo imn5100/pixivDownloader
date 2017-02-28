@@ -21,6 +21,7 @@ def requests_call(method, url, **kwargs):
     raise PixivError('Unknow method: %s' % method)
 
 
+# 需要经过登录后才能使用的api端
 class AuthPixivApi(object):
     def __init__(self, username, password, access_token=None):
         self.username = username

@@ -9,6 +9,7 @@ from pixiv.PixivPageDownloader import PixivHtmlParser
 from pixiv_config import *
 from pixivapi.AuthPixivApi import AuthPixivApi
 from pixivapi.PixivApi import PixivApi
+from pixivapi.PixivUtils import parse_dict
 from pixivision.ImageDownload import ImageDownload, IlluDownloadThread
 from pixivision.PixivisionDownloader import HtmlDownloader
 from utils.MessageHandler import RedisMessageClient, PixivDownloadHandler
@@ -140,5 +141,43 @@ def test_html_parse_byfile_for_search():
     print(PixivHtmlParser.parse_search_result(html))
 
 
+def testbs4():
+    from bs4 import BeautifulSoup
+    import re
+    html = open("test.html").read()
+    soup = BeautifulSoup(html)
+    lis = soup.find_all("li", class_=re.compile("image-item\s*"))
+    datas = []
+    for li in lis:
+        try:
+            url = li.find_all("a", class_=re.compile("work _work\s*"))
+            print(url[0])
+            data = {"url": PIXIV_URL + li.find_all("a", class_=re.compile("work  _work\w*"), limit=1)[0]['href'],
+                    "title": li.find("h1", attrs={"class": "title"}).text}
+            # 非关键信息 解析失败不影响主要信息收集
+            try:
+                user = {}
+                user_a = li.find("a", attrs={"class": "user ui-profile-popup"})
+                user["name"] = user_a["title"]
+                user["id"] = user_a["data-user_id"]
+                user["page"] = PIXIV_URL + user_a["href"]
+                data["user"] = user
+            except Exception, e:
+                print("Parse User Warning")
+                print(e.message)
+            count_a = li.find("a", attrs={"class": "bookmark-count _ui-tooltip"})
+            if count_a:
+                data["mark_count"] = li.find("a", attrs={"class": "bookmark-count _ui-tooltip"}).text
+            else:
+                data["mark_count"] = 0
+            data = parse_dict(data)
+            datas.append(data)
+        except Exception, e:
+            print("parse_search_result Warning")
+            print(e.message)
+            continue
+    return datas
+
+
 if __name__ == '__main__':
-    test_html_parse_byfile_for_search()
+    print(testbs4())
