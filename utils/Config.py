@@ -8,7 +8,7 @@ class Config:
         self.path = path
         self.cf = ConfigParser.ConfigParser()
         self.section = section
-        self.cf.read(self.path)
+        self.cf.read(path)
 
     def get(self, key, default_value=None, section=None):
         if section is None:

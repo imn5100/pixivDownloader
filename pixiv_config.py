@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from utils import Config
-
-config = Config('../data.ini', "pixiv")
+from utils.Config import Config
+# 配置文件位置 项目外文件夹
+config = Config('../config.ini', "pixiv")
 
 # 获取代理网页超时时间5s
 TIMEOUT = config.getint("TIMEOUT", default_value=5)
@@ -34,9 +34,9 @@ BASE_URL = "http://www.pixivision.net"
 # 拉取插画专题 url
 LINK_URL = "http://www.pixivision.net/en/c/illustration/?p=%s"
 ILLUST_DETAIL_PAGE = "http://www.pixiv.net/member_illust.php?mode=medium&illust_id=%s"
-# Pixivision全站总页数,用于全站爬取 2017/4/1
+# Pixivision全站总页数,用于全站爬取 2017/5/10
 # 全站爬取完毕后，如果Pixivsion有更新，可以修改此配置，比如Pixivsion有2页更新未爬取，修改PAGE_NUM=2,全站插画爬虫则会爬取前2页的所有特辑
-PAGE_NUM = 72
+PAGE_NUM = config.getint("PAGE_NUM", default_value=76)
 # illust detail url
 ILLUST_DETAIL = "https://app-api.pixiv.net/v1/illust/detail"
 ILLUST_RELATED = 'https://app-api.pixiv.net/v1/illust/related'
