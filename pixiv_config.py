@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from utils import Config
+
+config = Config('../data.ini', "pixiv")
 
 # 获取代理网页超时时间5s
-TIMEOUT = 5
+TIMEOUT = config.getint("TIMEOUT", default_value=5)
 # 失败重试次数
 RETRY_TIME = 3
 # api请求头
@@ -87,7 +90,7 @@ P_LIMIT = 10
 # 搜索页数
 SEARCH_PAGE = 2
 # 存储位置 必须为有效路径否则会报错
-SEARCH_SAVE_PATH = u"/Users/imn5100/Downloads/pixiv/search"
+SEARCH_SAVE_PATH = "/Users/imn5100/Downloads/pixiv/search"
 # 搜索关键字 u表示 unicode 类型，否则会创建文件夹失败
 SEARCH_KEYWORD = u"夕立"
 # Pixiv账户用户名或id
