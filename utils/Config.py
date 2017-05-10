@@ -71,5 +71,5 @@ def write_config(config_file_path, section, key, value):
 
 
 if __name__ == '__main__':
-    config = Config(os.path.pardir + "/../config.ini", "pixiv")
-    print config.getint("TIMEOUT")
+    config = Config(os.path.pardir + "/config.ini", "pixiv")
+    print config.getint("IMAGE_SVAE_BASEPATH")

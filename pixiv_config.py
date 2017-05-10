@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from utils.Config import Config
-# 配置文件位置 项目外文件夹
+
+# 通过项目外的配置文件获取配置(避免更新项目代码时配置也被覆盖)。不想配置文件可以直接在config.get中的default_value填写自己的配置。
+# 配置文件例子config.ini，放置位置：本项目所在文件夹
 config = Config('../config.ini', "pixiv")
 
 # 获取代理网页超时时间5s
@@ -48,11 +50,12 @@ REDIS_FILTER_KEY = "setFilter:Pixivision"
 BLOCK_NUM = 3
 USE_FILTER = False
 # 是否覆盖已下载的插画,False 时，已下载的插画会跳过下载，True时，无论插画是否存在，都会下载，并覆盖原文件
-OVERRIDE_IMAGE = False
+OVERRIDE_IMAGE = config.getboolean("OVERRIDE_IMAGE", default_value=False)
 # Image quality  图片质量 1 最高级，使用api下载原图(找不到原图会下载大图，找不到大图下载展示图) 2 pixivision 展示用图(大小和画质都有压缩)
 IMAGE_QUALITY = 1
 # 存储插画的基本目录
-IMAGE_SVAE_BASEPATH = u"/Users/imn5100/Downloads/pixiv/z_pixivision_download"
+IMAGE_SVAE_BASEPATH = config.get("IMAGE_SVAE_BASEPATH",
+                                 default_value="/Users/imn5100/Downloads/pixiv/z_pixivision_download")
 # 文件命名是否使用原文件名（即插画作者的命名）
 # 因为插画原名经常出现颜文字和各种奇怪的符号，这里不使用图片标题进行命名，用pixiv 的id进行命名会很大地减少文件错误，提高下载正确率，
 # 缺点是 会丢失原文件名字。
