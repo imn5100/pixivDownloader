@@ -9,7 +9,7 @@ config = Config('../config.ini', "pixiv")
 # 获取代理网页超时时间5s
 TIMEOUT = config.getint("TIMEOUT", default_value=5)
 # 失败重试次数
-RETRY_TIME = 3
+RETRY_TIME = config.getint("RETRY_TIME", default_value=3)
 # api请求头
 HEADER = {
     'App-OS': 'ios',
@@ -87,19 +87,19 @@ PIXIV_LOGIN_URL = "https://accounts.pixiv.net/api/login"
 #######################################
 # 下载设置
 # 下载阈值、收藏数>THRESHOLD 才进行下载
-DOWNLOAD_THRESHOLD = 200
+DOWNLOAD_THRESHOLD = config.getint("DOWNLOAD_THRESHOLD", default_value=200)
 # 多图作品限制P数，多p插画 大于 P_LIMIT 张跳过下载。有些插画太多了，严重影响整体下载速度。
-P_LIMIT = 10
+P_LIMIT = config.getint("P_LIMIT", default_value=10)
 # 搜索页数
-SEARCH_PAGE = 2
+SEARCH_PAGE = config.getint("SEARCH_PAGE", default_value=2)
 # 存储位置 必须为有效路径否则会报错
-SEARCH_SAVE_PATH = "/Users/imn5100/Downloads/pixiv/search"
-# 搜索关键字 u表示 unicode 类型，否则会创建文件夹失败
-SEARCH_KEYWORD = u"夕立"
+SEARCH_SAVE_PATH = config.get("SEARCH_SAVE_PATH", default_value="/Users/imn5100/Downloads/pixiv/search")
+# 搜索关键字 获取的配置如果包含中文 需要decode 解码
+SEARCH_KEYWORD = config.get("SEARCH_KEYWORD", default_value="夕立").decode("utf-8")
 # Pixiv账户用户名或id
-USERNAME = "*"
+USERNAME = config.get("USERNAME", default_value="*")
 # Pixiv 账户密码
-PASSWORD = "*"
+PASSWORD = config.get("PASSWORD", default_value="*")
 # 如果不想反复登录，可以在第一次登陆后，从控制台获取输出的cookie信息。配置于此。（反复重复登陆 除了会收到Pixiv寄出的安全提示邮件外暂无其他影响）
-# 不使用cookies 请保持 赋值为None
-PIXIV_COOKIES = None
+# 不使用cookies 请保持 默认值为""
+PIXIV_COOKIES = eval(config.get("PIXIV_COOKIES", default_value="{}"))

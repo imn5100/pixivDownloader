@@ -22,11 +22,12 @@ Pixiv And Pixivision Illustrations Crawler And Downloader.<br>
 python  launcher.py 
 ~~~
 运行Pixivision全站插画爬虫:
-（全站爬取完毕后，如果Pixivsion有更新，可以修改配置文件中的PAGE_NUM为更新的页数，比如Pixivsion有2页更新未爬取，修改PAGE_NUM=2,全站插画爬虫则会爬取前2页的所有特辑）
+全站爬取完毕后，如果Pixivsion有更新，可以修改配置文件中的PAGE_NUM为更新的页数，比如Pixivsion有2页更新未爬取，修改PAGE_NUM=2,全站插画爬虫则会爬取前2页的所有特辑
 ~~~
 python launcher_plus.py
 ~~~
 运行Pixivision全站插画爬虫补全脚本：
+用于检查从Pixivision下载的特辑是否完全下载完毕，并补全下载
 ~~~
 python launcher_check_completion.py
 ~~~
@@ -38,8 +39,9 @@ python launcher_related.py
 ~~~
 python launcher_search.py
 ~~~
+UPDATE:<br>
+2017.05.11  新增项目目录外的配置文件config.ini,避免更新代码后原配置被覆盖
 
-实现思路：参考我的博客文章[shawblog.me](https://shawblog.me/blog/112.html)<br>
 
 PS①:因网络问题，下载失败很难避免。运行完毕后，若有提示下载失败的插画，可以通过查看download_error.log文件获取下载失败的插画详情。运行launcher.py 选择使用url或ID补充下载。<br>
 
@@ -50,4 +52,4 @@ PS②:关于搜索下载，在没有会员的情况下，很难搜到高质量�
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.适当调整配置参数“DOWNLOAD_THRESHOLD”即_下载的插画的最小收藏数_的设置。<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.减小搜索关键字范围。 <br>
 
-PS③:因python2的编码问题。如果出现了在控制台输入中文||日文出现字符编码异常情况，请设置控制台运行环境字符编码为UTF-8后重试。
+PS③:因python2的编码问题。推荐使用IDE,如果出现了在控制台运行输入中文||日文出现字符编码异常情况，请设置控制台运行环境字符编码为UTF-8后重试。
