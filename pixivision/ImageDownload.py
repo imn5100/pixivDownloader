@@ -67,6 +67,10 @@ class ImageDownload(object):
         html = HtmlDownloader.download(url)
         illu_list = HtmlDownloader.parse_illustration(html)
         title_des = HtmlDownloader.get_title(html)
+        # # 是否由该线程自主创建文件夹
+        # if kws and kws.has_key('create_path') and kws.get("create_path") and title_des and title_des.has_key('title'):
+        #     path = path + "/" + title_des['title']
+        #     os.makedirs(path)
         if title_des and illu_list:
             title_des["size"] = len(illu_list)
             CommonUtils.write_topic_des(path + "/topic.txt", title_des)
@@ -98,6 +102,8 @@ class ImageDownload(object):
                 error_log("Download Illu Fail:" + " Illustration :" + str(illu))
                 error_log(e)
                 continue
+        print '*' * 10
+        print url + " Download End!"
 
     @classmethod
     def get_image_url(cls, illu, detail):
@@ -164,4 +170,4 @@ class IlluDownloadThread(threading.Thread):
                 error_log("make dir Fail:" + self.path)
                 error_log(e)
                 return
-        ImageDownload.download_topics(self.url, self.path, self.quality)
+        ImageDownload.download_topics(self.url, self.path, quality=self.quality)
