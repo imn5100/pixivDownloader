@@ -11,10 +11,8 @@ from pixivision.ImageDownload import IlluDownloadThread
 
 def check_image(dir):
     if os.path.exists(dir):
-        # windows系统获取的文件夹名称为GBK编码
         image_fls = os.listdir(dir)
         for image_fl in image_fls:
-            # 文件夹名称 widnows获取为gbk，liunx如果默认编码为utf-8则不需要这一步
             image_fl = image_fl
             # 检查是否有特辑描述文件
             base_path = dir + "/" + image_fl
