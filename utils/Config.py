@@ -2,6 +2,8 @@
 import ConfigParser
 import os
 
+__DEFAULT_CHARSET__ = 'utf-8'
+
 
 class Config:
     def __init__(self, path, section=None):
@@ -15,11 +17,20 @@ class Config:
             section = self.section
         if default_value is not None:
             try:
-                return self.cf.get(section, key)
-            except:
-                return default_value
+                return self.get_unicode(section, key)
+            except Exception, e:
+                if isinstance(e, UnicodeDecodeError):
+                    raise e
+                else:
+                    return default_value
         else:
-            return self.cf.get(section, key)
+            return self.get_unicode(section, key)
+
+    def get_unicode(self, section, key):
+        val = self.cf.get(section, key)
+        if isinstance(val, str):
+            val = val.decode(__DEFAULT_CHARSET__)
+        return val
 
     def getint(self, key, default_value=None, section=None):
         if section is None:

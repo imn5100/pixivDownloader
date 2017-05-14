@@ -94,8 +94,8 @@ P_LIMIT = config.getint("P_LIMIT", default_value=10)
 SEARCH_PAGE = config.getint("SEARCH_PAGE", default_value=2)
 # 存储位置 必须为有效路径否则会报错
 SEARCH_SAVE_PATH = config.get("SEARCH_SAVE_PATH", default_value="/Users/imn5100/Downloads/pixiv/search")
-# 搜索关键字 获取的配置如果包含中文 需要decode 解码
-SEARCH_KEYWORD = config.get("SEARCH_KEYWORD", default_value="夕立").decode("utf-8")
+# 搜索关键字
+SEARCH_KEYWORD = config.get("SEARCH_KEYWORD", default_value="夕立")
 # Pixiv账户用户名或id
 USERNAME = config.get("USERNAME", default_value="*")
 # Pixiv 账户密码
