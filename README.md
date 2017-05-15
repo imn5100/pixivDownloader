@@ -27,7 +27,7 @@ python  launcher.py
 python launcher_plus.py
 ~~~
 运行Pixivision全站插画爬虫补全脚本：<br>
-&nbsp;&nbsp;&nbsp;&nbsp;用于检查从Pixivision下载的特辑是否完全下载完毕，并补全下载
+&nbsp;&nbsp;&nbsp;&nbsp;用于检查从Pixivision下载的特辑是否完全下载完毕，并补全下载。(注意：这里的补全并不是下载Pixivison的更新内容)
 ~~~
 python launcher_check_completion.py
 ~~~

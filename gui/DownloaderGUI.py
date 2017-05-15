@@ -51,7 +51,8 @@ class PixivDownloadFrame(Frame):
 
         text2 = Text(self, height=20, width=50)
         scroll = Scrollbar(self, command=text2.yview)
-        text2.bind("<Key>", lambda e: "break")
+        # 设置输出控制台只读，不接受按键事件,但会导致无法复制控制台的信息，暂时不限制
+        # text2.bind("<Key>", lambda e: "break")
         text2.configure(yscrollcommand=scroll.set)
         text2.tag_configure('info', foreground='#3A98FE',
                             font=('Tempus Sans ITC', 12))
@@ -81,7 +82,7 @@ class PixivDownloadFrame(Frame):
         if re.match("htt(p|ps)://www.pixivision.net/(zh|ja|en|zh-tw)/a/\d*", url):
             showinfo("info", "Start download pixivision.net page:" + url)
             print ("info", "Start download pixivision.net page:" + url)
-            IlluDownloadThread(url.strip(), path=path, quality=1).start()
+            IlluDownloadThread(url.strip(), path=path, quality=1, create_path=True).start()
             return
         # 插画列表页下载
         elif re.match(r"htt(p|ps)://www.pixivision.net/(zh|ja|en|zh-tw)/c/illustration/\?p=\d*", url):

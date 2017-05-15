@@ -2,8 +2,7 @@
 import os
 import threading
 
-from pixiv_config import IMAGE_SVAE_BASEPATH, USE_FILTER, REDIS_IP, REDIS_PORT, IMAGE_USE_ORG_NAME, BLOCK_NUM, \
-    REDIS_FILTER_KEY
+from pixiv_config import IMAGE_SVAE_BASEPATH, USE_FILTER, REDIS_IP, REDIS_PORT, IMAGE_USE_ORG_NAME
 from pixivapi.PixivApi import PixivApi
 from pixivision.PixivisionDownloader import HtmlDownloader
 from utils import CommonUtils
@@ -11,34 +10,35 @@ from utils.LoggerUtil import error_log
 
 
 # redis filter 过滤装饰器 过滤已下载过的链接
-def redisFilterDecp(r=None):
-    def _deco(func):
-        def new_fun(cls, url, save_path, quality):
-            if USE_FILTER:
-                from utils.RedisFilter import RedisFilter
-                redis_filter = RedisFilter(r, block_num=BLOCK_NUM, filter_key=REDIS_FILTER_KEY)
-                if not redis_filter.is_contained(url):
-                    rt = func(cls, url, save_path, quality)
-                    redis_filter.add(url)
-                    print("Redis Filter Add url success: " + url)
-                    return rt
-                else:
-                    print("The URL has been filtered: " + url)
-            else:
-                return func(cls, url, save_path, quality)
-
-        return new_fun
-
-    return _deco
+# 使用redis会使整个项目变得太重。废弃不用。
+# def redisFilterDecp(r=None):
+#     def _deco(func):
+#         def new_fun(cls, url, save_path, quality):
+#             if USE_FILTER:
+#                 from utils.RedisFilter import RedisFilter
+#                 redis_filter = RedisFilter(r, block_num=BLOCK_NUM, filter_key=REDIS_FILTER_KEY)
+#                 if not redis_filter.is_contained(url):
+#                     rt = func(cls, url, save_path, quality)
+#                     redis_filter.add(url)
+#                     print("Redis Filter Add url success: " + url)
+#                     return rt
+#                 else:
+#                     print("The URL has been filtered: " + url)
+#             else:
+#                 return func(cls, url, save_path, quality)
+#
+#         return new_fun
+#
+#     return _deco
 
 
 class ImageDownload(object):
-    # redis 连接只需要一个，在类中共享
-    if USE_FILTER:
-        import redis
-        r = redis.Redis(REDIS_IP, REDIS_PORT)
-    else:
-        r = None
+    # # redis 连接只需要一个，在类中共享
+    # if USE_FILTER:
+    #     import redis
+    #     r = redis.Redis(REDIS_IP, REDIS_PORT)
+    # else:
+    #     r = None
 
     @classmethod
     def get_pixivision_topics(cls, url, path):
@@ -62,15 +62,14 @@ class ImageDownload(object):
         return topic_list
 
     @classmethod
-    @redisFilterDecp(r)
-    def download_topics(cls, url, path, quality=1):
+    def download_topics(cls, url, path, quality=1, create_path=False):
         html = HtmlDownloader.download(url)
         illu_list = HtmlDownloader.parse_illustration(html)
         title_des = HtmlDownloader.get_title(html)
         # # 是否由该线程自主创建文件夹
-        # if kws and kws.has_key('create_path') and kws.get("create_path") and title_des and title_des.has_key('title'):
-        #     path = path + "/" + title_des['title']
-        #     os.makedirs(path)
+        if create_path and title_des and title_des.has_key('title'):
+            path = path + "/" + title_des['title']
+            os.makedirs(path)
         if title_des and illu_list:
             title_des["size"] = len(illu_list)
             CommonUtils.write_topic_des(path + "/topic.txt", title_des)
@@ -156,11 +155,12 @@ class ImageDownload(object):
 
 
 class IlluDownloadThread(threading.Thread):
-    def __init__(self, url, path=IMAGE_SVAE_BASEPATH, quality=1):
+    def __init__(self, url, path=IMAGE_SVAE_BASEPATH, quality=1, create_path=False):
         threading.Thread.__init__(self, name="Download-" + url)
         self.url = url
         self.path = path
         self.quality = quality
+        self.create_path = create_path
 
     def run(self):
         if not os.path.exists(self.path):
@@ -170,4 +170,4 @@ class IlluDownloadThread(threading.Thread):
                 error_log("make dir Fail:" + self.path)
                 error_log(e)
                 return
-        ImageDownload.download_topics(self.url, self.path, quality=self.quality)
+        ImageDownload.download_topics(self.url, self.path, quality=self.quality, create_path=self.create_path)

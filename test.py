@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
-from threading import Thread
-
-import redis
 import time
+from threading import Thread
 
 from pixiv.PixivPageDownloader import PixivHtmlParser
 from pixiv_config import *
@@ -13,7 +11,6 @@ from pixivapi.PixivUtils import parse_dict
 from pixivision.ImageDownload import ImageDownload, IlluDownloadThread
 from pixivision.PixivisionDownloader import HtmlDownloader
 from utils.MessageHandler import RedisMessageClient, PixivDownloadHandler
-from utils.RedisFilter import RedisFilter
 
 
 def test_pixivision():
@@ -35,22 +32,22 @@ def test_api():
     print(related)
 
 
-def test_redisFilter():
-    r = redis.Redis(REDIS_IP, REDIS_PORT)
-    rFilter = RedisFilter(r, 3, "setFilter:Pixivision")
-    datas = ["/zh/c/1001", "/zh/c/1002", "/zh/c/1003", "/zh/c/1004", "/zh/c/1005", "/zh/c/1006", "/zh/c/1008",
-             "/zh/c/1009"]
-    other = "/zh/c/1007"
-    rFilter.add_all(datas)
-    print(rFilter.is_contained(datas[2]))
-    print(rFilter.is_contained(other))
-    rFilter.add(other)
-    print(rFilter.is_contained(other))
-    rFilter.remove(datas[1])
-    print(rFilter.is_contained(datas[1]))
-    rFilter.remove_all(datas)
-    rFilter.remove(other)
-    print(rFilter.is_contained(datas[2]))
+# def test_redisFilter():
+#     r = redis.Redis(REDIS_IP, REDIS_PORT)
+#     rFilter = RedisFilter(r, 3, "setFilter:Pixivision")
+#     datas = ["/zh/c/1001", "/zh/c/1002", "/zh/c/1003", "/zh/c/1004", "/zh/c/1005", "/zh/c/1006", "/zh/c/1008",
+#              "/zh/c/1009"]
+#     other = "/zh/c/1007"
+#     rFilter.add_all(datas)
+#     print(rFilter.is_contained(datas[2]))
+#     print(rFilter.is_contained(other))
+#     rFilter.add(other)
+#     print(rFilter.is_contained(other))
+#     rFilter.remove(datas[1])
+#     print(rFilter.is_contained(datas[1]))
+#     rFilter.remove_all(datas)
+#     rFilter.remove(other)
+#     print(rFilter.is_contained(datas[2]))
 
 
 def test_image_download():
