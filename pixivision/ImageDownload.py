@@ -2,7 +2,7 @@
 import os
 import threading
 
-from pixiv_config import IMAGE_SVAE_BASEPATH, USE_FILTER, REDIS_IP, REDIS_PORT, IMAGE_USE_ORG_NAME
+from pixiv_config import IMAGE_SVAE_BASEPATH, IMAGE_USE_ORG_NAME
 from pixivapi.PixivApi import PixivApi
 from pixivision.PixivisionDownloader import HtmlDownloader
 from utils import CommonUtils

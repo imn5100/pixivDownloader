@@ -19,7 +19,7 @@ def check_image(dir):
             if os.path.exists(base_path + "/topic.txt"):
                 check_num(base_path)
             else:
-                print("Not found topic.txt.\tPath：" + base_path.encode("utf-8"))
+                print("Not found topic.txt.\tPath：" + base_path)
 
 
 # 检查是否下载完全
