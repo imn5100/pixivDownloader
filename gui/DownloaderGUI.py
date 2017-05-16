@@ -32,7 +32,7 @@ class PixivDownloadFrame(Frame):
 
     def init_ui(self):
         self.root.title("Pixiv Downloader")
-        self.root.resizable(width=True, height=False)
+        self.root.resizable(width=False, height=False)
 
         url_label = Label(self, text="Pixiv Or Pixivision Site Or Illustration Id:", width=50, height=1)
         url_label.pack()
