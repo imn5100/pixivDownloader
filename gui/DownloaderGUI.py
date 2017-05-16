@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import os
+import tkMessageBox
 from Tkinter import *
 from tkMessageBox import showerror, showwarning, showinfo
 
+from gui.WorkQueue import PixivQueue
 from pixiv_config import IMAGE_SVAE_BASEPATH
 from pixivision.ImageDownload import ImageDownload, IlluDownloadThread
 from pixivision.PixivisionLauncher import PixivisionLauncher
@@ -15,9 +17,14 @@ def set_int(int_num):
         return 0
 
 
+def download_callback(url, path):
+    showinfo("Download Completed", "Url or id:" + str(url) + "\nPath:" + path)
+
+
 class PixivDownloadFrame(Frame):
     def __init__(self, root):
         Frame.__init__(self, root)
+        self.queue = PixivQueue(callback=download_callback)
         self.print_text = None
         self.root = root
         self.FrameSizeY = 250
@@ -66,6 +73,7 @@ class PixivDownloadFrame(Frame):
         self.print_text = text2
         scroll.pack(side=RIGHT, fill=Y)
         self.grid(row=0, column=0)
+        self.queue.run()
 
     def handle_url(self):
         url = self.url_var.get().strip()
@@ -93,7 +101,10 @@ class PixivDownloadFrame(Frame):
         elif set_int(url) != 0:
             showinfo("info", "Downloading id:" + str(set_int(url)) + " illustration")
             print ("info", "Downloading id:" + str(set_int(url)) + " illustration")
-            ImageDownload.download_image_byid(url, path)
+            self.queue.add_work({
+                'id': set_int(url),
+                'path': path + "/"
+            })
             return
         elif url.startswith("http"):
             # 无法解析的pixivison站 或非 pixiv站 不支持
@@ -103,7 +114,10 @@ class PixivDownloadFrame(Frame):
                 return
             showinfo("info", "Downloading  url:" + url)
             print ("info", "Downloading  url:" + url)
-            ImageDownload.download_byurl(url, path)
+            self.queue.add_work({
+                'url': url,
+                'path': path + "/"
+            })
         else:
             showerror("error", "")
 
