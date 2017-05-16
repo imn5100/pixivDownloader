@@ -26,11 +26,11 @@ class PixivQueue(object):
                 if not task:
                     continue
                 if task.has_key('id') and task.has_key('path'):
-                    ImageDownload.download_image_byid(task.get('id'), task.get('path'))
-                    if callback: callback(task.get('id'), task.get('path'))
+                    illu_file = ImageDownload.download_image_byid(task.get('id'), task.get('path'))
+                    if callback and illu_file: callback(illu_file, id=task.get('id'))
                 elif task.has_key('url') and task.has_key('path'):
-                    ImageDownload.download_byurl(task.get('url'), task.get('path'))
-                    if callback: callback(task.get('url'), task.get('path'))
+                    illu_file = ImageDownload.download_byurl(task.get('url'), task.get('path'))
+                    if callback and illu_file: callback(illu_file, url=task.get('url'))
             except Exception, e:
                 print ("error", e)
             finally:

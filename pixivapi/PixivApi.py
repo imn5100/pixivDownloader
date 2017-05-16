@@ -22,6 +22,7 @@ class PixivApi(object):
         with open(path, 'wb') as out_file:
             shutil.copyfileobj(response.raw, out_file)
         del response
+        return path
 
     # 获取作品详情
     @classmethod

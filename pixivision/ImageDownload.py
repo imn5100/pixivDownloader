@@ -139,19 +139,19 @@ class ImageDownload(object):
             if detail:
                 download_url = ImageDownload.get_image_url(None, detail)
                 if download_url:
-                    PixivApi.download(download_url, prefix=prefix)
+                    return PixivApi.download(download_url, prefix=prefix)
                 else:
-                    print("download by id fail,can't find download url")
+                    print("error", "download by id fail,can't find download url")
             else:
-                print("can't get detail id:" + str(id))
+                print("error", "can't get detail id:" + str(id))
 
     @classmethod
     def download_byurl(cls, url, prefix=None):
         illust_id = CommonUtils.get_url_param(url, "illust_id")
         if illust_id:
-            ImageDownload.download_image_byid(illust_id, prefix=prefix)
+            return ImageDownload.download_image_byid(illust_id, prefix=prefix)
         else:
-            PixivApi.download(url.strip(), prefix=prefix)
+            return PixivApi.download(url.strip(), prefix=prefix)
 
 
 class IlluDownloadThread(threading.Thread):

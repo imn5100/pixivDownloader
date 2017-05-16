@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
 import os
-import tkMessageBox
 from Tkinter import *
 from tkMessageBox import showerror, showwarning, showinfo
 
 from gui.WorkQueue import PixivQueue
 from pixiv_config import IMAGE_SVAE_BASEPATH
-from pixivision.ImageDownload import ImageDownload, IlluDownloadThread
+from pixivision.ImageDownload import IlluDownloadThread
 from pixivision.PixivisionLauncher import PixivisionLauncher
 
 
@@ -17,15 +16,12 @@ def set_int(int_num):
         return 0
 
 
-def download_callback(url, path):
-    showinfo("Download Completed", "Url or id:" + str(url) + "\nPath:" + path)
-
-
 class PixivDownloadFrame(Frame):
     def __init__(self, root):
         Frame.__init__(self, root)
-        self.queue = PixivQueue(callback=download_callback)
+        self.queue = PixivQueue(callback=self.download_callback)
         self.print_text = None
+        self.task_text = None
         self.root = root
         self.FrameSizeY = 250
         self.FrameSizeX = 465
@@ -56,23 +52,24 @@ class PixivDownloadFrame(Frame):
         banner = Label(self, text="Power by imn5100", width=30, height=5)
         banner.pack()
 
-        text2 = Text(self, height=20, width=50)
+        text1 = Text(self, height=20, width=30)
+        text1.bind("<Key>", lambda e: "break")
+        text1.insert(END, 'Download Completed:\n')
+        text1.pack(side=LEFT)
+        self.task_text = text1
+
+        text2 = Text(self, height=20, width=40)
         scroll = Scrollbar(self, command=text2.yview)
-        # 设置输出控制台只读，不接受按键事件,但会导致无法复制控制台的信息，暂时不限制
-        # text2.bind("<Key>", lambda e: "break")
         text2.configure(yscrollcommand=scroll.set)
-        text2.tag_configure('info', foreground='#3A98FE',
-                            font=('Tempus Sans ITC', 12))
-        text2.tag_configure('warning', foreground='#FEC534',
-                            font=('Tempus Sans ITC', 12))
-        text2.tag_configure('error', foreground='#FF2D21',
-                            font=('Tempus Sans ITC', 12))
-        quote = "This is Console:\n"
+        text2.tag_configure('info', foreground='#3A98FE')
+        text2.tag_configure('warning', foreground='#FEC534')
+        text2.tag_configure('error', foreground='#FF2D21')
+        quote = "Console Log:\n"
         text2.insert(END, quote, 'info')
-        text2.pack()
-        self.print_text = text2
+        text2.pack(side=LEFT)
         scroll.pack(side=RIGHT, fill=Y)
-        self.grid(row=0, column=0)
+        self.print_text = text2
+        self.grid()
         self.queue.run()
 
     def handle_url(self):
@@ -120,6 +117,13 @@ class PixivDownloadFrame(Frame):
             })
         else:
             showerror("error", "")
+
+    def download_callback(self, illu_file, id=None, url=None):
+        if id:
+            msg = "{\nId:" + str(id)
+        else:
+            msg = "{\nUrl:" + str(url)
+        self.task_text.insert(END, msg + "\nFile:" + illu_file + "\n}\n")
 
 
 class LogRedirection:
