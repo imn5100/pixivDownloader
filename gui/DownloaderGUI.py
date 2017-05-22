@@ -88,7 +88,7 @@ class PixivDownloadFrame(Frame):
             showinfo("info", "Start download pixivision.net page:" + url)
             print ("info", "Start download pixivision.net page:" + url)
             IlluDownloadThread(url.strip(), path=path, quality=1, create_path=True).register_hook(
-                success_callback=self.thread_callback).start()
+                success_callback=self.download_callback).start()
             return
         # 插画列表页下载
         elif re.match(r"htt(p|ps)://www.pixivision.net/(zh|ja|en|zh-tw)/c/illustration/\?p=\d*", url):
@@ -119,15 +119,11 @@ class PixivDownloadFrame(Frame):
         else:
             showerror("error", "")
 
-    def download_callback(self, illu_file, id=None, url=None):
-        if id:
-            msg = "{\nId:" + str(id)
+    def download_callback(self, msg=None):
+        if msg:
+            self.task_text.insert(END, msg)
         else:
-            msg = "{\nUrl:" + str(url)
-        self.task_text.insert(END, msg + "\nFile:" + illu_file + "\n}\n")
-
-    def thread_callback(self):
-        self.task_text.insert(END, "A work Done")
+            self.task_text.insert(END, "A work Done")
 
 
 class LogRedirection:
@@ -137,6 +133,8 @@ class LogRedirection:
 
     def write(self, output_stream):
         try:
+            # 如果有必要可以在错误日子打印所有输出
+            # LoggerUtil.error_log(output_stream)
             if output_stream.startswith('(') and output_stream.endswith(')'):
                 output = eval(output_stream)
                 if output and len(output) == 2:

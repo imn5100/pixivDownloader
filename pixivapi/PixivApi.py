@@ -16,7 +16,7 @@ class PixivApi(object):
         # 文件一存在，且下载模式为非覆盖模式，跳过下载。注意：修改命名规范后因为文件名不同，会出现重复下载通用图的情况。
         if os.path.exists(path) and (not pixiv_config.OVERRIDE_IMAGE):
             print("continue!")
-            return
+            return path
         # 增加timeout时间，可减少 tiemout 异常导致的文件下载失败问题，但无法完全避免，且会增加下载时间
         response = requests.get(url, headers={'Referer': referer}, timeout=60, stream=True)
         with open(path, 'wb') as out_file:

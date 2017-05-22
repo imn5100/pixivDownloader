@@ -135,7 +135,6 @@ class ImageDownload(object):
     def download_image_byid(cls, id, prefix=None):
         if id:
             detail = PixivApi.illust_detail(id)
-            print(detail)
             if detail:
                 download_url = ImageDownload.get_image_url(None, detail)
                 if download_url:
