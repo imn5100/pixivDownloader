@@ -2,7 +2,7 @@
 from Queue import Queue
 from threading import Thread
 
-from pixivision.ImageDownload import ImageDownload
+from pixiv import PixivImageDownloader
 
 
 class PixivQueue(object):
@@ -26,7 +26,7 @@ class PixivQueue(object):
                 if not task:
                     continue
                 if task.has_key('id') and task.has_key('path'):
-                    illu_file = ImageDownload.download_image_byid(task.get('id'), task.get('path'))
+                    illu_file = PixivImageDownloader.download_all_by_id(task.get('id'), task.get('path'))
                     if callback:
                         if illu_file:
                             msg = "{\nId:" + str(task.get('id')) + "\nFile:" + illu_file + "\n}\n"
@@ -34,7 +34,7 @@ class PixivQueue(object):
                             msg = "{\nId:" + str(task.get('id')) + "\nFile:Download Fail\n}\n"
                         callback(msg)
                 elif task.has_key('url') and task.has_key('path'):
-                    illu_file = ImageDownload.download_byurl(task.get('url'), task.get('path'))
+                    illu_file = PixivImageDownloader.download_all_by_url(task.get('url'), task.get('path'))
                     if callback:
                         if illu_file:
                             msg = "{\nUrl:" + str(task.get('url')) + "\nFile:" + illu_file + "\n}\n"
