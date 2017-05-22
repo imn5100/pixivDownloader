@@ -161,6 +161,8 @@ class IlluDownloadThread(threading.Thread):
         self.path = path
         self.quality = quality
         self.create_path = create_path
+        self.success = None
+        self.fail = None
 
     def run(self):
         if not os.path.exists(self.path):
@@ -170,4 +172,15 @@ class IlluDownloadThread(threading.Thread):
                 error_log("make dir Fail:" + self.path)
                 error_log(e)
                 return
-        ImageDownload.download_topics(self.url, self.path, quality=self.quality, create_path=self.create_path)
+        try:
+            ImageDownload.download_topics(self.url, self.path, quality=self.quality, create_path=self.create_path)
+            if self.success: self.success()
+        except:
+            if self.fail: self.fail()
+
+    def register_hook(self, success_callback=None, fail_callback=None):
+        if success_callback:
+            self.success = success_callback
+        if fail_callback:
+            self.fail = fail_callback
+        return self

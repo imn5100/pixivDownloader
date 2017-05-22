@@ -87,7 +87,8 @@ class PixivDownloadFrame(Frame):
         if re.match("htt(p|ps)://www.pixivision.net/(zh|ja|en|zh-tw)/a/\d*", url):
             showinfo("info", "Start download pixivision.net page:" + url)
             print ("info", "Start download pixivision.net page:" + url)
-            IlluDownloadThread(url.strip(), path=path, quality=1, create_path=True).start()
+            IlluDownloadThread(url.strip(), path=path, quality=1, create_path=True).register_hook(
+                success_callback=self.thread_callback).start()
             return
         # 插画列表页下载
         elif re.match(r"htt(p|ps)://www.pixivision.net/(zh|ja|en|zh-tw)/c/illustration/\?p=\d*", url):
@@ -124,6 +125,9 @@ class PixivDownloadFrame(Frame):
         else:
             msg = "{\nUrl:" + str(url)
         self.task_text.insert(END, msg + "\nFile:" + illu_file + "\n}\n")
+
+    def thread_callback(self):
+        self.task_text.insert(END, "A work Done")
 
 
 class LogRedirection:
