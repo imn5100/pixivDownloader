@@ -48,3 +48,21 @@ def write_topic_des(file_path, data):
     except Exception, e:
         print("Write Topic Description Fail")
         print(e)
+
+
+# 构建回掉通知消息
+def build_callback_msg(path, id=None, url=None):
+    if id is None and url is None:
+        return ""
+    if id:
+        show = "Id"
+        show1 = id
+    else:
+        show = "Url"
+        show1 = url
+    if path:
+        show2 = path
+    else:
+        show2 = "Download Fail"
+    msg = "{\n%s:%s\nFile:%s\n}\n"
+    return msg % (show, show1, show2)

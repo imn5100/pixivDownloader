@@ -149,10 +149,3 @@ class LogRedirection:
 
     def set_out(self):
         sys.stdout = self
-
-
-if __name__ == '__main__':
-    root = Tk()
-    frame = PixivDownloadFrame(root)
-    sys.stdout = LogRedirection(frame.print_text)
-    root.mainloop()

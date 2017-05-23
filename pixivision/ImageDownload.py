@@ -103,6 +103,7 @@ class ImageDownload(object):
                 continue
         print '*' * 10
         print url + " Download End!"
+        return path
 
     @classmethod
     def get_image_url(cls, illu, detail):
@@ -172,8 +173,10 @@ class IlluDownloadThread(threading.Thread):
                 error_log(e)
                 return
         try:
-            ImageDownload.download_topics(self.url, self.path, quality=self.quality, create_path=self.create_path)
-            if self.success: self.success()
+            path = ImageDownload.download_topics(self.url, self.path, quality=self.quality,
+                                                 create_path=self.create_path)
+            if self.success:
+                self.success(CommonUtils.build_callback_msg(path, url=self.url))
         except:
             if self.fail: self.fail()
 

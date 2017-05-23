@@ -3,6 +3,7 @@ from Queue import Queue
 from threading import Thread
 
 from pixiv import PixivImageDownloader
+from utils import CommonUtils
 
 
 class PixivQueue(object):
@@ -28,18 +29,12 @@ class PixivQueue(object):
                 if task.has_key('id') and task.has_key('path'):
                     illu_file = PixivImageDownloader.download_all_by_id(task.get('id'), task.get('path'))
                     if callback:
-                        if illu_file:
-                            msg = "{\nId:" + str(task.get('id')) + "\nFile:" + illu_file + "\n}\n"
-                        else:
-                            msg = "{\nId:" + str(task.get('id')) + "\nFile:Download Fail\n}\n"
+                        msg = CommonUtils.build_callback_msg(illu_file, id=str(task.get('id')))
                         callback(msg)
                 elif task.has_key('url') and task.has_key('path'):
                     illu_file = PixivImageDownloader.download_all_by_url(task.get('url'), task.get('path'))
                     if callback:
-                        if illu_file:
-                            msg = "{\nUrl:" + str(task.get('url')) + "\nFile:" + illu_file + "\n}\n"
-                        else:
-                            msg = "{\nUrl:" + str(task.get('url')) + "\nFile:Download Fail\n}\n"
+                        msg = CommonUtils.build_callback_msg(illu_file, url=str(task.get('url')))
                         callback(msg)
             except Exception, e:
                 print ("error", e)
