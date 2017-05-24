@@ -2,25 +2,24 @@
 Pixiv And Pixivision Illustrations Crawler And Downloader.<br>
  
 * 项目主要用于 Pixiv站和Pixivision的插画特辑信息爬取和图片下载<br>
-	支持图片质量：原图|大图下载<br>
       	支持以下下载方式：<br>
-          1.  Pixivision插画特辑列表页全部爬取<br>
+           1.  Pixivision插画特辑列表页全部爬取<br>
           2.  Pixivision插画特辑详情页全部爬取<br>
           3.  通过Pixiv插画url下载<br>
           4.  通过Pixiv插画ID下载<br>
           5.  通过Pixiv插画ID下载关联作品<br>
           6.  通过关键字搜索下载<br>
  
-* 核心配置文件__pixiv_config.py__和__config.ini__<br>
-     1. 修改__CRAWLER_HEADER__中__Accept-Language__，获取4中不同语言的特辑描述。<br>
-     2. 修改__IMAGE_SVAE_BASEPATH__，指定图片存储位置。<br>
+* 核心配置文件pixiv_config.py和config.ini<br>
+     1. 修改RAWLER_HEADER中Accept-Language，获取4中不同语言的特辑描述。<br>
+     2. 修改IMAGE_SVAE_BASEPATH，指定图片存储位置。<br>
      *. 更多详细配置请看文件注释。
 
-运行菜单：
+运行菜单:(支持下载方式1-4)
 ~~~
 python  launcher.py 
 ~~~
-启动图形界面下载工具:
+启动图形界面下载工具:(支持下载方式1-4)
 ~~~
 python launcher_gui.py
 ~~~
