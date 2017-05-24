@@ -1,9 +1,9 @@
 # PixivDownloader
-Pixiv And Pixivision Illustrations Crawler And Downloader.<br>
+Pixiv And Pixivision Illustrations Downloader.<br>
  
 * 项目主要用于 Pixiv站和Pixivision的插画特辑信息爬取和图片下载<br>
       	支持以下下载方式：<br>
-           1.  Pixivision插画特辑列表页全部爬取<br>
+          1.  Pixivision插画特辑列表页全部爬取<br>
           2.  Pixivision插画特辑详情页全部爬取<br>
           3.  通过Pixiv插画url下载<br>
           4.  通过Pixiv插画ID下载<br>
@@ -29,7 +29,7 @@ python launcher_gui.py
 python launcher_plus.py
 ~~~
 运行Pixivision全站插画爬虫补全脚本：<br>
-&nbsp;&nbsp;&nbsp;&nbsp;用于检查从Pixivision下载的特辑是否完全下载完毕，并补全下载。(注意：这里的补全并不是下载Pixivison的更新内容)
+&nbsp;&nbsp;&nbsp;&nbsp;用于检查从Pixivision下载的特辑是否完全下载完毕，并补全下载。(注意：这里的补全并不是下载Pixivison的更新的内容)
 ~~~
 python launcher_check_completion.py
 ~~~
@@ -46,9 +46,11 @@ UPDATE:<br>
 2017.05.24  添加了一个简单的图形界面下载工具<br>
 
 PS①:关于搜索下载，在没有会员的情况下，很难搜到高质量的人气作品。<br>
-网上的做法：在关键字后加 1000users入り ，即1000以上用户收藏，表示搜索tag中或描述中包含关键字1000users入り，1000可替换为其他数值。这样搜出来的作品的确能保证是人气作品，但只对大类名有效（比如東方project,艦これ 这类搜索）且会遗漏很多优秀作品,小类目的作品则会一幅都搜不出。<br>&nbsp;&nbsp;&nbsp;&nbsp;在使用小类目搜索下载时，你可以尝试一下方法下载人气作品：<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.增加爬取页数。 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.适当调整配置参数“DOWNLOAD_THRESHOLD”即_下载的插画的最小收藏数_的设置。<br>
+网上的做法：在关键字后加 1000users入り ，即1000以上用户收藏，表示搜索tag中或描述中包含关键字1000users入り，1000可替换为其他数值。
+这样搜出来的作品的确能保证是人气作品，但只对大类目有效（比如東方project,艦これ 这类搜索）且会遗漏很多优秀作品,小类目的作品则会一幅都搜不出。<br>
+&nbsp;&nbsp;&nbsp;&nbsp;在使用小类目搜索下载时，你可以尝试以下方法下载人气作品：<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.增加爬取页数配置SEARCH_PAGE。 <br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.适当调小配置参数“DOWNLOAD_THRESHOLD”即下载的插画的最小收藏数的设置。<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.减小搜索关键字范围。 <br>
 
-PS②:因python2的编码问题。推荐使用IDE,如果出现了在控制台运行输入中文||日文出现字符编码异常情况，请设置控制台运行环境字符编码为UTF-8后重试。
+PS②:如果出现了在控制台运行输入中文||日文出现字符编码异常情况，请设置控制台运行环境字符编码为UTF-8后重试。Windows系统下推荐直接使用IDE运行。

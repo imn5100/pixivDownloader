@@ -6,10 +6,8 @@ from pixivision.PixivisionLauncher import PixivisionLauncher, start
 from utils.LoggerUtil import error_log
 
 
-# 使用线程池，不需要等线程*全部*顺序执行完毕再开启下个线程
+# 使用线程池，不需要等到线程池顺序执行完毕再开启下个线程
 def run_by_pool():
-    # 9:49     # 14:15
-    # Pixivision全站插图爬取
     from twisted.python.threadpool import ThreadPool
     urls = [LINK_URL % n for n in range(1, PAGE_NUM + 1)]
     # 5*20 最大100线程在运行
