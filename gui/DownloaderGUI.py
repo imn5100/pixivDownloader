@@ -91,7 +91,7 @@ class PixivDownloadFrame(Frame):
                 success_callback=self.download_callback).start()
             return
         # 插画列表页下载
-        elif re.match(r"htt(p|ps)://www.pixivision.net/(zh|ja|en|zh-tw)/c/illustration/\?p=\d*", url):
+        elif re.match(r"htt(p|ps)://www.pixivision.net/(zh|ja|en|zh-tw)/c/illustration(/|)(\?p=\d+|)", url):
             showinfo("info", "Start download pixivision.net page:" + url)
             print ("info", "Start download pixivision.net page:" + url)
             PixivisionLauncher(url, save_path=path).start()
@@ -133,7 +133,7 @@ class LogRedirection:
 
     def write(self, output_stream):
         try:
-            # 如果有必要可以在错误日子打印所有输出
+            # 如果有必要可以在错误日志打印所有输出
             # LoggerUtil.error_log(output_stream)
             if output_stream.startswith('(') and output_stream.endswith(')'):
                 output = eval(output_stream)

@@ -12,6 +12,7 @@ from pixivision.ImageDownload import IlluDownloadThread
 def check_image(dir):
     if os.path.exists(dir):
         image_fls = os.listdir(dir)
+        print 'Dir Count:' + str(len(image_fls))
         for image_fl in image_fls:
             image_fl = image_fl
             # 检查是否有特辑描述文件

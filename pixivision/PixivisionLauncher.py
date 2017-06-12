@@ -14,7 +14,7 @@ def start(url, save_path=IMAGE_SVAE_BASEPATH, quality=1, success_callback=None, 
                 success_callback=success_callback, fail_callback=fail_callback)
             t.start()
             ts.append(t)
-    for t in ts:
+    for t in ts :
         t.join()
 
 
