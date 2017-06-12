@@ -36,3 +36,4 @@ class PixivisionLauncher(threading.Thread):
             self.success = success_callback
         if fail_callback:
             self.fail = fail_callback
+        return self
