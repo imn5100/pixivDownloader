@@ -25,30 +25,60 @@ class PixivDownloadFrame(Frame):
         self.root = root
         self.FrameSizeY = 250
         self.FrameSizeX = 465
+        self.search_frame = Frame(self)
+        self.download_frame = Frame(self)
         self.url_var = StringVar()
+        self.keywords = StringVar()
+        self.keywords.set('1000users入り')
+        self.page_number = StringVar()
+        self.page_number.set('2')
         self.path_var = StringVar()
         self.path_var.set(IMAGE_SVAE_BASEPATH)
+        self.search_status = False
         self.init_ui()
 
     def init_ui(self):
         self.root.title("Pixiv Downloader")
         self.root.resizable(width=False, height=False)
+        menu = Menu(self)
+        self.root.config(menu=menu)
+        switch_menu = Menu(menu)
+        menu.add_cascade(label="Menu", menu=switch_menu)
+        switch_menu.add_command(label="Switch!", command=self.switch)
 
-        url_label = Label(self, text="Pixiv Or Pixivision Site Or Illustration Id:", width=50, height=1)
+        # 基本下载组件
+        url_label = Label(self.download_frame, text="Pixiv Or Pixivision Site Or Illustration Id:", width=50, height=1)
         url_label.pack()
 
-        url_entry = Entry(self, width=50, textvariable=self.url_var)
+        url_entry = Entry(self.download_frame, width=50, textvariable=self.url_var)
         url_entry.pack()
 
-        path_label = Label(self, text="Download Path:", width=30, height=1)
+        path_label = Label(self.download_frame, text="Download Path:", width=30, height=1)
         path_label.pack()
 
-        path_entry = Entry(self, width=50, textvariable=self.path_var)
+        path_entry = Entry(self.download_frame, width=50, textvariable=self.path_var)
         path_entry.pack()
 
-        button = Button(self, text='Download', height=2, command=self.handle_url)
+        button = Button(self.download_frame, text='Download', height=2, command=self.handle_url)
         button.pack()
 
+        # search组件
+        keywords_label = Label(self.search_frame, text="Key Words:", width=50, height=1)
+        keywords_label.pack()
+
+        keywords_entry = Entry(self.search_frame, width=50, textvariable=self.keywords)
+        keywords_entry.pack()
+
+        page_label = Label(self.search_frame, text="Number of pages:", width=30, height=1)
+        page_label.pack()
+
+        page_entry = Entry(self.search_frame, width=50, textvariable=self.page_number)
+        page_entry.pack()
+
+        search_button = Button(self.search_frame, text='Start', height=2, command=self.handle_search)
+        search_button.pack()
+
+        # 公共组件
         banner = Label(self, text="Power by imn5100", width=30, height=5)
         banner.pack()
 
@@ -69,6 +99,7 @@ class PixivDownloadFrame(Frame):
         text2.pack(side=LEFT)
         scroll.pack(side=RIGHT, fill=Y)
         self.print_text = text2
+        self.download_frame.pack(side=LEFT)
         self.grid()
         self.queue.run()
 
@@ -119,6 +150,19 @@ class PixivDownloadFrame(Frame):
             })
         else:
             showerror("error", "")
+
+    def handle_search(self):
+        pass
+
+    def switch(self):
+        if self.search_status:
+            self.search_frame.pack_forget()
+            self.download_frame.pack()
+            self.search_status = False
+        else:
+            self.search_frame.pack()
+            self.download_frame.pack_forget()
+            self.search_status = True
 
     def download_callback(self, msg=None):
         if msg:
