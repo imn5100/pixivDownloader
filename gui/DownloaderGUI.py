@@ -85,9 +85,7 @@ class PixivDownloadFrame(Frame):
         text1 = Text(self, height=20, width=30)
         text1.bind("<Key>", lambda e: "break")
         text1.insert(END, 'Download Completed:\n')
-        text1.pack(side=LEFT)
         self.task_text = text1
-
         text2 = Text(self, height=20, width=40)
         scroll = Scrollbar(self, command=text2.yview)
         text2.configure(yscrollcommand=scroll.set)
@@ -96,10 +94,12 @@ class PixivDownloadFrame(Frame):
         text2.tag_configure('error', foreground='#FF2D21')
         quote = "Console Log:\n"
         text2.insert(END, quote, 'info')
-        text2.pack(side=LEFT)
-        scroll.pack(side=RIGHT, fill=Y)
         self.print_text = text2
-        self.download_frame.pack(side=LEFT)
+        text1.pack(side=LEFT)
+        text2.pack(side=LEFT)
+        scroll.pack(side=LEFT, fill=Y)
+
+        self.download_frame.pack(side=RIGHT, fill=Y)
         self.grid()
         self.queue.run()
 
