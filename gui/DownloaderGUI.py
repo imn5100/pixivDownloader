@@ -23,8 +23,6 @@ class PixivDownloadFrame(Frame):
         self.print_text = None
         self.task_text = None
         self.root = root
-        self.FrameSizeY = 250
-        self.FrameSizeX = 465
         self.search_frame = Frame(self)
         self.download_frame = Frame(self)
         self.url_var = StringVar()
@@ -47,47 +45,46 @@ class PixivDownloadFrame(Frame):
         switch_menu.add_command(label="Switch!", command=self.switch)
 
         # 基本下载组件
-        url_label = Label(self.download_frame, text="Pixiv Or Pixivision Site Or Illustration Id:", width=50, height=1)
+        url_label = Label(self.download_frame, text="Pixiv Or Pixivision Site Or Illustration Id:", width=57, height=1)
         url_label.pack()
 
-        url_entry = Entry(self.download_frame, width=50, textvariable=self.url_var)
+        url_entry = Entry(self.download_frame, width=57, textvariable=self.url_var)
         url_entry.pack()
 
         path_label = Label(self.download_frame, text="Download Path:", width=30, height=1)
         path_label.pack()
 
-        path_entry = Entry(self.download_frame, width=50, textvariable=self.path_var)
+        path_entry = Entry(self.download_frame, width=57, textvariable=self.path_var)
         path_entry.pack()
 
-        button = Button(self.download_frame, text='Download', height=2, command=self.handle_url)
+        button = Button(self.download_frame, text='Download', height=2, command=self.handle_url, foreground='grey')
         button.pack()
 
         # search组件
-        keywords_label = Label(self.search_frame, text="Key Words:", width=50, height=1)
+        keywords_label = Label(self.search_frame, text="Key Words:", width=57, height=1)
         keywords_label.pack()
 
-        keywords_entry = Entry(self.search_frame, width=50, textvariable=self.keywords)
+        keywords_entry = Entry(self.search_frame, width=57, textvariable=self.keywords)
         keywords_entry.pack()
 
         page_label = Label(self.search_frame, text="Number of pages:", width=30, height=1)
         page_label.pack()
 
-        page_entry = Entry(self.search_frame, width=50, textvariable=self.page_number)
+        page_entry = Entry(self.search_frame, width=57, textvariable=self.page_number)
         page_entry.pack()
 
         search_button = Button(self.search_frame, text='Start', height=2, command=self.handle_search)
         search_button.pack()
 
         # 公共组件
-        banner = Label(self, text="Power by imn5100", width=30, height=5)
-        banner.pack()
-
-        text1 = Text(self, height=20, width=30)
+        text1 = Text(self, height=20, width=30, bg='light gray')
         text1.bind("<Key>", lambda e: "break")
         text1.insert(END, 'Download Completed:\n')
         self.task_text = text1
-        text2 = Text(self, height=20, width=40)
+        text2 = Text(self, height=20, width=40, bg='light gray')
         scroll = Scrollbar(self, command=text2.yview)
+        scroll2 = Scrollbar(self, command=text1.yview)
+        text1.configure(yscrollcommand=scroll2.set)
         text2.configure(yscrollcommand=scroll.set)
         text2.tag_configure('info', foreground='#3A98FE')
         text2.tag_configure('warning', foreground='#FEC534')
@@ -95,11 +92,15 @@ class PixivDownloadFrame(Frame):
         quote = "Console Log:\n"
         text2.insert(END, quote, 'info')
         self.print_text = text2
-        text1.pack(side=LEFT)
-        text2.pack(side=LEFT)
-        scroll.pack(side=LEFT, fill=Y)
+        text1.grid(row=3, column=0, sticky=W)
+        scroll2.grid(row=3, column=0, sticky=N + S + E)
+        text2.grid(row=3, column=1, sticky=W)
+        scroll.grid(row=3, column=1, sticky=N + S + E)
 
-        self.download_frame.pack(side=RIGHT, fill=Y)
+        banner = Label(self, text="Power by imn5100", width=30, height=5)
+        banner.grid(row=4, columnspan=2)
+
+        self.download_frame.grid(row=1, columnspan=2)
         self.grid()
         self.queue.run()
 
@@ -156,12 +157,12 @@ class PixivDownloadFrame(Frame):
 
     def switch(self):
         if self.search_status:
-            self.search_frame.pack_forget()
-            self.download_frame.pack()
+            self.search_frame.grid_forget()
+            self.download_frame.grid(row=1, columnspan=2)
             self.search_status = False
         else:
-            self.search_frame.pack()
-            self.download_frame.pack_forget()
+            self.search_frame.grid(row=1, columnspan=2)
+            self.download_frame.grid_forget()
             self.search_status = True
 
     def download_callback(self, msg=None):
