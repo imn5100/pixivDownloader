@@ -4,7 +4,7 @@ from Tkinter import *
 from tkMessageBox import showerror, showwarning, showinfo
 
 from gui.WorkQueue import PixivQueue
-from pixiv_config import IMAGE_SVAE_BASEPATH
+from pixiv_config import IMAGE_SVAE_BASEPATH, USERNAME, PASSWORD
 from pixivision.ImageDownload import IlluDownloadThread
 from pixivision.PixivisionLauncher import PixivisionLauncher
 
@@ -26,13 +26,15 @@ class PixivDownloadFrame(Frame):
         self.search_frame = Frame(self)
         self.download_frame = Frame(self)
         self.url_var = StringVar()
-        self.keywords = StringVar()
-        self.keywords.set('1000users入り')
-        self.page_number = StringVar()
-        self.page_number.set('2')
-        self.path_var = StringVar()
-        self.path_var.set(IMAGE_SVAE_BASEPATH)
+        self.keywords = StringVar(value='1000users入り')
+        self.page_number = StringVar(value=2)
+        self.fav_num = StringVar(value=500)
+        self.p_limit = StringVar(value=0)
+        self.path_var = StringVar(value=IMAGE_SVAE_BASEPATH)
+        self.account = StringVar(value=USERNAME)
+        self.password = StringVar(value=PASSWORD)
         self.search_status = False
+        self.switch_menu = None
         self.init_ui()
 
     def init_ui(self):
@@ -40,10 +42,9 @@ class PixivDownloadFrame(Frame):
         self.root.resizable(width=False, height=False)
         menu = Menu(self)
         self.root.config(menu=menu)
-        switch_menu = Menu(menu)
-        menu.add_cascade(label="Menu", menu=switch_menu)
-        switch_menu.add_command(label="Switch!", command=self.switch)
-
+        self.switch_menu = Menu(menu)
+        menu.add_cascade(label="Download Mode Switch", menu=self.switch_menu)
+        self.switch_menu.add_command(label="ToSearchDownload", command=self.switch)
         # 基本下载组件
         url_label = Label(self.download_frame, text="Pixiv Or Pixivision Site Or Illustration Id:", width=57, height=1)
         url_label.pack()
@@ -67,11 +68,40 @@ class PixivDownloadFrame(Frame):
         keywords_entry = Entry(self.search_frame, width=57, textvariable=self.keywords)
         keywords_entry.pack()
 
+        search_path_label = Label(self.search_frame, text="Download Path:", width=30, height=1)
+        search_path_label.pack()
+
+        search_path_entry = Entry(self.search_frame, width=57, textvariable=self.path_var)
+        search_path_entry.pack()
+
+        fav_num_label = Label(self.search_frame, text="Minimum number of favorites:", width=30, height=1)
+        fav_num_label.pack()
+
+        fav_num_entry = Entry(self.search_frame, width=57, textvariable=self.fav_num)
+        fav_num_entry.pack()
+
         page_label = Label(self.search_frame, text="Number of pages:", width=30, height=1)
         page_label.pack()
 
         page_entry = Entry(self.search_frame, width=57, textvariable=self.page_number)
         page_entry.pack()
+
+        p_limit_label = Label(self.search_frame, text="Single works P limit(0 does not limit):", width=30, height=1)
+        p_limit_label.pack()
+
+        p_limit_entry = Entry(self.search_frame, width=57, textvariable=self.p_limit)
+        p_limit_entry.pack()
+
+        account_label = Label(self.search_frame, text="Pixiv Account(Use cookies ignore this):", width=30,
+                              height=1)
+        account_label.pack()
+        account_entry = Entry(self.search_frame, width=57, textvariable=self.account)
+        account_entry.pack()
+        pwd_label = Label(self.search_frame, text="Password", width=30, height=1)
+        pwd_label.pack()
+        pwd_entry = Entry(self.search_frame, width=57, textvariable=self.password)
+        pwd_entry.pack()
+        pwd_entry['show'] = '*'
 
         search_button = Button(self.search_frame, text='Start', height=2, command=self.handle_search)
         search_button.pack()
@@ -160,10 +190,12 @@ class PixivDownloadFrame(Frame):
             self.search_frame.grid_forget()
             self.download_frame.grid(row=1, columnspan=2)
             self.search_status = False
+            self.switch_menu.entryconfig(0, label="ToSearchDownload")
         else:
             self.search_frame.grid(row=1, columnspan=2)
             self.download_frame.grid_forget()
             self.search_status = True
+            self.switch_menu.entryconfig(0, label="ToUrlDownload")
 
     def download_callback(self, msg=None):
         if msg:
