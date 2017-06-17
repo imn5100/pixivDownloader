@@ -42,7 +42,10 @@ class PixivQueue(object):
                         msg = CommonUtils.build_callback_msg(illu_file, url=str(task.get('url')))
                         callback(msg)
                 elif task.has_key('title') and task.has_key('url') and task.has_key('search_path'):
-                    PixivImageDownloader.download_illustration(task, task.get('search_path'), PixivApi)
+                    illu_file = PixivImageDownloader.download_illustration(task, task.get('search_path'), PixivApi,
+                                                                           p_limit=task.get('p_limit'))
+                    if callback and illu_file:
+                        callback("{\n%s:%s\nFile:%s\n}\n" % ("search get", task.get('title'), illu_file))
             except Exception, e:
                 print ("error", e)
             finally:

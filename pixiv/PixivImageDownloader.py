@@ -18,7 +18,7 @@ def download(illust_id, title, path, url, auth_api):
     return auth_api.download(url, path=save_path)
 
 
-def download_illustration(illu, path, auth_api):
+def download_illustration(illu, path, auth_api, p_limit=P_LIMIT):
     """
     #illu 包含插画详细
     path 存储路径
@@ -39,7 +39,7 @@ def download_illustration(illu, path, auth_api):
                     path = download(illust_id, illu.title, path, url, auth_api)
                 # 多图插画
                 else:
-                    if detail.page_count > P_LIMIT:
+                    if p_limit > 0 and detail.page_count > p_limit:
                         # 该插画P数大于最大限制，放弃下载
                         print("Pixiv id:%s,name:%s P>limit,Skip download" % (illust_id, illu.title))
                         return

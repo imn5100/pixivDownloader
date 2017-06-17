@@ -206,18 +206,18 @@ class PixivDownloadFrame(Frame):
         if not os.path.exists(path):
             os.makedirs(path)
         showerror("info", "Is searching：")
-        result = []
-        for p in range(1, CommonUtils.set_int(self.page_number.get(), 2) + 1):
-            result.extend(
-                data_handler.search(keywords, page=p, download_threshold=CommonUtils.set_int(self.p_limit.get(), 0)))
         set_filter = set()
-        for illu in result:
-            if illu.url in set_filter:
-                continue
-            else:
-                illu['search_path'] = path
-                self.queue.add_work(illu)
-                set_filter.add(illu.url)
+        for p in range(1, CommonUtils.set_int(self.page_number.get(), 2) + 1):
+            result = data_handler.search(keywords, page=p,
+                                         download_threshold=CommonUtils.set_int(self.fav_num.get(), 0))
+            for illu in result:
+                if illu.url in set_filter:
+                    continue
+                else:
+                    illu['search_path'] = path
+                    illu['p_limit'] = CommonUtils.set_int(self.p_limit.get(), 0)
+                    self.queue.add_work(illu)
+                    set_filter.add(illu.url)
 
     def switch(self):
         if self.search_status:
