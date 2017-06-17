@@ -207,7 +207,7 @@ class PixivDownloadFrame(Frame):
             os.makedirs(path)
         showerror("info", "Is searching：")
         result = []
-        for p in range(1, CommonUtils.set_int(self.page_number.get(), 2)):
+        for p in range(1, CommonUtils.set_int(self.page_number.get(), 2) + 1):
             result.extend(
                 data_handler.search(keywords, page=p, download_threshold=CommonUtils.set_int(self.p_limit.get(), 0)))
         set_filter = set()

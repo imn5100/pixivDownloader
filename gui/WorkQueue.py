@@ -8,13 +8,17 @@ from utils import CommonUtils
 
 
 class PixivQueue(object):
-    def __init__(self, callback=None):
+    def __init__(self, callback=None, thread_num=5):
         self.queue = Queue()
-        self.worker = Thread(target=PixivQueue.worker_run, args=(self.queue, callback))
+        self.workers = []
+        self.thread_num = thread_num
+        for i in range(1, thread_num + 1):
+            self.workers.append(Thread(target=PixivQueue.worker_run, args=(self.queue, callback)))
 
     def run(self):
-        self.worker.daemon = True
-        self.worker.start()
+        for worker in self.workers:
+            worker.daemon = True
+            worker.start()
         self.queue.join()
 
     def add_work(self, task):
