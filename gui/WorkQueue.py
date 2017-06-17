@@ -3,6 +3,7 @@ from Queue import Queue
 from threading import Thread
 
 from pixiv import PixivImageDownloader
+from pixivapi.PixivApi import PixivApi
 from utils import CommonUtils
 
 
@@ -31,11 +32,13 @@ class PixivQueue(object):
                     if callback:
                         msg = CommonUtils.build_callback_msg(illu_file, id=str(task.get('id')))
                         callback(msg)
-                elif task.has_key('url') and task.has_key('path'):
+                elif task.has_key('path') and task.has_key('url'):
                     illu_file = PixivImageDownloader.download_all_by_url(task.get('url'), task.get('path'))
                     if callback:
                         msg = CommonUtils.build_callback_msg(illu_file, url=str(task.get('url')))
                         callback(msg)
+                elif task.has_key('title') and task.has_key('url') and task.has_key('search_path'):
+                    PixivImageDownloader.download_illustration(task, task.get('search_path'), PixivApi)
             except Exception, e:
                 print ("error", e)
             finally:

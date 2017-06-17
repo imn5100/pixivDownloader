@@ -92,12 +92,13 @@ class AuthPixivApi(object):
             path = prefix + os.path.basename(url)
         if os.path.exists(path) and (not pixiv_config.OVERRIDE_IMAGE):
             print("continue!")
-            return
+            return path
         response = self.auth_requests_call("get", url, timeout=60,
                                            stream=True)
         with open(path, 'wb') as out_file:
             shutil.copyfileobj(response.raw, out_file)
         del response
+        return path
 
     def search_works(self, query, page=1, per_page=10, mode='text',
                      period='all', order='desc', sort='date',

@@ -15,7 +15,7 @@ def download(illust_id, title, path, url, auth_api):
     else:
         save_path = path + "/p_%s%s" % (illust_id, extension)
     print(save_path)
-    auth_api.download(url, path=save_path)
+    return auth_api.download(url, path=save_path)
 
 
 def download_illustration(illu, path, auth_api):
@@ -36,7 +36,7 @@ def download_illustration(illu, path, auth_api):
                         url = detail.meta_single_page.original_image_url
                     except:
                         url = detail.image_urls.large
-                    download(illust_id, illu.title, path, url, auth_api)
+                    path = download(illust_id, illu.title, path, url, auth_api)
                 # 多图插画
                 else:
                     if detail.page_count > P_LIMIT:
@@ -66,10 +66,13 @@ def download_illustration(illu, path, auth_api):
                                 auth_api.download(url, path=save_path)
                             except:
                                 continue
+                        path = path + "/"
+
                     else:
                         # 获取多图失败,下载大图
                         url = detail.image_urls.large
-                        download(illust_id, illu.title, path, url, auth_api)
+                        path = download(illust_id, illu.title, path, url, auth_api)
+                return path
             except Exception, e:
                 error_log("Download fail:")
                 error_log(e)

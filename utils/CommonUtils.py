@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import os
 
 
@@ -9,6 +10,23 @@ def get_url_param(url, param):
         return urlparse.parse_qs(result.query)[param][0]
     except:
         return None
+
+
+def set_int(int_num, default_value=0):
+    try:
+        return int(int_num)
+    except:
+        return default_value
+
+
+def is_not_empty(val):
+    if val is not None and val.strip() != '':
+        return True
+    return False
+
+
+def is_empty(val):
+    return not is_not_empty(val)
 
 
 def filter_dir_name(name):
@@ -51,15 +69,16 @@ def write_topic_des(file_path, data):
 
 
 # 构建回掉通知消息
-def build_callback_msg(path, id=None, url=None):
-    if id is None and url is None:
-        return ""
+def build_callback_msg(path, id=None, url=None, keywords=None):
     if id:
         show = "Id"
         show1 = id
-    else:
+    elif url:
         show = "Url"
         show1 = url
+    elif keywords:
+        show = 'Keywords'
+        show1 = keywords
     if path:
         show2 = path
     else:

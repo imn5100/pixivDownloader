@@ -87,8 +87,8 @@ class PixivDataHandler(object):
         if search_result:
             # 过滤数据不完整和收藏数不超过阈值的插画信息
             search_result = filter(
-                    lambda data: (data.has_key("url") and data.has_key("title") and data.has_key("mark_count") and int(
-                            data.mark_count) > download_threshold),
-                    search_result)
+                lambda data: (data.has_key("url") and data.has_key("title") and data.has_key("mark_count") and int(
+                    data.mark_count) >= download_threshold),
+                search_result)
             pop_result.extend(search_result)
         return pop_result

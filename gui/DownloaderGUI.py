@@ -4,16 +4,11 @@ from Tkinter import *
 from tkMessageBox import showerror, showwarning, showinfo
 
 from gui.WorkQueue import PixivQueue
-from pixiv_config import IMAGE_SVAE_BASEPATH, USERNAME, PASSWORD
+from pixiv import PixivDataDownloader
+from pixiv_config import IMAGE_SVAE_BASEPATH, USERNAME, PASSWORD, PIXIV_COOKIES
 from pixivision.ImageDownload import IlluDownloadThread
 from pixivision.PixivisionLauncher import PixivisionLauncher
-
-
-def set_int(int_num):
-    try:
-        return int(int_num)
-    except:
-        return 0
+from utils import CommonUtils
 
 
 class PixivDownloadFrame(Frame):
@@ -159,11 +154,11 @@ class PixivDownloadFrame(Frame):
             PixivisionLauncher(url, save_path=path).register_hook(
                 success_callback=self.download_callback).start()
             return
-        elif set_int(url) != 0:
-            showinfo("info", "Downloading id:" + str(set_int(url)) + " illustration")
-            print ("info", "Downloading id:" + str(set_int(url)) + " illustration")
+        elif CommonUtils.set_int(url) != 0:
+            showinfo("info", "Downloading id:" + str(CommonUtils.set_int(url)) + " illustration")
+            print ("info", "Downloading id:" + str(CommonUtils.set_int(url)) + " illustration")
             self.queue.add_work({
-                'id': set_int(url),
+                'id': CommonUtils.set_int(url),
                 'path': path + "/"
             })
             return
@@ -183,7 +178,46 @@ class PixivDownloadFrame(Frame):
             showerror("error", "")
 
     def handle_search(self):
-        pass
+        if len(PIXIV_COOKIES) >= 3:
+            data_handler = PixivDataDownloader.PixivDataHandler(cookies=PIXIV_COOKIES)
+        else:
+            if CommonUtils.is_not_empty(self.account.get()) and CommonUtils.is_not_empty(self.password.get()):
+                data_handler = PixivDataDownloader.PixivDataHandler(self.account.get().strip(),
+                                                                    self.password.get().strip())
+            else:
+                showwarning("warning", "Please configure cookies or account and password!")
+                print ("warning", "Please configure cookies or account and password!")
+                return
+        keywords = self.keywords.get()
+        if CommonUtils.is_empty(keywords):
+            showwarning("warning", "Please enter search keywords!")
+            print ("warning", "Please enter search keywords!")
+            return
+        if CommonUtils.is_empty(self.path_var.get()):
+            showwarning("warning", "path can't be empty!")
+            print ("warning", "path can't be empty!")
+            return
+        path = self.path_var.get()
+        if not os.path.exists(path):
+            showerror("error", " No such file or directory!")
+            print ('error', 'No such file or directory')
+            return
+        path = path + "/" + CommonUtils.filter_dir_name("search_" + keywords)
+        if not os.path.exists(path):
+            os.makedirs(path)
+        showerror("info", "Is searching：")
+        result = []
+        for p in range(1, CommonUtils.set_int(self.page_number.get(), 2)):
+            result.extend(
+                data_handler.search(keywords, page=p, download_threshold=CommonUtils.set_int(self.p_limit.get(), 0)))
+        set_filter = set()
+        for illu in result:
+            if illu.url in set_filter:
+                continue
+            else:
+                illu['search_path'] = path
+                self.queue.add_work(illu)
+                set_filter.add(illu.url)
 
     def switch(self):
         if self.search_status:
