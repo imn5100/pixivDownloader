@@ -24,7 +24,7 @@ class PixivDownloadFrame(Frame):
         self.keywords = StringVar(value='1000users入り')
         self.page_number = StringVar(value=2)
         self.fav_num = StringVar(value=500)
-        self.p_limit = StringVar(value=0)
+        self.p_limit = StringVar(value=20)
         self.path_var = StringVar(value=IMAGE_SVAE_BASEPATH)
         self.account = StringVar(value=USERNAME)
         self.password = StringVar(value=PASSWORD)
