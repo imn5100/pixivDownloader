@@ -53,7 +53,7 @@ class PixivDownloadFrame(Frame):
         path_entry = Entry(self.download_frame, width=57, textvariable=self.path_var)
         path_entry.pack()
 
-        button = Button(self.download_frame, text='Download', height=2, command=self.handle_url, foreground='grey')
+        button = Button(self.download_frame, text='Download', height=2, command=self.handle_url)
         button.pack()
 
         # search组件
