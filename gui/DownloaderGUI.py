@@ -35,11 +35,11 @@ class PixivDownloadFrame(Frame):
     def init_ui(self):
         self.root.title("Pixiv Downloader")
         self.root.resizable(width=False, height=False)
-        menu = Menu(self)
-        self.root.config(menu=menu)
-        self.switch_menu = Menu(menu)
-        menu.add_cascade(label="Download Mode Switch", menu=self.switch_menu)
+        menubar = Menu(self)
+        self.root.config(menu=menubar)
+        self.switch_menu = Menu(menubar, tearoff=0)
         self.switch_menu.add_command(label="ToSearchDownload", command=self.switch)
+        menubar.add_cascade(label="Download Mode Switch", menu=self.switch_menu)
         # 基本下载组件
         url_label = Label(self.download_frame, text="Pixiv Or Pixivision Site Or Illustration Id:", width=57, height=1)
         url_label.pack()
