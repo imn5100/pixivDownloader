@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 from Tkinter import *
+from threading import Thread
 from tkMessageBox import showerror, showwarning, showinfo
 
 from gui.WorkQueue import PixivQueue
@@ -205,7 +206,11 @@ class PixivDownloadFrame(Frame):
         path = path + "/" + CommonUtils.filter_dir_name("search_" + keywords)
         if not os.path.exists(path):
             os.makedirs(path)
-        showerror("info", "Is searching：")
+        showinfo("info", "Is searching：")
+        search_handler = Thread(target=self.search, args=(data_handler, keywords, path))
+        search_handler.start()
+
+    def search(self, data_handler, keywords, path):
         set_filter = set()
         for p in range(1, CommonUtils.set_int(self.page_number.get(), 2) + 1):
             result = data_handler.search(keywords, page=p,
