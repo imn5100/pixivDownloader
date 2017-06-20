@@ -50,3 +50,4 @@ class PixivQueue(object):
                 print ("error", e)
             finally:
                 queue.task_done()
+                print ("Current Task Number:" + str(queue.qsize()))
