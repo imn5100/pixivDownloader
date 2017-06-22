@@ -7,8 +7,8 @@ Pixiv And Pixivision Illustrations Downloader.<br>
           2.  Pixivision插画特辑详情页全部爬取<br>
           3.  通过Pixiv插画url下载<br>
           4.  通过Pixiv插画ID下载<br>
-          5.  通过Pixiv插画ID下载关联作品<br>
-          6.  通过关键字搜索下载<br>
+          5.  通过关键字搜索下载<br>
+          6.  通过Pixiv插画ID下载关联作品<br>
  
 * 核心配置文件pixiv_config.py和config.ini<br>
      1. 修改RAWLER_HEADER中Accept-Language，获取4中不同语言的特辑描述。<br>
@@ -19,7 +19,7 @@ Pixiv And Pixivision Illustrations Downloader.<br>
 ~~~
 python  launcher.py 
 ~~~
-启动图形界面下载工具:(支持下载方式1-4)
+启动图形界面下载工具:(支持下载方式1-5)
 ~~~
 python launcher_gui.py
 ~~~
@@ -41,13 +41,15 @@ python launcher_related.py
 ~~~
 python launcher_search.py
 ~~~
+运行需求：python2.7(3以上版本暂未测试) 扩展库：requests,BeautifulSoup。如果需要运行launcher_plus.py还需要twisted.<br><br>
 UPDATE:<br>
 2017.05.11  新增项目目录外的配置文件config.ini,避免更新代码后原配置被覆盖<br>
 2017.05.24  添加了一个简单的图形界面下载工具<br>
+2017.06.20  完善图像界面下载工具,支持通过关键字搜索下载插画<br>
 
-PS①:关于搜索下载，在没有会员的情况下，很难搜到高质量的人气作品。<br>
-网上的做法：在关键字后加 1000users入り ，即1000以上用户收藏，表示搜索tag中或描述中包含关键字1000users入り，1000可替换为其他数值。
-这样搜出来的作品的确能保证是人气作品，但只对大类目有效（比如東方project,艦これ 这类搜索）且会遗漏很多优秀作品,小类目的作品则会一幅都搜不出。<br>
+PS①:关于搜索下载，在没有高级会员账号的情况下，很难搜到高质量的人气作品。<br>
+常见的做法：在关键字后加 1000users入り ，即"1000以上用户收藏"，表示搜索tag中或描述中包含关键字"1000users入り"，1000可替换为其他数值。
+这样搜出来的作品的确能基本保证是人气作品，但只对大类目有效（比如東方project,艦これ 这类搜索）且会遗漏很多优秀作品,小类目的作品则会一幅都搜不出。<br>
 &nbsp;&nbsp;&nbsp;&nbsp;在使用小类目搜索下载时，你可以尝试以下方法下载人气作品：<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.增加爬取页数配置SEARCH_PAGE。 <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.适当调小配置参数“DOWNLOAD_THRESHOLD”即下载的插画的最小收藏数的设置。<br>
