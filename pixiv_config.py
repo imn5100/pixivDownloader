@@ -16,7 +16,7 @@ ACCESS_TOKEN = config.get("ACCESS_TOKEN", default_value="VkRYFnjMJm-spCNTH-")
 
 # *****************************  cookie 用于记录网页登录状态。使用搜索功能时：(账号+密码) 或 (Cookie) 必填一项
 # 如果不想反复登录，可以在第一次登陆后，从控制台获取输出的cookie信息。配置于此。（反复重复登陆 除了会收到Pixiv寄出的安全提示邮件外暂无其他影响）
-# 不使用cookies 请保持默认值为""
+# 不使用cookies 请保持默认值为"{}"
 PIXIV_COOKIES = eval(config.get("PIXIV_COOKIES", default_value="{}"))
 
 

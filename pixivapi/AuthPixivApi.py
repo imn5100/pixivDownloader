@@ -8,6 +8,7 @@ import time
 
 import pixiv_config
 from pixivapi.PixivUtils import PixivError, parse_json, parse_resp
+from utils import CommonUtils
 
 
 def requests_call(method, url, **kwargs):
@@ -28,10 +29,10 @@ class AuthPixivApi(object):
     def __init__(self, username, password, access_token=None):
         self.username = username
         self.password = password
-        self.access_token = access_token
         self.user_id = None
         self.refresh_token = None
-        if not access_token:
+        self.access_token = access_token
+        if CommonUtils.is_empty(access_token):
             self.login(username, password)
 
     def require_auth(self):
@@ -97,7 +98,7 @@ class AuthPixivApi(object):
             self.refresh_token = token.response.refresh_token
         except:
             raise PixivError('Get access_token error! Response: %s' % (token), header=r.headers, body=r.text)
-        print token.response.access_token
+        print ("ACCESS TOKEN" + token.response.access_token)
         return token
 
     def download(self, url, prefix='', path=None):
@@ -150,10 +151,9 @@ class AuthPixivApi(object):
                 else:
                     return None
             # 多线程请求，容易被拒绝设置重试三次，每次重试间隔2s
+            except PixivError, e:
+                break
             except Exception:
                 time.sleep(2)
                 count += 1
                 continue
-            except PixivError, e:
-                raise e
-                break

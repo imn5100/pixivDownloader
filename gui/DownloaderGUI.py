@@ -257,9 +257,12 @@ class LogRedirection:
                 if output and len(output) == 2:
                     self.text.insert(END, output[1], output[0])
                     return
+            if output_stream.startswith('{"error":'):
+                self.text.insert(END, output_stream, 'error')
+                return
             self.text.insert(END, output_stream, 'info')
         except Exception:
-            self.text.insert(END, output_stream, 'info')
+            self.text.insert(END, output_stream, 'error')
 
     def reset(self):
         sys.stdout = self.__console__

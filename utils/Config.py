@@ -80,8 +80,3 @@ def write_config(config_file_path, section, key, value):
     cf.set(section, key, value)
     cf.write(open(config_file_path, 'w'))
     return True
-
-
-if __name__ == '__main__':
-    config = Config(os.path.pardir + "/config.ini", "pixiv")
-    print config.getint("IMAGE_SVAE_BASEPATH")
