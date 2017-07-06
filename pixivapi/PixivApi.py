@@ -7,7 +7,7 @@ import time
 import pixiv_config
 from PixivUtils import *
 
-
+# Deprecated pixiv api 需要登录才能请求到内容
 class PixivApi(object):
     @classmethod
     def download(cls, url, prefix='', path=None, referer='https://app-api.pixiv.net/'):

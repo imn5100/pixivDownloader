@@ -9,37 +9,7 @@ from utils import CommonUtils
 from utils.LoggerUtil import error_log
 
 
-# redis filter 过滤装饰器 过滤已下载过的链接
-# 使用redis会使整个项目变得太重。废弃不用。
-# def redisFilterDecp(r=None):
-#     def _deco(func):
-#         def new_fun(cls, url, save_path, quality):
-#             if USE_FILTER:
-#                 from utils.RedisFilter import RedisFilter
-#                 redis_filter = RedisFilter(r, block_num=BLOCK_NUM, filter_key=REDIS_FILTER_KEY)
-#                 if not redis_filter.is_contained(url):
-#                     rt = func(cls, url, save_path, quality)
-#                     redis_filter.add(url)
-#                     print("Redis Filter Add url success: " + url)
-#                     return rt
-#                 else:
-#                     print("The URL has been filtered: " + url)
-#             else:
-#                 return func(cls, url, save_path, quality)
-#
-#         return new_fun
-#
-#     return _deco
-
-
 class ImageDownload(object):
-    # # redis 连接只需要一个，在类中共享
-    # if USE_FILTER:
-    #     import redis
-    #     r = redis.Redis(REDIS_IP, REDIS_PORT)
-    # else:
-    #     r = None
-
     @classmethod
     def get_pixivision_topics(cls, url, path):
         topic_list = HtmlDownloader.parse_illustration_topic(HtmlDownloader.download(url))

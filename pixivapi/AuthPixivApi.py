@@ -4,6 +4,8 @@ import os
 import requests
 import shutil
 
+import time
+
 import pixiv_config
 from pixivapi.PixivUtils import PixivError, parse_json, parse_resp
 
@@ -40,6 +42,12 @@ class AuthPixivApi(object):
         self.require_auth()
         headers['Referer'] = 'http://spapi.pixiv.net/'
         headers['User-Agent'] = 'PixivIOSApp/6.0.9'
+        # 指定语言
+        # ja  日文
+        # zh 中文简体
+        # zh-tw 中文繁体
+        # en 或空或其他无法解析语言 英文
+        headers['Accept-Language'] = 'en'
         headers['Authorization'] = 'Bearer %s' % self.access_token
         return requests_call(method, url, headers=headers, **kwargs)
 
@@ -72,8 +80,8 @@ class AuthPixivApi(object):
         if r.status_code not in [200, 301, 302]:
             if data['grant_type'] == 'password':
                 raise PixivError(
-                        '[ERROR] auth() failed! check username and password.\nHTTP %s: %s' % (r.status_code, r.text),
-                        header=r.headers, body=r.text)
+                    '[ERROR] auth() failed! check username and password.\nHTTP %s: %s' % (r.status_code, r.text),
+                    header=r.headers, body=r.text)
             else:
                 raise PixivError('[ERROR] auth() failed! check refresh_token.\nHTTP %s: %s' % (r.status_code, r.text),
                                  header=r.headers, body=r.text)
@@ -85,6 +93,7 @@ class AuthPixivApi(object):
             self.refresh_token = token.response.refresh_token
         except:
             raise PixivError('Get access_token error! Response: %s' % (token), header=r.headers, body=r.text)
+        print token
         return token
 
     def download(self, url, prefix='', path=None):
@@ -93,8 +102,7 @@ class AuthPixivApi(object):
         if os.path.exists(path) and (not pixiv_config.OVERRIDE_IMAGE):
             print("continue!")
             return path
-        response = self.auth_requests_call("get", url, timeout=60,
-                                           stream=True)
+        response = self.auth_requests_call("get", url, timeout=60, stream=True)
         with open(path, 'wb') as out_file:
             shutil.copyfileobj(response.raw, out_file)
         del response
@@ -119,5 +127,38 @@ class AuthPixivApi(object):
             'include_sanity_level': include_sanity_level,
             'image_sizes': ','.join(image_sizes),
         }
+        r = self.auth_requests_call('GET', url, params=params)
+        return parse_resp(r)
+
+    def illust_detail(self, illust_id):
+        url = pixiv_config.ILLUST_DETAIL
+        params = {
+            'image_sizes': 'px_128x128,small,medium,large,px_480mw',
+            'include_stats': 'true',
+            'illust_id': illust_id
+        }
+        count = 0  # 失败重试次数
+        while count <= pixiv_config.RETRY_TIME:
+            try:
+                response = self.auth_requests_call('GET', url, params=params, timeout=8)
+                if response.ok and len(response.content) > 10:
+                    return parse_resp(response)
+                else:
+                    return None
+            # 多线程请求，容易被拒绝设置重试三次，每次重试间隔2s
+            except Exception, e:
+                time.sleep(2)
+                count += 1
+                continue
+
+    def illust_related(self, illust_id, seed_illust_ids=None):
+        url = pixiv_config.ILLUST_RELATED
+        params = {
+            'illust_id': illust_id,
+        }
+        if type(seed_illust_ids) == str:
+            params['seed_illust_ids'] = seed_illust_ids
+        if type(seed_illust_ids) == list:
+            params['seed_illust_ids'] = ",".join([str(iid) for iid in seed_illust_ids])
         r = self.auth_requests_call('GET', url, params=params)
         return parse_resp(r)

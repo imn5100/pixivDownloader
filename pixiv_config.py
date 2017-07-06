@@ -14,8 +14,8 @@ RETRY_TIME = config.getint("RETRY_TIME", default_value=3)
 HEADER = {
     'App-OS': 'ios',
     'App-OS-Version': '9.3.3',
-    'App-Version': '6.0.9',
-    'User-Agent': 'PixivIOSApp/6.0.9 (iOS 9.3.3; iPhone8,1)',
+    'App-Version': '6.8.3',
+    'User-Agent': 'PixivIOSApp/6.8.3 (iOS 9.3.3; iPhone8,1)',
 }
 # 爬虫请求头
 CRAWLER_HEADER = {
