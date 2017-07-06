@@ -36,6 +36,7 @@ python launcher_check_completion.py
 ~~~
 python launcher_search.py
 ~~~
+Pixiv Api代码参考了[pixivpy](https://github.com/upbit/pixivpy "pixivpy")<br>
 运行需求：python2.7(3以上版本暂未测试) 扩展库：requests,BeautifulSoup。如果需要运行launcher_plus.py还需要twisted.<br><br>
 UPDATE:<br>
 2017.05.11  新增项目目录外的配置文件config.ini,避免更新代码后原配置被覆盖<br>
