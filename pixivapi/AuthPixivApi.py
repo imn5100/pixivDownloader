@@ -49,7 +49,11 @@ class AuthPixivApi(object):
         # en 或空或其他无法解析语言 英文
         headers['Accept-Language'] = 'en'
         headers['Authorization'] = 'Bearer %s' % self.access_token
-        return requests_call(method, url, headers=headers, **kwargs)
+        response = requests_call(method, url, headers=headers, **kwargs)
+        if response.status_code != 200:
+            print response.content
+            raise PixivError(response.content)
+        return response
 
     def login(self, username, password):
         return self.auth(username=username, password=password)
@@ -93,7 +97,7 @@ class AuthPixivApi(object):
             self.refresh_token = token.response.refresh_token
         except:
             raise PixivError('Get access_token error! Response: %s' % (token), header=r.headers, body=r.text)
-        print token
+        print token.response.access_token
         return token
 
     def download(self, url, prefix='', path=None):
@@ -146,19 +150,10 @@ class AuthPixivApi(object):
                 else:
                     return None
             # 多线程请求，容易被拒绝设置重试三次，每次重试间隔2s
-            except Exception, e:
+            except Exception:
                 time.sleep(2)
                 count += 1
                 continue
-
-    def illust_related(self, illust_id, seed_illust_ids=None):
-        url = pixiv_config.ILLUST_RELATED
-        params = {
-            'illust_id': illust_id,
-        }
-        if type(seed_illust_ids) == str:
-            params['seed_illust_ids'] = seed_illust_ids
-        if type(seed_illust_ids) == list:
-            params['seed_illust_ids'] = ",".join([str(iid) for iid in seed_illust_ids])
-        r = self.auth_requests_call('GET', url, params=params)
-        return parse_resp(r)
+            except PixivError, e:
+                raise e
+                break

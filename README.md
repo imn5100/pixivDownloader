@@ -8,11 +8,10 @@ Pixiv And Pixivision Illustrations Downloader.<br>
           3.  通过Pixiv插画url下载<br>
           4.  通过Pixiv插画ID下载<br>
           5.  通过关键字搜索下载<br>
-          6.  通过Pixiv插画ID下载关联作品<br>
  
 * 核心配置文件pixiv_config.py和config.ini<br>
-     1. 修改RAWLER_HEADER中Accept-Language，获取4中不同语言的特辑描述。<br>
-     2. 修改IMAGE_SVAE_BASEPATH，指定图片存储位置。<br>
+     1. USERNAME和PASSWORD 必填,或填写ACCESS_TOKEN代替,否者无法正常使用<br>
+     2. 修改IMAGE_SAVE_BASEPATH，指定图片存储位置。<br>
      *. 更多详细配置请看文件注释。
 
 运行菜单:(支持下载方式1-4)
@@ -33,10 +32,6 @@ python launcher_plus.py
 ~~~
 python launcher_check_completion.py
 ~~~
-启动关联下载，通过Pixiv插画id下载关联作品,自定义关联深度，每次向下关联可获取20-30副插画，因为越向下关联性越差，质量也会变低，因此关联深度不能设置太大。
-~~~
-python launcher_related.py
-~~~
 启动搜索下载，自动下载Pixiv通过关键字搜索到插画。需要输入或设置：Pixiv邮箱或ID，Pixiv密码,搜索关键字，存储路径，爬取页数，下载的插画的最小收藏数。
 ~~~
 python launcher_search.py
@@ -46,6 +41,7 @@ UPDATE:<br>
 2017.05.11  新增项目目录外的配置文件config.ini,避免更新代码后原配置被覆盖<br>
 2017.05.24  添加了一个简单的图形界面下载工具<br>
 2017.06.20  完善图像界面下载工具,支持通过关键字搜索下载插画<br>
+2017.07.06  由于Pixiv Api更改,原本拉取插画详情的接口需要登录才能使用,Pixiv账号和密码设置变为必填项。关联下载Api接口404已废弃。<br>
 
 PS①:关于搜索下载，在没有高级会员账号的情况下，很难搜到高质量的人气作品。<br>
 常见的做法：在关键字后加 1000users入り ，即"1000以上用户收藏"，表示搜索tag中或描述中包含关键字"1000users入り"，1000可替换为其他数值。
@@ -55,4 +51,4 @@ PS①:关于搜索下载，在没有高级会员账号的情况下，很难搜�
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.适当调小配置参数“DOWNLOAD_THRESHOLD”即下载的插画的最小收藏数的设置。<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.减小搜索关键字范围。 <br>
 
-PS②:如果出现了在控制台运行输入中文||日文出现字符编码异常情况，请设置控制台运行环境字符编码为UTF-8后重试。Windows系统下推荐直接使用IDE运行。
+PS②:如果出现了在控制台运行输入中文||日文出现字符编码异常情况，请设置控制台运行环境字符编码为UTF-8后重试。Windows系统下推荐直接使用IDE运行,或直接使用图形界面下载工具。

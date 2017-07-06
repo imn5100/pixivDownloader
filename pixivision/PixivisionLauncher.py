@@ -5,7 +5,7 @@ from pixiv_config import *
 from pixivision.ImageDownload import ImageDownload, IlluDownloadThread
 
 
-def start(url, save_path=IMAGE_SVAE_BASEPATH, quality=1, success_callback=None, fail_callback=None):
+def start(url, save_path=IMAGE_SAVE_BASEPATH, quality=1, success_callback=None, fail_callback=None):
     topics = ImageDownload.get_pixivision_topics(url, save_path)
     ts = []
     for topic in topics:
@@ -23,7 +23,7 @@ class PixivisionLauncher(threading.Thread):
         start(self.url, save_path=self.save_path, quality=self.quality, success_callback=self.success,
               fail_callback=self.fail)
 
-    def __init__(self, url, save_path=IMAGE_SVAE_BASEPATH, quality=1):
+    def __init__(self, url, save_path=IMAGE_SAVE_BASEPATH, quality=1):
         threading.Thread.__init__(self, name="PisivisionLauncher_" + url)
         self.url = url
         self.save_path = save_path

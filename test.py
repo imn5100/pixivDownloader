@@ -28,8 +28,8 @@ def test_pixivision():
 def test_api():
     detail = PixivApi.illust_detail(54809586)
     print(detail.illust)
-    related = PixivApi.illust_related(54809586)
-    print(related)
+    # related = PixivApi.illust_related(54809586)
+    # print(related)
 
 
 # def test_redisFilter():
@@ -52,7 +52,7 @@ def test_api():
 
 def test_image_download():
     topics = ImageDownload.get_pixivision_topics("http://www.pixivision.net/en/c/illustration/?p=2",
-                                                 IMAGE_SVAE_BASEPATH)
+                                                 IMAGE_SAVE_BASEPATH)
     ts = []
     for topic in topics:
         t = IlluDownloadThread(topic.href, topic.save_path, 1)

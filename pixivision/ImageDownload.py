@@ -2,7 +2,7 @@
 import os
 import threading
 
-from pixiv_config import IMAGE_SVAE_BASEPATH, IMAGE_USE_ORG_NAME
+from pixiv_config import IMAGE_SAVE_BASEPATH, IMAGE_USE_ORG_NAME
 from pixivapi.PixivApi import PixivApi
 from pixivision.PixivisionDownloader import HtmlDownloader
 from utils import CommonUtils
@@ -125,7 +125,7 @@ class ImageDownload(object):
 
 
 class IlluDownloadThread(threading.Thread):
-    def __init__(self, url, path=IMAGE_SVAE_BASEPATH, quality=1, create_path=False):
+    def __init__(self, url, path=IMAGE_SAVE_BASEPATH, quality=1, create_path=False):
         threading.Thread.__init__(self, name="Download-" + url)
         self.url = url
         self.path = path

@@ -6,7 +6,7 @@ from tkMessageBox import showerror, showwarning, showinfo
 
 from gui.WorkQueue import PixivQueue
 from pixiv import PixivDataDownloader
-from pixiv_config import IMAGE_SVAE_BASEPATH, USERNAME, PASSWORD, PIXIV_COOKIES
+from pixiv_config import IMAGE_SAVE_BASEPATH, USERNAME, PASSWORD, PIXIV_COOKIES
 from pixivision.ImageDownload import IlluDownloadThread
 from pixivision.PixivisionLauncher import PixivisionLauncher
 from utils import CommonUtils
@@ -26,7 +26,7 @@ class PixivDownloadFrame(Frame):
         self.page_number = StringVar(value=2)
         self.fav_num = StringVar(value=500)
         self.p_limit = StringVar(value=20)
-        self.path_var = StringVar(value=IMAGE_SVAE_BASEPATH)
+        self.path_var = StringVar(value=IMAGE_SAVE_BASEPATH)
         self.account = StringVar(value=USERNAME)
         self.password = StringVar(value=PASSWORD)
         self.search_status = False

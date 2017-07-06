@@ -28,7 +28,7 @@ def main_for_zh():
             page_index = 1
         url = pixiv_config.LINK_URL % page_index
         print("充能ing...")
-        PixivisionLauncher(url, save_path=pixiv_config.IMAGE_SVAE_BASEPATH, quality=pixiv_config.IMAGE_QUALITY).start()
+        PixivisionLauncher(url, save_path=pixiv_config.IMAGE_SAVE_BASEPATH, quality=pixiv_config.IMAGE_QUALITY).start()
     elif download_type == 2:
         while True:
             url = raw_input('请输入需要下载的链接:\n')
@@ -71,7 +71,7 @@ def main_for_en():
             page_index = 1
         url = pixiv_config.LINK_URL % page_index
         print("Charging...")
-        PixivisionLauncher(url, save_path=pixiv_config.IMAGE_SVAE_BASEPATH, quality=pixiv_config.IMAGE_QUALITY).start()
+        PixivisionLauncher(url, save_path=pixiv_config.IMAGE_SAVE_BASEPATH, quality=pixiv_config.IMAGE_QUALITY).start()
     elif download_type == 2:
         while True:
             url = raw_input('Please enter a Pixivision URL to download:\n')

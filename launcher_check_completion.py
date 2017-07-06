@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import os
 import re
 
-from pixiv_config import IMAGE_SVAE_BASEPATH
+from pixiv_config import IMAGE_SAVE_BASEPATH
 from pixivision.ImageDownload import IlluDownloadThread
 
 
@@ -55,5 +55,5 @@ def completion(base_path, content):
 
 if __name__ == '__main__':
     # 运行补全检查 前请保证下载时和检查时的命名规范相同，否则会下载两次同样的插画 不同的命名
-    check_image(IMAGE_SVAE_BASEPATH)
+    check_image(IMAGE_SAVE_BASEPATH)
     # 有几个 精选热门特辑 的详情页没有具体插画内容 而是跳转到另外的特辑页，所以忽视 不爬取。

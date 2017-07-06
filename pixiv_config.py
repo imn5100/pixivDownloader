@@ -55,7 +55,7 @@ OVERRIDE_IMAGE = config.getboolean("OVERRIDE_IMAGE", default_value=False)
 # Image quality  图片质量 1 最高级，使用api下载原图(找不到原图会下载大图，找不到大图下载展示图) 2 pixivision 展示用图(大小和画质都有压缩)
 IMAGE_QUALITY = 1
 # 存储插画的基本目录
-IMAGE_SVAE_BASEPATH = config.get("IMAGE_SVAE_BASEPATH",
+IMAGE_SAVE_BASEPATH = config.get("IMAGE_SVAE_BASEPATH",
                                  default_value="/Users/imn5100/Downloads/pixiv/z_pixivision_download")
 # 文件命名是否使用原文件名（即插画作者的命名）
 # 因为插画原名经常出现颜文字和各种奇怪的符号，这里不使用图片标题进行命名，用pixiv 的id进行命名会很大地减少文件错误，提高下载正确率，
@@ -97,10 +97,14 @@ SEARCH_PAGE = config.getint("SEARCH_PAGE", default_value=2)
 SEARCH_SAVE_PATH = config.get("SEARCH_SAVE_PATH", default_value="/Users/imn5100/Downloads/pixiv/search")
 # 搜索关键字
 SEARCH_KEYWORD = config.get("SEARCH_KEYWORD", default_value="夕立")
-# Pixiv账户用户名或id
+# ***************************** (账号+密码) 或 (Access token) 必填一项 否者无法拉取插画详情 ******************************
+# Pixiv账户 和 密码
 USERNAME = config.get("USERNAME", default_value="*")
-# Pixiv 账户密码
 PASSWORD = config.get("PASSWORD", default_value="*")
+# 访问pixiv api的凭证，使用账户密码登录后获得,可重复使用，不需要每次都用账号密码登录。
+ACCESS_TOKEN = config.get("ACCESS_TOKEN", default_value="VkRYFnjMJm-spCNTH-")
+
+# *****************************  cookie 用于记录网页登录状态。使用搜索功能时：(账号+密码) 或 (Cookie) 必填一项
 # 如果不想反复登录，可以在第一次登陆后，从控制台获取输出的cookie信息。配置于此。（反复重复登陆 除了会收到Pixiv寄出的安全提示邮件外暂无其他影响）
-# 不使用cookies 请保持 默认值为""
+# 不使用cookies 请保持默认值为""
 PIXIV_COOKIES = eval(config.get("PIXIV_COOKIES", default_value="{}"))
