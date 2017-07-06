@@ -4,7 +4,7 @@ import pixiv_config
 from pixivapi.AuthPixivApi import AuthPixivApi
 
 
-# Deprecated pixiv api 需要登录才能请求到内容
+# Deprecated pixiv api 需要登录才能请求到内容,暂时使用AuthPixivApi 替换方法实现，此类最终将弃用。
 class PixivApi(object):
     apiClient = AuthPixivApi(pixiv_config.USERNAME, pixiv_config.PASSWORD, access_token=pixiv_config.ACCESS_TOKEN)
 
