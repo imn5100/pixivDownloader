@@ -85,3 +85,12 @@ def build_callback_msg(path, id=None, url=None, keywords=None):
         show2 = "Download Fail"
     msg = "{\n%s:%s\nFile:%s\n}\n"
     return msg % (show, show1, show2)
+
+
+def format_bool(bool_value):
+    if type(bool_value) == bool:
+        return 'true' if bool_value else 'false'
+    if bool_value in ['true', 'True']:
+        return 'true'
+    else:
+        return 'false'
