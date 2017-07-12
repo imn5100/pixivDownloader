@@ -55,7 +55,7 @@ ILLUST_DETAIL_PAGE = "http://www.pixiv.net/member_illust.php?mode=medium&illust_
 PAGE_NUM = config.getint("PAGE_NUM", default_value=77)
 # illust detail url
 ILLUST_DETAIL = "https://app-api.pixiv.net/v1/illust/detail"
-ILLUST_RELATED = 'https://app-api.pixiv.net/v1/illust/related'
+ILLUST_RELATED = 'https://app-api.pixiv.net/v2/illust/related'
 # redis set 过滤器相关设置
 # 暂时弃用redis
 # REDIS_IP = "127.0.0.1"

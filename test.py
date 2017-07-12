@@ -86,7 +86,14 @@ def test_auth_api():
     # obj = api.search_works("艦これ")
     # print(obj)
     # print (api.illust_detail(59252176))
-    print (api.illust_related(59252176))
+    # print (api.works(59252176))
+    # print (api.spotlight(category='illust'))
+    # print (api.illust_related(59252176))
+    # print (api.search_works('百合'))
+    # print (api.search_illust('百合'))
+    # print (api.search_popular_illust('百合'))
+    print (api.app_ranking(date='2017-07-11'))
+    # print (api.ranking())
 
 
 # 模拟订阅消息
