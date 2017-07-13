@@ -61,9 +61,9 @@ class HtmlDownloader(object):
             return None
         main = BeautifulSoup(html)
         datas = []
-        title_data = HtmlDownloader.find_title_image(main)
-        if title_data:
-            datas.append(title_data)
+        # title_data = HtmlDownloader.find_title_image(main)
+        # if title_data:
+        #     datas.append(title_data)
         divs = main.findAll("div", attrs={"class": re.compile('am__work gtm__illust-collection-illusts-\d*')})
         # 适配某些专题页面
         if not divs:
