@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import time
 
-from pixiv_config import LINK_URL, PAGE_NUM, IMAGE_SAVE_BASEPATH, IMAGE_QUALITY
+from pixiv_config import LINK_URL, PAGE_NUM, IMAGE_SAVE_BASEPATH
 from pixivision.PixivisionLauncher import PixivisionLauncher, start
 from utils.LoggerUtil import error_log
 
@@ -14,7 +14,7 @@ def run_by_pool():
     error_log("start：" + str(time.time()))
     pool = ThreadPool(minthreads=1, maxthreads=5)
     for url in urls:
-        pool.callInThread(start, url, save_path=IMAGE_SAVE_BASEPATH, quality=IMAGE_QUALITY)
+        pool.callInThread(start, url, save_path=IMAGE_SAVE_BASEPATH)
     pool.start()
     while True:
         # 每20s判断一次线程池状态，没有线程正在运行则停止下载进程
@@ -38,7 +38,7 @@ def run_by_list():
         launchers = []
         for url in urls[start_index:(start_index + step)]:
             print("Start " + url)
-            launchers.append(PixivisionLauncher(url, IMAGE_SAVE_BASEPATH, IMAGE_QUALITY))
+            launchers.append(PixivisionLauncher(url, IMAGE_SAVE_BASEPATH))
         for launcher in launchers:
             launcher.start()
         for launcher in launchers:

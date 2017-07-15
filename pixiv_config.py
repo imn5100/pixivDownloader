@@ -56,18 +56,8 @@ PAGE_NUM = config.getint("PAGE_NUM", default_value=77)
 # illust detail url
 ILLUST_DETAIL = "https://app-api.pixiv.net/v1/illust/detail"
 ILLUST_RELATED = 'https://app-api.pixiv.net/v2/illust/related'
-# redis set 过滤器相关设置
-# 暂时弃用redis
-# REDIS_IP = "127.0.0.1"
-# REDIS_PORT = 6379
-# REDIS_FILTER_KEY = "setFilter:Pixivision"
-# 将存储空间分为三块 避免单set过大
-BLOCK_NUM = 3
-USE_FILTER = False
 # 是否覆盖已下载的插画,False 时，已下载的插画会跳过下载，True时，无论插画是否存在，都会下载，并覆盖原文件
 OVERRIDE_IMAGE = config.getboolean("OVERRIDE_IMAGE", default_value=False)
-# Image quality  图片质量 1 最高级，使用api下载原图(找不到原图会下载大图，找不到大图下载展示图) 2 pixivision 展示用图(大小和画质都有压缩)
-IMAGE_QUALITY = 1
 # 存储插画的基本目录
 IMAGE_SAVE_BASEPATH = config.get("IMAGE_SVAE_BASEPATH",
                                  default_value="/Users/imn5100/Downloads/pixiv/")

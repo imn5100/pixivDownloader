@@ -3,7 +3,7 @@ import os
 import threading
 
 from pixiv import PixivImageDownloader
-from pixiv_config import IMAGE_SAVE_BASEPATH, IMAGE_USE_ORG_NAME
+from pixiv_config import IMAGE_SAVE_BASEPATH
 from pixivapi.PixivApi import PixivApi
 from pixivision.PixivisionDownloader import HtmlDownloader
 from utils import CommonUtils
