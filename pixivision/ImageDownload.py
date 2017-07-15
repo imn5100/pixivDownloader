@@ -2,6 +2,7 @@
 import os
 import threading
 
+from pixiv import PixivImageDownloader
 from pixiv_config import IMAGE_SAVE_BASEPATH, IMAGE_USE_ORG_NAME
 from pixivapi.PixivApi import PixivApi
 from pixivision.PixivisionDownloader import HtmlDownloader
@@ -25,52 +26,31 @@ class ImageDownload(object):
                     os.makedirs(save_path)
                 CommonUtils.write_topic(save_path + "/topic.txt", topic)
                 topic['save_path'] = save_path
-            except Exception, e:
-                continue
+            except Exception as e:
                 error_log("Create topic path fail,topic url:" + topic.Href)
                 error_log(e)
+                continue
         return topic_list
 
     @classmethod
-    def download_topics(cls, url, path, quality=1, create_path=False):
+    def download_topics(cls, url, path, create_path=False):
         html = HtmlDownloader.download(url)
         illu_list = HtmlDownloader.parse_illustration(html)
         title_des = HtmlDownloader.get_title(html)
         # # 是否由该线程自主创建文件夹
         if create_path and title_des and title_des.has_key('title'):
             path = path + "/" + title_des['title']
-            os.makedirs(path)
+            if not os.path.exists(path):
+                os.makedirs(path)
         if title_des and illu_list:
             title_des["size"] = len(illu_list)
+            title_des["url"] = url
             CommonUtils.write_topic_des(path + "/topic.txt", title_des)
         if not illu_list:
             return
         for illu in illu_list:
-            try:
-                filename = CommonUtils.filter_dir_name(illu.title)
-                extension = os.path.splitext(illu.image)[1]
-                id = CommonUtils.get_url_param(illu.image_page, "illust_id")
-                if quality == 1:
-                    # 通过api获取 插画原图地址，下载原图
-                    detail = PixivApi.illust_detail(id)
-                    if detail:
-                        download_url = ImageDownload.get_image_url(illu, detail)
-                        if IMAGE_USE_ORG_NAME:
-                            save_path = path + "/p_%s_%s%s" % (id, filename, extension)
-                        else:
-                            save_path = path + "/p_%s%s" % (id, extension)
-                        print(save_path)
-                        PixivApi.download(download_url, path=save_path)
-                    else:
-                        print(illu.title + " can't get detail id :" + id)
-                else:
-                    # 直接下载 pixivision 展示图
-                    print(path + "/p_%s_%s%s" % (id, filename, extension))
-                    PixivApi.download(illu.image, path=path + "/p_%s_%s%s" % (id, filename, extension))
-            except Exception, e:
-                error_log("Download Illu Fail:" + " Illustration :" + str(illu))
-                error_log(e)
-                continue
+            id = CommonUtils.get_url_param(illu.image_page, "illust_id")
+            PixivImageDownloader.download_all_by_id(id, path + '/', limit_p=False)
         print '*' * 10
         print url + " Download End!"
         return path
@@ -125,11 +105,10 @@ class ImageDownload(object):
 
 
 class IlluDownloadThread(threading.Thread):
-    def __init__(self, url, path=IMAGE_SAVE_BASEPATH, quality=1, create_path=False):
+    def __init__(self, url, path=IMAGE_SAVE_BASEPATH, create_path=False):
         threading.Thread.__init__(self, name="Download-" + url)
         self.url = url
         self.path = path
-        self.quality = quality
         self.create_path = create_path
         self.success = None
         self.fail = None
@@ -143,12 +122,14 @@ class IlluDownloadThread(threading.Thread):
                 error_log(e)
                 return
         try:
-            path = ImageDownload.download_topics(self.url, self.path, quality=self.quality,
+            path = ImageDownload.download_topics(self.url, self.path,
                                                  create_path=self.create_path)
             if self.success:
                 self.success(CommonUtils.build_callback_msg(path, url=self.url))
-        except:
-            if self.fail: self.fail()
+        except Exception as e:
+            print e
+            if self.fail:
+                self.fail()
 
     def register_hook(self, success_callback=None, fail_callback=None):
         if success_callback:

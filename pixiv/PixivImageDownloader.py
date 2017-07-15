@@ -82,7 +82,7 @@ def download_illustration(illu, path, auth_api, p_limit=P_LIMIT):
         return
 
 
-def download_all_by_id(illust_id, path):
+def download_all_by_id(illust_id, path, limit_p=True):
     detail = PixivApi.illust_detail(illust_id)
     if detail:
         try:
@@ -96,7 +96,7 @@ def download_all_by_id(illust_id, path):
                 path = PixivApi.download(url, prefix=path)
             # 多图插画
             else:
-                if detail.page_count > P_LIMIT:
+                if detail.page_count > P_LIMIT and limit_p:
                     # 该插画P数大于最大限制，放弃下载
                     print("Pixiv id:%s P>limit,Skip download" % (illust_id,))
                     return
@@ -124,7 +124,7 @@ def download_all_by_id(illust_id, path):
                     path = PixivApi.download(url, prefix=path)
             return path
         except Exception, e:
-            error_log("Download fail:")
+            error_log("Download fail:"+detail)
             error_log(e)
     else:
         print(" can't get detail id :" + str(illust_id))

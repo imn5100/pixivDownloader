@@ -126,13 +126,14 @@ class AuthPixivApi(object):
         count = 0  # 失败重试次数
         while count <= pixiv_config.RETRY_TIME:
             try:
-                response = self.auth_requests_call('GET', url, params=params, timeout=8)
+                response = self.auth_requests_call('GET', url, params=params, timeout=60)
                 if response.ok and len(response.content) > 10:
                     return parse_resp(response)
                 else:
                     return None
             # 多线程请求，容易被拒绝设置重试三次，每次重试间隔2s
-            except PixivError:
+            except PixivError as e:
+                print e
                 break
             except Exception:
                 time.sleep(2)

@@ -51,18 +51,19 @@ def write_topic(file_path, topic):
 def write_topic_des(file_path, data):
     import codecs
     try:
-        flag = 0
-        # topic.txt 不存在时 需要填写 title信息，否则不需要
-        if not os.path.exists(file_path):
-            flag = 1
-        topic_file = codecs.open(file_path, 'a+', encoding='utf-8')
+        topic_file = codecs.open(file_path, 'a', encoding='utf-8')
+        contents = ''
+        if os.path.exists(file_path):
+            contents = codecs.open(file_path, 'r', encoding='utf-8').read()
         # 已写入过 下载数量则跳过写入
-        if topic_file.read().find("IlluNum") > 0:
-            return
-        topic_file.write("description = " + data["description"] + "\n")
-        topic_file.write("IlluNum = " + str(data["size"]) + "\n")
-        if flag == 1:
-            topic_file.write("title = " + data["title"] + "\n")
+        if contents.find("Title =") < 0:
+            topic_file.write("Title = " + data["title"] + "\n")
+        if contents.find("Href =") < 0:
+            topic_file.write("Href = " + str(data["url"]) + "\n")
+        if contents.find("Description =") < 0:
+            topic_file.write("Description = " + data["description"] + "\n")
+        if contents.find("IlluNum =") < 0:
+            topic_file.write("IlluNum = " + str(data["size"]) + "\n")
     except Exception, e:
         print("Write Topic Description Fail")
         print(e)

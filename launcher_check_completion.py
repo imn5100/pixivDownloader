@@ -17,22 +17,27 @@ def check_image(dir):
             image_fl = image_fl
             # 检查是否有特辑描述文件
             base_path = dir + "/" + image_fl
-            if os.path.exists(base_path + "/topic.txt"):
-                check_num(base_path)
-            else:
-                print("Not found topic.txt.\tPath：" + base_path)
+            if os.path.isdir(base_path):
+                if os.path.exists(base_path + "/topic.txt"):
+                    check_num(base_path)
+                else:
+                    print("Not found topic.txt.\tPath：" + base_path)
 
 
 # 检查是否下载完全
 def check_num(base_path):
-    true_image_num = len(os.listdir(base_path))
+    files = os.listdir(base_path)
+    true_image_num = len(files)
+    if '.DS_Store' in files:
+        true_image_num = true_image_num - 1
     content = open(base_path + "/topic.txt", "r").read()
     res = re.search("IlluNum = \d*", content)
     if res:
         # 获取专题插画文件数量。
         image_num = re.search("IlluNum = \d*", content).group().split(" ")[-1]
         if int(true_image_num) - int(image_num) >= 1:
-            print("All illustrations have been downloaded.\tPath:" + base_path)
+            print("All illustrations have been downloaded.\tPath:" + base_path + " " + str(
+                int(true_image_num) - 1) + "/" + image_num)
         else:
             # 判断未下载完全时，获取专题url 重新补全下载
             print(base_path + " " + str(int(true_image_num) - 1) + "/" + image_num)

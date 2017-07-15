@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import codecs
 import json
 import time
 from threading import Thread
@@ -10,12 +11,13 @@ from pixivapi.PixivApi import PixivApi
 from pixivapi.PixivUtils import parse_dict
 from pixivision.ImageDownload import ImageDownload, IlluDownloadThread
 from pixivision.PixivisionDownloader import HtmlDownloader
+from utils import CommonUtils
 from utils.MessageHandler import RedisMessageClient, PixivDownloadHandler
 
 
 def test_pixivision():
     topic_list = HtmlDownloader.parse_illustration_topic(
-            HtmlDownloader.download("http://www.pixivision.net/en/c/illustration/?p=1"))
+        HtmlDownloader.download("http://www.pixivision.net/en/c/illustration/?p=1"))
     for topic in topic_list:
         print(topic)
     # 创建特辑文件夹，写入特辑信息。
@@ -82,7 +84,7 @@ def test_pixiv_html_parse_byfile():
 
 
 def test_auth_api():
-    api = AuthPixivApi("", "",access_token='')
+    api = AuthPixivApi("", "", access_token='')
     # obj = api.search_works("艦これ")
     # print(obj)
     # print (api.illust_detail(39562690))
@@ -184,5 +186,13 @@ def testbs4():
     return datas
 
 
+def test_str_find():
+    data = {'title': u'想抱着睡觉♡抱枕套风格的插画特辑', 'size': '15',
+            'description': u'印着角色躺在上面的图的抱枕套，在宅向周边里一直都特别受欢迎。将抱枕放在床上，仿佛最喜爱的那个角色就睡在自己身边一样，有时候还会兴奋到无法安睡。而抱着抱枕酣然入睡的时候，又会做一个怎样的美梦呢？这次，就为大家送上描绘了“抱枕套”的插画作品特辑。快来看看吧！',
+            'url': 'https://www.pixivision.net/zh/a/2613'}
+    file_path = "/Users/imn5100/Downloads/pixiv/想抱着睡觉♡抱枕套风格的插画特辑//topic.txt"
+    CommonUtils.write_topic_des(file_path, data)
+
+
 if __name__ == '__main__':
-    test_auth_api()
+    test_str_find()

@@ -145,7 +145,7 @@ class PixivDownloadFrame(Frame):
         if re.match("htt(p|ps)://www.pixivision.net/(zh|ja|en|zh-tw)/a/\d*", url):
             showinfo("info", "Start download pixivision.net page:" + url)
             print ("info", "Start download pixivision.net page:" + url)
-            IlluDownloadThread(url.strip(), path=path, quality=1, create_path=True).register_hook(
+            IlluDownloadThread(url.strip(), path=path, create_path=True).register_hook(
                 success_callback=self.download_callback).start()
             return
         # 插画列表页下载
