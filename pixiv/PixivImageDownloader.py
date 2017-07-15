@@ -93,8 +93,10 @@ def download_all_by_id(illust_id, path, limit_p=True):
                     url = detail.meta_single_page.original_image_url
                 except:
                     url = detail.image_urls.large
-                path = PixivApi.download(url, prefix=path)
-                print("Downloading:" + path)
+                extension = os.path.splitext(url)[1]
+                save_path = path + "/p_%s%s" % (illust_id, extension)
+                print("Downloading:" + save_path)
+                path = PixivApi.download(url, path=save_path)
             # 多图插画
             else:
                 if detail.page_count > P_LIMIT and limit_p:
