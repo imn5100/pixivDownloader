@@ -19,7 +19,7 @@ class Config:
         if default_value is not None:
             try:
                 return self.get_unicode(section, key)
-            except Exception, e:
+            except Exception as e:
                 if isinstance(e, UnicodeDecodeError):
                     raise e
                 else:

@@ -73,7 +73,7 @@ def download_illustration(illu, path, auth_api, p_limit=P_LIMIT):
                         url = detail.image_urls.large
                         path = download(illust_id, illu.title, path, url, auth_api)
                 return path
-            except Exception, e:
+            except Exception as e:
                 error_log("Download fail:")
                 error_log(e)
         else:
@@ -126,7 +126,7 @@ def download_all_by_id(illust_id, path, limit_p=True):
                     url = detail.image_urls.large
                     path = PixivApi.download(url, prefix=path)
             return path
-        except Exception, e:
+        except Exception as e:
             error_log("Download fail:"+detail)
             error_log(e)
     else:
@@ -146,7 +146,7 @@ def download_queue(queue, path, auth_api):
         try:
             illustration = queue.get()
             download_illustration(illustration, path, auth_api)
-        except Exception, e:
+        except Exception as e:
             print(e)
             continue
         finally:

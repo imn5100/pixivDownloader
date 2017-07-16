@@ -169,7 +169,7 @@ def testbs4():
                 user["id"] = user_a["data-user_id"]
                 user["page"] = PIXIV_URL + user_a["href"]
                 data["user"] = user
-            except Exception, e:
+            except Exception as e:
                 print("Parse User Warning")
                 print(e.message)
             count_a = li.find("a", attrs={"class": "bookmark-count _ui-tooltip"})
@@ -179,7 +179,7 @@ def testbs4():
                 data["mark_count"] = 0
             data = parse_dict(data)
             datas.append(data)
-        except Exception, e:
+        except Exception as e:
             print("parse_search_result Warning")
             print(e.message)
             continue

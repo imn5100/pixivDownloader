@@ -64,7 +64,7 @@ def write_topic_des(file_path, data):
             topic_file.write("Description = " + data["description"] + "\n")
         if contents.find("IlluNum =") < 0:
             topic_file.write("IlluNum = " + str(data["size"]) + "\n")
-    except Exception, e:
+    except Exception as e:
         print("Write Topic Description Fail")
         print(e)
 

@@ -46,7 +46,7 @@ class PixivQueue(object):
                                                                            p_limit=task.get('p_limit'))
                     if callback and illu_file:
                         callback("{\n%s:%s\nFile:%s\n}\n" % ("search get", task.get('title'), illu_file))
-            except Exception, e:
+            except Exception as e:
                 print ("error", e)
             finally:
                 queue.task_done()

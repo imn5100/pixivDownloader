@@ -117,7 +117,7 @@ class IlluDownloadThread(threading.Thread):
         if not os.path.exists(self.path):
             try:
                 os.makedirs(self.path)
-            except Exception, e:
+            except Exception as e:
                 error_log("make dir Fail:" + self.path)
                 error_log(e)
                 return

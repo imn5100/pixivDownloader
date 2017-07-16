@@ -48,7 +48,7 @@ class HtmlDownloader(object):
                     data["tags"].append(tag.text)
                 data = parse_dict(data)
                 datas.append(data)
-            except Exception, e:
+            except Exception as e:
                 print("Get Topics Warning")
                 print(e)
                 continue
@@ -88,7 +88,7 @@ class HtmlDownloader(object):
                         "image_page"] + ":" + "can't find image。please use quality=1 mode download")
                 data = parse_dict(data)
                 datas.append(data)
-            except Exception, e:
+            except Exception as e:
                 print("Parse illustrations Warning:")
                 print(e)
                 continue
@@ -109,7 +109,7 @@ class HtmlDownloader(object):
             data["author"] = user_a.text
             data = parse_dict(data)
             return data
-        except Exception, e:
+        except Exception as e:
             print("Get topic Title Warning:")
             print(e)
             return None
@@ -121,7 +121,7 @@ class HtmlDownloader(object):
             data = {"title": main.find("meta", attrs={"property": "og:title"})["content"],
                     "description": main.find("meta", attrs={"name": "description"})["content"]}
             return data
-        except Exception, e:
+        except Exception as e:
             print("Get topic Title and description Fail")
             print(e)
             return None
