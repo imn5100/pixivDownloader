@@ -2,7 +2,7 @@
 import threading
 
 from pixiv_config import *
-from pixivision.ImageDownload import ImageDownload, IlluDownloadThread
+from pixivision.PixivisionTopicDownloader import ImageDownload, IlluDownloadThread
 
 
 def start(url, save_path=IMAGE_SAVE_BASEPATH, success_callback=None, fail_callback=None):

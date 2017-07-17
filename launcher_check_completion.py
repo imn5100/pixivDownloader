@@ -6,7 +6,7 @@ import os
 import re
 
 from pixiv_config import IMAGE_SAVE_BASEPATH
-from pixivision.ImageDownload import IlluDownloadThread
+from pixivision.PixivisionTopicDownloader import IlluDownloadThread
 
 
 def check_image(dir):

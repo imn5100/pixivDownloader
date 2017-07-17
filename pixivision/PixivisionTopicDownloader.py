@@ -4,8 +4,7 @@ import threading
 
 from pixiv import PixivImageDownloader
 from pixiv_config import IMAGE_SAVE_BASEPATH
-from pixivapi.PixivApi import PixivApi
-from pixivision.PixivisionDownloader import HtmlDownloader
+from pixivision.PixivisionHtmlParser import HtmlDownloader
 from utils import CommonUtils
 from utils.LoggerUtil import error_log
 
@@ -81,27 +80,6 @@ class ImageDownload(object):
                     flag = 2
         print("Download " + show_msg[flag])
         return download_url
-
-    @classmethod
-    def download_image_byid(cls, id, prefix=None):
-        if id:
-            detail = PixivApi.illust_detail(id)
-            if detail:
-                download_url = ImageDownload.get_image_url(None, detail)
-                if download_url:
-                    return PixivApi.download(download_url, prefix=prefix)
-                else:
-                    print("error", "download by id fail,can't find download url")
-            else:
-                print("error", "can't get detail id:" + str(id))
-
-    @classmethod
-    def download_byurl(cls, url, prefix=None):
-        illust_id = CommonUtils.get_url_param(url, "illust_id")
-        if illust_id:
-            return ImageDownload.download_image_byid(illust_id, prefix=prefix)
-        else:
-            return PixivApi.download(url.strip(), prefix=prefix)
 
 
 class IlluDownloadThread(threading.Thread):

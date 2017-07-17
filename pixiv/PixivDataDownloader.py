@@ -3,7 +3,7 @@ import re
 
 import requests
 
-from pixiv.PixivPageDownloader import PixivHtmlParser
+from pixiv.PixivHtmlParser import PixivHtmlParser
 from pixiv_config import PIXIV_LOGIN_KEY, PIXIV_PAGE_HEADERS, PIXIV_LOGIN_URL, RETRY_TIME, TIMEOUT, PIXIV_SEARCH_URL, \
     DOWNLOAD_THRESHOLD
 from pixivapi.PixivUtils import parse_resp, PixivError

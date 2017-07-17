@@ -25,7 +25,7 @@ python launcher_gui.py
 运行Pixivision全站插画爬虫:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;全站爬取完毕后，如果Pixivsion有更新，可以修改配置文件中的PAGE_NUM为更新的页数，比如Pixivsion有2页更新未爬取，修改PAGE_NUM=2,全站插画爬虫则会爬取前2页的所有特辑
 ~~~
-python launcher_plus.py
+python launcher_pixivision.py
 ~~~
 运行Pixivision全站插画爬虫补全脚本：<br>
 &nbsp;&nbsp;&nbsp;&nbsp;用于检查从Pixivision下载的特辑是否完全下载完毕，并补全下载。(注意：这里的补全并不是下载Pixivison的更新的内容)

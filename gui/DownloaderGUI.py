@@ -7,7 +7,7 @@ from tkMessageBox import showerror, showwarning, showinfo
 from gui.WorkQueue import PixivQueue
 from pixiv import PixivDataDownloader
 from pixiv_config import IMAGE_SAVE_BASEPATH, USERNAME, PASSWORD, PIXIV_COOKIES
-from pixivision.ImageDownload import IlluDownloadThread
+from pixivision.PixivisionTopicDownloader import IlluDownloadThread
 from pixivision.PixivisionLauncher import PixivisionLauncher
 from utils import CommonUtils
 

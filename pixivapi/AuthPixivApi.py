@@ -298,7 +298,7 @@ class AuthPixivApi(object):
 
     # 作品详细2
     def works(self, illust_id):
-        url = 'https://public-api.secure.pixiv.net/v1/works/%d.json' % (illust_id)
+        url = 'https://public-api.secure.pixiv.net/v1/works/%d.json' % illust_id
         params = {
             'image_sizes': 'px_128x128,small,medium,large,px_480mw',
             'include_stats': 'true',

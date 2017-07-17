@@ -1,4 +1,5 @@
 # -*- coding:utf-8 -*-
+import threading
 
 import pixiv_config
 from pixivapi.AuthPixivApi import AuthPixivApi
@@ -6,6 +7,7 @@ from pixivapi.AuthPixivApi import AuthPixivApi
 
 class PixivApi(object):
     __apiClient = None
+    __lock = threading.Lock()
 
     @classmethod
     def download(cls, url, prefix='', path=None, referer='https://app-api.pixiv.net/'):
@@ -20,6 +22,10 @@ class PixivApi(object):
 
     @classmethod
     def check_api(cls):
-        if not cls.__apiClient:
-            cls.__apiClient = AuthPixivApi(pixiv_config.USERNAME, pixiv_config.PASSWORD,
-                                           access_token=pixiv_config.ACCESS_TOKEN)
+        try:
+            cls.__lock.acquire()
+            if not cls.__apiClient:
+                cls.__apiClient = AuthPixivApi(pixiv_config.USERNAME, pixiv_config.PASSWORD,
+                                               access_token=pixiv_config.ACCESS_TOKEN)
+        finally:
+            cls.__lock.release()

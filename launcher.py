@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+import os
 import re
 
 import pixiv_config
-from pixivision.ImageDownload import IlluDownloadThread, ImageDownload
+from pixiv import PixivImageDownloader
+from pixivision.PixivisionTopicDownloader import IlluDownloadThread
 from pixivision.PixivisionLauncher import PixivisionLauncher
 
 
@@ -17,7 +19,7 @@ def main_for_zh():
     print("这里是Pixivision插画特辑下载器。")
     print("如果遇见什么问题或发现BUG，请联系我Github:(https://github.com/imn5100)或Email:(imn5100_chu2@163.com)。")
     download_type = raw_input(
-            "请选择你需要下载的类型：\n输入1.特辑列表页(多组特辑)输入页码即可\n输入2.下载特辑页\n输入3.直接使用图片url下载（部分下载失败的图片可直接使用此功能下载）\n输入4.通过P站id下载\n输入其他数字.退出\n")
+        "请选择你需要下载的类型：\n输入1.特辑列表页(多组特辑)输入页码即可\n输入2.下载特辑页\n输入3.直接使用图片url下载（部分下载失败的图片可直接使用此功能下载）\n输入4.通过P站id下载\n输入其他数字.退出\n")
     download_type = set_int(download_type)
     if download_type == 0:
         exit()
@@ -42,10 +44,10 @@ def main_for_zh():
         IlluDownloadThread(url.strip(), path=save_path.decode("utf-8")).start()
     elif download_type == 3:
         url = str(raw_input("请输入Pixiv图片url:")).strip()
-        ImageDownload.download_byurl(url)
+        PixivImageDownloader.download_all_by_url(url, os.getcwd())
     elif download_type == 4:
         id = int(raw_input("请输入Pixiv插画ID:"))
-        ImageDownload.download_image_byid(id)
+        PixivImageDownloader.download_all_by_id(id, os.getcwd(), limit_p=False)
     else:
         print("退出!")
         return
@@ -56,16 +58,16 @@ def main_for_en():
     print(
         "If you have any problems or find bugs, please contact me at github: (https://github.com/imn5100) or Email: (imn5100_chu2@163.com).")
     download_type = raw_input(
-            "Please select the type you want to download: \n Enter 1. The special list page (groups of specials) enter the page number to \n "
-            "Enter 2. Download the special page \n "
-            "Enter 3.Use the image url to download (some download failed pictures Direct use of this feature to download) \n"
-            " Enter 4. Through the P station id download \n Enter the other numbers.\n")
+        "Please select the type you want to download: \n Enter 1. The special list page (groups of specials) enter the page number to \n "
+        "Enter 2. Download the special page \n "
+        "Enter 3.Use the image url to download (some download failed pictures Direct use of this feature to download) \n"
+        " Enter 4. Through the P station id download \n Enter the other numbers.\n")
     download_type = set_int(download_type)
     if download_type == 0:
         exit()
     if download_type == 1:
         page_index = raw_input(
-                "Please enter the page number to be downloaded. If the page number does not exist, the download will fail\n")
+            "Please enter the page number to be downloaded. If the page number does not exist, the download will fail\n")
         page_index = set_int(page_index)
         if page_index == 0:
             page_index = 1
@@ -86,11 +88,11 @@ def main_for_en():
         IlluDownloadThread(url.strip(), path=save_path.decode("utf-8")).start()
     elif download_type == 3:
         url = str(raw_input("Please enter the Pixiv image url:")).strip()
-        ImageDownload.download_byurl(url)
+        PixivImageDownloader.download_all_by_url(url, os.getcwd())
         print("Charging...")
     elif download_type == 4:
         id = int(raw_input("Please enter a Pixiv illustration ID:"))
-        ImageDownload.download_image_byid(id)
+        PixivImageDownloader.download_all_by_id(id, os.getcwd(), limit_p=False)
     else:
         print("Exit!")
         return

@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
+import os
 import time
 from threading import Thread
 
-from pixiv.PixivPageDownloader import PixivHtmlParser
+from pixiv.PixivHtmlParser import PixivHtmlParser
 from pixiv_config import *
 from pixivapi.AuthPixivApi import AuthPixivApi
 from pixivapi.PixivApi import PixivApi
 from pixivapi.PixivUtils import parse_dict
-from pixivision.ImageDownload import ImageDownload, IlluDownloadThread
-from pixivision.PixivisionDownloader import HtmlDownloader
+from pixivision.PixivisionTopicDownloader import ImageDownload, IlluDownloadThread
+from pixivision.PixivisionHtmlParser import HtmlDownloader
 from utils import CommonUtils
 
 
@@ -153,4 +154,5 @@ def test_str_find():
 
 
 if __name__ == '__main__':
-    test_api()
+    # test_api()
+    print os.getcwd()
