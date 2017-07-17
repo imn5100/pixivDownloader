@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-import codecs
-import json
 import time
 from threading import Thread
 
@@ -12,7 +10,6 @@ from pixivapi.PixivUtils import parse_dict
 from pixivision.ImageDownload import ImageDownload, IlluDownloadThread
 from pixivision.PixivisionDownloader import HtmlDownloader
 from utils import CommonUtils
-from utils.MessageHandler import RedisMessageClient, PixivDownloadHandler
 
 
 def test_pixivision():
@@ -32,24 +29,6 @@ def test_api():
     print(detail.illust)
     # related = PixivApi.illust_related(54809586)
     # print(related)
-
-
-# def test_redisFilter():
-#     r = redis.Redis(REDIS_IP, REDIS_PORT)
-#     rFilter = RedisFilter(r, 3, "setFilter:Pixivision")
-#     datas = ["/zh/c/1001", "/zh/c/1002", "/zh/c/1003", "/zh/c/1004", "/zh/c/1005", "/zh/c/1006", "/zh/c/1008",
-#              "/zh/c/1009"]
-#     other = "/zh/c/1007"
-#     rFilter.add_all(datas)
-#     print(rFilter.is_contained(datas[2]))
-#     print(rFilter.is_contained(other))
-#     rFilter.add(other)
-#     print(rFilter.is_contained(other))
-#     rFilter.remove(datas[1])
-#     print(rFilter.is_contained(datas[1]))
-#     rFilter.remove_all(datas)
-#     rFilter.remove(other)
-#     print(rFilter.is_contained(datas[2]))
 
 
 def test_image_download():
@@ -97,27 +76,6 @@ def test_auth_api():
     # print (api.app_ranking(date='2017-07-11'))
     # print (api.ranking())
     # print (api.illust_recommended())
-
-
-# 模拟订阅消息
-def test_msg_sub(channel):
-    pixiv_api = AuthPixivApi("*", "*")
-    handler = PixivDownloadHandler(pixiv_api)
-    sub_client = RedisMessageClient(handler)
-    sub_client.run_sub(channel)
-
-
-# 模拟redis消息推送
-def test_msg_pub(channel):
-    pub_client = RedisMessageClient()
-    pub_client.pub(channel, json.dumps({"topic": "download",
-                                        "url": "https://i4.pixiv.net/img-original/img/2016/09/13/12/23/34/58959975_p0.jpg"}))
-    # pub_client.pub(channel, json.dumps({"topic": "download",
-    #                                     "url": "https://i1.pixiv.net/img-original/img/2015/12/27/22/22/00/54279980_p0.jpg"}))
-    # pub_client.pub(channel, json.dumps({"topic": "download",
-    #                                     "url": "https://i1.pixiv.net/img-original/img/2014/05/28/01/21/50/43748656_p0.jpg"}))
-    # pub_client.pub(channel, json.dumps({"topic": "download",
-    #                                     "url": "https://i1.pixiv.net/img-original/img/2016/08/20/00/16/23/58541644_p0.png"}))
 
 
 def download_test(url):

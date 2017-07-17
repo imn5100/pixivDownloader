@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import ConfigParser
-import os
 
 # this is file config.ini charset.
 __DEFAULT_CHARSET__ = 'utf-8'
