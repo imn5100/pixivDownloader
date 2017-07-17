@@ -22,6 +22,8 @@ class PixivApi(object):
 
     @classmethod
     def check_api(cls):
+        if cls.__apiClient:
+            return
         try:
             cls.__lock.acquire()
             if not cls.__apiClient:
