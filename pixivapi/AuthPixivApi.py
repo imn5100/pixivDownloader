@@ -53,7 +53,6 @@ class AuthPixivApi(object):
         headers['Authorization'] = 'Bearer %s' % self.access_token
         response = requests_call(method, url, headers=headers, **kwargs)
         if response.status_code != 200:
-            print response.content
             raise PixivError(response.content)
         response.encoding = 'utf-8'
         return response
@@ -133,7 +132,7 @@ class AuthPixivApi(object):
                     return None
             # 多线程请求，容易被拒绝设置重试三次，每次重试间隔2s
             except PixivError as e:
-                print e
+                print (e)
                 break
             except Exception:
                 time.sleep(2)

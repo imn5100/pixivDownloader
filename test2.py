@@ -27,12 +27,12 @@ def test_executor():
 
 def testConfig():
     config = Config('../config.ini', "pixiv")
-    print config.get("SEARCH_KEYWORD", "kaka")
+    print (config.get("SEARCH_KEYWORD", "kaka"))
 
 
 def testMatch():
     url = "https://www.pixivision.net/zh/c/illustration/"
-    print re.match(r"htt(p|ps)://www.pixivision.net/(zh|ja|en|zh-tw)/c/illustration(/|)(\?p=\d+|)", url)
+    print (re.match(r"htt(p|ps)://www.pixivision.net/(zh|ja|en|zh-tw)/c/illustration(/|)(\?p=\d+|)", url))
 
 
 if __name__ == '__main__':

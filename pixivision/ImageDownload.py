@@ -51,8 +51,8 @@ class ImageDownload(object):
         for illu in illu_list:
             id = CommonUtils.get_url_param(illu.image_page, "illust_id")
             PixivImageDownloader.download_all_by_id(id, path + '/', limit_p=False)
-        print '*' * 10
-        print url + " Download End!"
+        print ('*' * 10)
+        print (url + " Download End!")
         return path
 
     @classmethod

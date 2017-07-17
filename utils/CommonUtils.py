@@ -3,6 +3,17 @@ from __future__ import unicode_literals
 import os
 
 
+def singleton(cls, *args, **kw):
+    instances = {}
+
+    def _singleton():
+        if cls not in instances:
+            instances[cls] = cls(*args, **kw)
+        return instances[cls]
+
+    return _singleton
+
+
 def get_url_param(url, param):
     import urlparse
     try:
@@ -20,13 +31,17 @@ def set_int(int_num, default_value=0):
 
 
 def is_not_empty(val):
-    if val is not None and val.strip() != '':
+    if val and val.strip() != '':
         return True
     return False
 
 
 def is_empty(val):
-    return not is_not_empty(val)
+    if not val:
+        return True
+    if val.strip() == '':
+        return True
+    return False
 
 
 def filter_dir_name(name):

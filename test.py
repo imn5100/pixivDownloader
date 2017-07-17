@@ -28,7 +28,7 @@ def test_pixivision():
 
 
 def test_api():
-    detail = PixivApi.illust_detail(54809586)
+    detail = PixivApi.illust_detail(52819443)
     print(detail.illust)
     # related = PixivApi.illust_related(54809586)
     # print(related)
@@ -84,10 +84,10 @@ def test_pixiv_html_parse_byfile():
 
 
 def test_auth_api():
-    api = AuthPixivApi("", "", access_token='')
+    api = AuthPixivApi("", "", access_token='7a42XR')
     # obj = api.search_works("艦これ")
     # print(obj)
-    # print (api.illust_detail(39562690))
+    print (api.illust_detail(52819443))
     # print (api.works(39562690))
     # print (api.spotlight(category='illust'))
     # print (api.illust_related(59252176))
@@ -96,7 +96,7 @@ def test_auth_api():
     # print (api.search_popular_illust('百合',offset=20))
     # print (api.app_ranking(date='2017-07-11'))
     # print (api.ranking())
-    print (api.illust_recommended())
+    # print (api.illust_recommended())
 
 
 # 模拟订阅消息
@@ -195,4 +195,4 @@ def test_str_find():
 
 
 if __name__ == '__main__':
-    test_str_find()
+    test_api()
