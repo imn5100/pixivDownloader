@@ -5,6 +5,7 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 from utils.Config import Config
 import time
+from PIL import Image
 
 
 def return_future_result(message):
@@ -14,9 +15,9 @@ def return_future_result(message):
 
 def test_executor():
     pool = ProcessPoolExecutor()  # machine has processors
-    future1 = pool.submit(return_future_result, ("hello"))  # 往线程池里面加入一个task
-    future2 = pool.submit(return_future_result, ("world"))  # 往线程池里面加入一个task
-    future3 = pool.submit(return_future_result, ("test"))  # 往线程池里面加入一个task
+    future1 = pool.submit(return_future_result, 'hello')  # 往线程池里面加入一个task
+    future2 = pool.submit(return_future_result, "world")  # 往线程池里面加入一个task
+    future3 = pool.submit(return_future_result, "test")  # 往线程池里面加入一个task
     print(future1.done())  # 判断task1是否结束
     time.sleep(3)
     print(future2.done())  # 判断task2是否结束
@@ -35,5 +36,11 @@ def testMatch():
     print (re.match(r"htt(p|ps)://www.pixivision.net/(zh|ja|en|zh-tw)/c/illustration(/|)(\?p=\d+|)", url))
 
 
+def testImage():
+    im = Image.open("/Users/imn5100/Downloads/p_51695014.jpg")
+    # im2 = Image.open("/Users/imn5100/Downloads/landing.jpg")
+    print (im)
+
+
 if __name__ == '__main__':
-    test_executor()
+    testImage()
