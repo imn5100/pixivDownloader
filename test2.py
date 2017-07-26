@@ -36,11 +36,17 @@ def testMatch():
     print (re.match(r"htt(p|ps)://www.pixivision.net/(zh|ja|en|zh-tw)/c/illustration(/|)(\?p=\d+|)", url))
 
 
-def testImage():
-    im = Image.open("/Users/imn5100/Downloads/p_51695014.jpg")
-    # im2 = Image.open("/Users/imn5100/Downloads/landing.jpg")
-    print (im)
+def testImage(file):
+    # im = Image.open("/Users/imn5100/Downloads/p_51695014.jpg")
+    print (time.time())
+    im2 = Image.open(file)
+    try:
+        im2.verify()
+    except Exception as e:
+        print (e)
+    print (time.time())
 
 
 if __name__ == '__main__':
-    testImage()
+    testImage("/Users/imn5100/Downloads/p_51695014.jpg")
+    testImage("/Users/imn5100/Downloads/p_63414362_4.png")
