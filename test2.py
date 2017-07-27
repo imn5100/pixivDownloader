@@ -38,6 +38,8 @@ def testMatch():
 
 def testImage(file):
     # im = Image.open("/Users/imn5100/Downloads/p_51695014.jpg")
+    print file[-4:].lower()
+    print (file[-4:].lower() in ('.jpg', '.png', '.gif'))
     print (time.time())
     im2 = Image.open(file)
     try:
@@ -47,6 +49,23 @@ def testImage(file):
     print (time.time())
 
 
+def testWalk(path):
+    import os
+    count = 0
+    for root, dirs, files in os.walk(path, topdown=False):
+        for name in files:
+            count = count + 1
+            print(os.path.join(root, name))
+            # for name in dirs:
+            #     print(os.path.join(root, name))
+    print count
+
+
 if __name__ == '__main__':
-    testImage("/Users/imn5100/Downloads/p_51695014.jpg")
-    testImage("/Users/imn5100/Downloads/p_63414362_4.png")
+    # testImage("/Users/imn5100/Downloads/p_51695014.jpg")
+    # testImage("/Users/imn5100/Downloads/p_63414362_4.png")
+    # testWalk('/Users/imn5100/Downloads/pixiv/search')
+    reader = open('/Users/imn5100/Downloads/pixiv/z_pixivision_download/一生追随！“超凡的反派”特辑/p_10208070.jpg', 'r')
+    print reader.read()
+    im = Image.open('/Users/imn5100/Downloads/pixiv/z_pixivision_download/一生追随！“超凡的反派”特辑/p_10208070.jpg')
+    print im

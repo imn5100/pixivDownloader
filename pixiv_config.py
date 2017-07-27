@@ -19,7 +19,6 @@ ACCESS_TOKEN = config.get("ACCESS_TOKEN", default_value="")
 # 不使用cookies 请保持默认值为"{}"
 PIXIV_COOKIES = eval(config.get("PIXIV_COOKIES", default_value="{}"))
 
-
 # 获取代理网页超时时间5s
 TIMEOUT = config.getint("TIMEOUT", default_value=5)
 # 失败重试次数
@@ -59,7 +58,8 @@ ILLUST_RELATED = 'https://app-api.pixiv.net/v2/illust/related'
 # 是否覆盖已下载的插画,False 时，已下载的插画会跳过下载，True时，无论插画是否存在，都会下载，并覆盖原文件
 OVERRIDE_IMAGE = config.getboolean("OVERRIDE_IMAGE", default_value=False)
 # 存储插画的基本目录
-IMAGE_SAVE_BASEPATH ='/Users/imn5100/Downloads/pixiv/'
+IMAGE_SAVE_BASEPATH = config.getint("IMAGE_SAVE_BASEPATH",
+                                    default_value=' /Users/imn5100/Downloads/pixiv/z_pixivision_download')
 # 文件命名是否使用原文件名（即插画作者的命名）
 # 因为插画原名经常出现颜文字和各种奇怪的符号，这里不使用图片标题进行命名，用pixiv 的id进行命名会很大地减少文件错误，提高下载正确率，
 # 缺点是 会丢失原文件名字。
@@ -100,4 +100,5 @@ SEARCH_PAGE = config.getint("SEARCH_PAGE", default_value=2)
 SEARCH_SAVE_PATH = config.get("SEARCH_SAVE_PATH", default_value="/Users/imn5100/Downloads/pixiv/search")
 # 搜索关键字
 SEARCH_KEYWORD = config.get("SEARCH_KEYWORD", default_value="夕立")
-
+# 是否检查文件下载完整 需要安装 pillow
+CHECK_IMAGE_VERIFY = config.getboolean("CHECK_IMAGE_VERIFY", default_value=True)
