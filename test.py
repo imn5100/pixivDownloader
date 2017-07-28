@@ -3,6 +3,7 @@ import os
 import time
 from threading import Thread
 
+from pixiv.PixivDataDownloader import PixivDataHandler
 from pixiv.PixivHtmlParser import PixivHtmlParser
 from pixiv_config import *
 from pixivapi.AuthPixivApi import AuthPixivApi
@@ -64,16 +65,16 @@ def test_pixiv_html_parse_byfile():
 
 
 def test_auth_api():
-    api = AuthPixivApi("", "", access_token='7a42XR')
+    api = AuthPixivApi("", "", access_token='dQ63rSzFSIpvbbkAJnV41xrRv3evYy_nXcLEUaobku8')
     # obj = api.search_works("艦これ")
     # print(obj)
-    print (api.illust_detail(52819443))
+    # print (api.illust_detail(52819443))
     # print (api.works(39562690))
     # print (api.spotlight(category='illust'))
     # print (api.illust_related(59252176))
     # print (api.search_works('百合'))
     # print (api.search_illust('百合'))
-    # print (api.search_popular_illust('百合',offset=20))
+    return api.search_popular_illust('百合', offset=None)
     # print (api.app_ranking(date='2017-07-11'))
     # print (api.ranking())
     # print (api.illust_recommended())
@@ -153,6 +154,52 @@ def test_str_find():
     CommonUtils.write_topic_des(file_path, data)
 
 
+def test_search_pop():
+    api = AuthPixivApi("", "", access_token='PP7Z39eIV9PKl-XWkz-wy_KgWsxqe5xHGRYfeIDwOOQ')
+    ids = set()
+    # for data in api.search_popular_illust('百合', offset=None).illusts:
+    #     ids.add(data.id)
+    #     print (data.title + ":" + str(data.id))
+    print ("normal search:")
+    count = 0
+    for data in api.search_illust('百合').illusts:
+        count = count + 1
+        if data.total_bookmarks >= 200:
+            ids.add(data.id)
+            print (data.title + ":" + str(data.id))
+    print ("count" + str(count))
+    for data in api.search_illust('百合', offset=count).illusts:
+        count = count + 1
+        if data.total_bookmarks >= 200:
+            ids.add(data.id)
+            print (data.title + ":" + str(data.id))
+    print ("count" + str(count))
+    for data in api.search_illust('百合', offset=count).illusts:
+        count = count + 1
+        if data.total_bookmarks >= 200:
+            ids.add(data.id)
+            print (data.title + ":" + str(data.id))
+    print ("count" + str(count))
+    for data in api.search_illust('百合', offset=count).illusts:
+        count = count + 1
+        if data.total_bookmarks >= 200:
+            ids.add(data.id)
+            print (data.title + ":" + str(data.id))
+    print ("count" + str(count))
+    print len(ids)
+
+
+def testPage_search():
+    handler = PixivDataHandler('', '',
+                               cookies={'device_token': '7faf9c841824ca3411def80c0fb29631', 'p_ab_id': '5',
+                                        'PHPSESSID': '', 'p_ab_id_2': '9'})
+    urls = set()
+    for page in range(1, 7):
+        for data in handler.search(u'百合', page=page, download_threshold=200):
+            urls.add(data.url)
+    print (len(urls))
+
+
 if __name__ == '__main__':
-    # test_api()
-    print os.getcwd()
+    test_search_pop()
+    testPage_search()

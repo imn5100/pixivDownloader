@@ -189,7 +189,7 @@ class PixivDownloadFrame(Frame):
                 showwarning("warning", "Please configure cookies or account and password!")
                 print ("warning", "Please configure cookies or account and password!")
                 return
-        keywords = self.keywords.get()
+        keywords = self.keywords.get().strip()
         if CommonUtils.is_empty(keywords):
             showwarning("warning", "Please enter search keywords!")
             print ("warning", "Please enter search keywords!")
