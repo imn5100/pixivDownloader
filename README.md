@@ -18,7 +18,7 @@ Pixiv And Pixivision Illustrations Downloader.<br>
 ~~~
 python  launcher.py 
 ~~~
-启动图形界面下载工具:(支持下载方式1-5)
+启动图形界面下载工具:(支持下载方式1-5)<br>
 使用方式：1.直接启动，输入Pixiv用户名和密码(如果有配置会自动填充)，验证通过直接进入下载界面。2.配置ACCESS_TOKEN和PIXIV_COOKIES(每次使用用户名和密码登录时控制台会输出)，验证通过后(时间可能略长),直接进入下载界面。
 ~~~
 python launcher_gui.py
