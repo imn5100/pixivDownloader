@@ -24,7 +24,10 @@ def search_nologin(word, page=1, search_type='illust', download_threshold=DOWNLO
     else:
         raise PixivError('search word can not be null')
     print(url)
-    html = requests.get(url, timeout=10, headers=PIXIV_PAGE_HEADERS)
+    response = requests.get(url, timeout=10, headers=PIXIV_PAGE_HEADERS)
+    if response and response.ok:
+        response.encoding = 'utf-8'
+        html = response.content
     if not html:
         print("Get Page is None!URL:" + url)
         return []
@@ -93,6 +96,16 @@ class PixivDataHandler(object):
                 count += 1
                 continue
         return None
+
+    def check_login_success(self):
+        try:
+            response = self.session.get("https://www.pixiv.net/setting_profile.php", timeout=10)
+            if response.status_code == 200:
+                return True
+            else:
+                return False
+        except:
+            return False
 
     def search(self, word, page=1, search_type='illust', download_threshold=DOWNLOAD_THRESHOLD):
         if word:

@@ -29,7 +29,7 @@ class PixivHtmlParser(object):
             except:
                 print("search normal result is empty")
                 return datas
-        lis = section.findAll("li", attrs={"class": re.compile("image-item\s*")})
+        lis = section.findAll("li", attrs={"class": re.compile("image-item(\s*|)")})
         if not lis:
             try:
                 # 特殊处理首页用推荐的情况

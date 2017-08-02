@@ -3,6 +3,8 @@ import re
 
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
+from pixiv import PixivDataDownloader
+from pixiv_config import PIXIV_COOKIES
 from utils.Config import Config
 import time
 from PIL import Image
@@ -61,11 +63,18 @@ def testWalk(path):
     print count
 
 
+def test_search():
+    # print  PixivDataDownloader.search_nologin(u"2000users入り")
+    search_handler = PixivDataDownloader.PixivDataHandler(cookies=PIXIV_COOKIES)
+    search_handler.check_login_success()
+
+
 if __name__ == '__main__':
     # testImage("/Users/imn5100/Downloads/p_51695014.jpg")
     # testImage("/Users/imn5100/Downloads/p_63414362_4.png")
     # testWalk('/Users/imn5100/Downloads/pixiv/search')
-    reader = open('/Users/imn5100/Downloads/pixiv/z_pixivision_download/一生追随！“超凡的反派”特辑/p_10208070.jpg', 'r')
-    print reader.read()
-    im = Image.open('/Users/imn5100/Downloads/pixiv/z_pixivision_download/一生追随！“超凡的反派”特辑/p_10208070.jpg')
-    print im
+    # reader = open('/Users/imn5100/Downloads/pixiv/z_pixivision_download/一生追随！“超凡的反派”特辑/p_10208070.jpg', 'r')
+    # print reader.read()
+    # im = Image.open('/Users/imn5100/Downloads/pixiv/z_pixivision_download/一生追随！“超凡的反派”特辑/p_10208070.jpg')
+    # print im
+    test_search()

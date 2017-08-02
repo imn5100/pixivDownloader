@@ -8,14 +8,22 @@ from gui.WorkQueue import PixivQueue
 from pixiv import PixivDataDownloader
 from pixiv.IllustrationDownloader import IllustrationDownloader
 from pixiv_config import IMAGE_SAVE_BASEPATH, USERNAME, PASSWORD, PIXIV_COOKIES
+from pixivapi.PixivUtils import PixivError
 from pixivision.PixivisionTopicDownloader import IlluDownloadThread
 from pixivision.PixivisionLauncher import PixivisionLauncher
 from utils import CommonUtils
 
 
 class PixivDownloadFrame(Frame):
-    def __init__(self, root, api):
+    def __init__(self, root, api, search_handler=None):
         Frame.__init__(self, root)
+        self.api = api
+        if search_handler:
+            self.search_handler = search_handler
+        elif api.username and api.password:
+            self.search_handler = PixivDataDownloader.PixivDataHandler(api.username, api.password)
+        else:
+            raise PixivError('You must set a search_handler for the queue')
         self.queue = PixivQueue(IllustrationDownloader(api), callback=self.download_callback)
         self.print_text = None
         self.task_text = None
@@ -203,10 +211,9 @@ class PixivDownloadFrame(Frame):
 
     def search(self, keywords, path):
         set_filter = set()
-        handler = PixivDataDownloader.PixivDataHandler(USERNAME, PASSWORD)
         for p in range(1, CommonUtils.set_int(self.page_number.get(), 2) + 1):
-            result = handler.search(keywords, page=p,
-                                    download_threshold=CommonUtils.set_int(self.fav_num.get(), 0))
+            result = self.search_handler.search(keywords, page=p,
+                                                download_threshold=CommonUtils.set_int(self.fav_num.get(), 0))
             if len(result) == 0:
                 showerror("warning", "Search  result is Empty!")
                 print ('warning', 'No such file or directory')
