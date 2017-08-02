@@ -85,7 +85,7 @@ PIXIV_PAGE_HEADERS = {
                   'Chrome/50.0.2661.102 Safari/537.36'
 }
 # 关键字搜索页面search  page type in(illust,ugoira,manga) &scd=2016-11-26&order=date
-PIXIV_SEARCH_URL = "http://www.pixiv.net/search.php?word=%s&type=%s&p=%d"
+PIXIV_SEARCH_URL = "https://www.pixiv.net/search.php?word=%s&type=%s&p=%d"
 PIXIV_LOGIN_KEY = "https://accounts.pixiv.net/login"
 PIXIV_LOGIN_URL = "https://accounts.pixiv.net/api/login"
 #######################################

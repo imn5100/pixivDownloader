@@ -139,6 +139,23 @@ class AuthPixivApi(object):
                 count += 1
                 continue
 
+    def check_login_success(self):
+        url = pixiv_config.ILLUST_DETAIL
+        params = {
+            'image_sizes': 'px_128x128,small,medium,large,px_480mw',
+            'include_stats': 'true',
+            'illust_id': 55418
+        }
+        try:
+            response = self.auth_requests_call('GET', url, params=params, timeout=60)
+            if response.ok and len(response.content) > 10:
+                return True
+            else:
+                return False
+        except Exception as e:
+            print (e)
+            return False
+
     # search_target - 搜索类型
     #   partial_match_for_tags  - 标签部分一致
     #   exact_match_for_tags    - 标签完全一致

@@ -6,6 +6,7 @@ from tkMessageBox import showerror, showwarning, showinfo
 
 from gui.WorkQueue import PixivQueue
 from pixiv import PixivDataDownloader
+from pixiv.IllustrationDownloader import IllustrationDownloader
 from pixiv_config import IMAGE_SAVE_BASEPATH, USERNAME, PASSWORD, PIXIV_COOKIES
 from pixivision.PixivisionTopicDownloader import IlluDownloadThread
 from pixivision.PixivisionLauncher import PixivisionLauncher
@@ -13,9 +14,9 @@ from utils import CommonUtils
 
 
 class PixivDownloadFrame(Frame):
-    def __init__(self, root):
+    def __init__(self, root, api):
         Frame.__init__(self, root)
-        self.queue = PixivQueue(callback=self.download_callback)
+        self.queue = PixivQueue(IllustrationDownloader(api), callback=self.download_callback)
         self.print_text = None
         self.task_text = None
         self.root = root
@@ -27,8 +28,8 @@ class PixivDownloadFrame(Frame):
         self.fav_num = StringVar(value=500)
         self.p_limit = StringVar(value=20)
         self.path_var = StringVar(value=IMAGE_SAVE_BASEPATH)
-        self.account = StringVar(value=USERNAME)
-        self.password = StringVar(value=PASSWORD)
+        # self.account = StringVar(value=USERNAME)
+        # self.password = StringVar(value=PASSWORD)
         self.search_status = False
         self.switch_menu = None
         self.init_ui()
@@ -88,16 +89,16 @@ class PixivDownloadFrame(Frame):
         p_limit_entry = Entry(self.search_frame, width=57, textvariable=self.p_limit)
         p_limit_entry.pack()
 
-        account_label = Label(self.search_frame, text="Pixiv Account(Use cookies ignore this):", width=30,
-                              height=1)
-        account_label.pack()
-        account_entry = Entry(self.search_frame, width=57, textvariable=self.account)
-        account_entry.pack()
-        pwd_label = Label(self.search_frame, text="Password", width=30, height=1)
-        pwd_label.pack()
-        pwd_entry = Entry(self.search_frame, width=57, textvariable=self.password)
-        pwd_entry.pack()
-        pwd_entry['show'] = '*'
+        # account_label = Label(self.search_frame, text="Pixiv Account(Use cookies ignore this):", width=30,
+        #                       height=1)
+        # account_label.pack()
+        # account_entry = Entry(self.search_frame, width=57, textvariable=self.account)
+        # account_entry.pack()
+        # pwd_label = Label(self.search_frame, text="Password", width=30, height=1)
+        # pwd_label.pack()
+        # pwd_entry = Entry(self.search_frame, width=57, textvariable=self.password)
+        # pwd_entry.pack()
+        # pwd_entry['show'] = '*'
 
         search_button = Button(self.search_frame, text='Start', height=2, command=self.handle_search)
         search_button.pack()
@@ -179,16 +180,6 @@ class PixivDownloadFrame(Frame):
             showerror("error", "")
 
     def handle_search(self):
-        if len(PIXIV_COOKIES) >= 3:
-            data_handler = PixivDataDownloader.PixivDataHandler(cookies=PIXIV_COOKIES)
-        else:
-            if CommonUtils.is_not_empty(self.account.get()) and CommonUtils.is_not_empty(self.password.get()):
-                data_handler = PixivDataDownloader.PixivDataHandler(self.account.get().strip(),
-                                                                    self.password.get().strip())
-            else:
-                showwarning("warning", "Please configure cookies or account and password!")
-                print ("warning", "Please configure cookies or account and password!")
-                return
         keywords = self.keywords.get().strip()
         if CommonUtils.is_empty(keywords):
             showwarning("warning", "Please enter search keywords!")
@@ -198,7 +189,7 @@ class PixivDownloadFrame(Frame):
             showwarning("warning", "path can't be empty!")
             print ("warning", "path can't be empty!")
             return
-        path = self.path_var.get()
+        path = self.path_var.get().strip()
         if not os.path.exists(path):
             showerror("error", " No such file or directory!")
             print ('error', 'No such file or directory')
@@ -207,14 +198,19 @@ class PixivDownloadFrame(Frame):
         if not os.path.exists(path):
             os.makedirs(path)
         showinfo("info", "Is searching：")
-        search_handler = Thread(target=self.search, args=(data_handler, keywords, path))
+        search_handler = Thread(target=self.search, args=(keywords, path))
         search_handler.start()
 
-    def search(self, data_handler, keywords, path):
+    def search(self, keywords, path):
         set_filter = set()
+        handler = PixivDataDownloader.PixivDataHandler(USERNAME, PASSWORD)
         for p in range(1, CommonUtils.set_int(self.page_number.get(), 2) + 1):
-            result = data_handler.search(keywords, page=p,
-                                         download_threshold=CommonUtils.set_int(self.fav_num.get(), 0))
+            result = handler.search(keywords, page=p,
+                                    download_threshold=CommonUtils.set_int(self.fav_num.get(), 0))
+            if len(result) == 0:
+                showerror("warning", "Search  result is Empty!")
+                print ('warning', 'No such file or directory')
+                break
             for illu in result:
                 if illu.url in set_filter:
                     continue
