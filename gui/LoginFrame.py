@@ -83,7 +83,7 @@ class LoginFrame(Frame):
                     self.destroy()
                     return True
                 else:
-                    print "PIXIV_COOKIES config Wrong"
+                    print "PIXIV_COOKIES config error or expired!"
             else:
-                print "ACCESS_TOKEN config Wrong!"
+                print "ACCESS_TOKEN config error or expired!"
         return False
