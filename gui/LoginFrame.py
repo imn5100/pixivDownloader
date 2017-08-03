@@ -4,18 +4,19 @@ from tkMessageBox import showerror
 
 from gui.DownloaderFrame import PixivDownloadFrame, LogRedirection
 from pixiv import PixivDataDownloader
-from pixiv_config import USERNAME, PASSWORD, ACCESS_TOKEN, PIXIV_COOKIES
+from pixiv_config import USERNAME, PASSWORD, ACCESS_TOKEN, PIXIV_COOKIES, REFRESH_TOKEN
 from pixivapi.AuthPixivApi import AuthPixivApi
-from utils.CommonUtils import is_not_empty
+from utils.CommonUtils import is_empty
 
 
 class LoginFrame(Frame):
     def __init__(self, root):
         Frame.__init__(self, root)
+        self.api = None
+        self.search_handler = None
         self.root = root
         self.account = StringVar(value=USERNAME)
         self.password = StringVar(value=PASSWORD)
-        # self.token = StringVar(value='')
         self.init_ui()
 
     def init_ui(self):
@@ -33,11 +34,6 @@ class LoginFrame(Frame):
             pwd_entry.pack()
             pwd_entry['show'] = '*'
 
-            # token_label = Label(self, text="You can ignore the above only input token:", width=30, height=1)
-            # token_label.pack()
-            # token_entry = Entry(self, width=57, textvariable=self.token)
-            # token_entry.pack()
-
             login_button = Button(self, text='Start', height=2, command=self.handler_login)
             login_button.pack()
 
@@ -48,42 +44,62 @@ class LoginFrame(Frame):
     def handler_login(self):
         username = self.account.get().strip()
         password = self.password.get().strip()
-        # token = self.token.get().strip()
-        use_token = True
+        if is_empty(username) or is_empty(password):
+            showerror("error",
+                      "Please input username and password")
+            return
         try:
-            # if token:
-            #     api = AuthPixivApi('', '', token)
-            if is_not_empty(username) and is_not_empty(password):
-                use_token = False
-                api = AuthPixivApi(username, password)
-            else:
-                showerror("error",
-                          "Please input username and password")
-                return
-            if api.check_login_success():
-                frame = PixivDownloadFrame(self.root, api)
-                sys.stdout = LogRedirection(frame.print_text)
-                self.destroy()
-            else:
-                showerror("error",
-                          "[ERROR] auth() failed! Please check " + ("token" if use_token else "username and password"))
+            if not self.api:
+                self.api = AuthPixivApi(username, password)
+                if not self.api.check_login_success():
+                    showerror("error",
+                              "[ERROR] auth() failed! Please check username and password")
+                    return
+            if not self.search_handler:
+                self.search_handler = PixivDataDownloader.PixivDataHandler(username=username, password=password)
+                if not self.search_handler.check_login_success():
+                    showerror("error",
+                              "[ERROR] auth() failed! Please check username and password")
+                    return
+            frame = PixivDownloadFrame(self.root, self.api, self.search_handler)
+            sys.stdout = LogRedirection(frame.print_text)
+            self.destroy()
         except Exception as e:
             print (e)
             showerror("error",
-                      "[ERROR] auth() failed! Please check " + ("token" if use_token else "username and password"))
+                      "[ERROR] auth() failed! Please check username and password")
 
     def check_config(self):
-        if ACCESS_TOKEN and len(PIXIV_COOKIES) > 3:
-            api = AuthPixivApi('', '', ACCESS_TOKEN)
+        success = False
+        if ACCESS_TOKEN:
+            api = AuthPixivApi(None, None, ACCESS_TOKEN)
             if api.check_login_success():
-                search_handler = PixivDataDownloader.PixivDataHandler(cookies=PIXIV_COOKIES)
-                if search_handler.check_login_success():
-                    frame = PixivDownloadFrame(self.root, api, search_handler=search_handler)
+                self.api = api
+                success = True
+                print ("Access Token is correct!")
+            else:
+                print ("Access Token error or expired!")
+
+        if REFRESH_TOKEN and not success:
+            api = AuthPixivApi(None, None, refresh_token=REFRESH_TOKEN)
+            if api.check_login_success():
+                self.api = api
+                success = True
+                print ("Refresh Token is correct!")
+            else:
+                print ("Access Token config error or expired!")
+
+        if len(PIXIV_COOKIES) > 3:
+            search_handler = PixivDataDownloader.PixivDataHandler(cookies=PIXIV_COOKIES)
+            if search_handler.check_login_success():
+                self.search_handler = search_handler
+                print ("Cookie is correct!")
+                if success:
+                    frame = PixivDownloadFrame(self.root, api, search_handler)
                     sys.stdout = LogRedirection(frame.print_text)
                     self.destroy()
                     return True
-                else:
-                    print "PIXIV_COOKIES config error or expired!"
             else:
-                print "ACCESS_TOKEN config error or expired!"
+                print ("Cookie error or expired!")
+
         return False

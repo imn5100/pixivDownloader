@@ -5,25 +5,21 @@ from threading import Thread
 from tkMessageBox import showerror, showwarning, showinfo
 
 from gui.WorkQueue import PixivQueue
-from pixiv import PixivDataDownloader
 from pixiv.IllustrationDownloader import IllustrationDownloader
-from pixiv_config import IMAGE_SAVE_BASEPATH, USERNAME, PASSWORD, PIXIV_COOKIES
+from pixiv_config import IMAGE_SAVE_BASEPATH
 from pixivapi.PixivUtils import PixivError
-from pixivision.PixivisionTopicDownloader import IlluDownloadThread
 from pixivision.PixivisionLauncher import PixivisionLauncher
+from pixivision.PixivisionTopicDownloader import IlluDownloadThread
 from utils import CommonUtils
 
 
 class PixivDownloadFrame(Frame):
-    def __init__(self, root, api, search_handler=None):
+    def __init__(self, root, api, search_handler):
         Frame.__init__(self, root)
+        if not search_handler or not api:
+            raise PixivError('You must set  authPixivApi and search_handler for the DownloadFrame')
         self.api = api
-        if search_handler:
-            self.search_handler = search_handler
-        elif api.username and api.password:
-            self.search_handler = PixivDataDownloader.PixivDataHandler(api.username, api.password)
-        else:
-            raise PixivError('You must set a search_handler for the queue')
+        self.search_handler = search_handler
         self.downloader = IllustrationDownloader(api)
         self.queue = PixivQueue(self.downloader, callback=self.download_callback)
         self.print_text = None
@@ -217,7 +213,7 @@ class PixivDownloadFrame(Frame):
                                                 download_threshold=CommonUtils.set_int(self.fav_num.get(), 0))
             if len(result) == 0:
                 showerror("warning", "Search  result is Empty!")
-                print ('warning', 'No such file or directory')
+                print ('warning', 'Search  result is Empty')
                 break
             for illu in result:
                 if illu.url in set_filter:

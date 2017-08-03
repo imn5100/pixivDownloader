@@ -27,14 +27,14 @@ def requests_call(method, url, **kwargs):
 
 # 需要经过登录后才能使用的api端
 class AuthPixivApi(object):
-    def __init__(self, username, password, access_token=None):
+    def __init__(self, username, password, access_token=None, refresh_token=None):
         self.username = username
         self.password = password
         self.user_id = None
-        self.refresh_token = None
+        self.refresh_token = refresh_token
         self.access_token = access_token
         if CommonUtils.is_empty(access_token):
-            self.login(username, password)
+            self.login(username, password, refresh_token)
 
     def require_auth(self):
         if self.access_token is None:
@@ -57,8 +57,8 @@ class AuthPixivApi(object):
         response.encoding = 'utf-8'
         return response
 
-    def login(self, username, password):
-        return self.auth(username=username, password=password)
+    def login(self, username=None, password=None, refresh_token=None):
+        return self.auth(username=username, password=password, refresh_token=refresh_token)
 
     def auth(self, username=None, password=None, refresh_token=None):
         url = 'https://oauth.secure.pixiv.net/auth/token'
@@ -73,7 +73,7 @@ class AuthPixivApi(object):
             'client_id': 'MOBrBDS8blbauoSck0ZfDbtuzpyT',
             'client_secret': 'lsACyCD94FhDUtGTXi3QzcFE2uU1hqtDaKeqrdwj',
         }
-        if (username is not None) and (password is not None):
+        if CommonUtils.is_not_empty(username) and CommonUtils.is_not_empty(password):
             data['grant_type'] = 'password'
             data['username'] = username
             data['password'] = password
@@ -99,7 +99,8 @@ class AuthPixivApi(object):
             self.refresh_token = token.response.refresh_token
         except:
             raise PixivError('Get access_token error! Response: %s' % (token), header=r.headers, body=r.text)
-        print ("ACCESS TOKEN " + token.response.access_token)
+        print ("ACCESS TOKEN " + self.access_token)
+        print ("ACCESS Refresh Token " + self.refresh_token)
         return token
 
     def download(self, url, prefix='', path=None):
