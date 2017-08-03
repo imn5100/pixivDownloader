@@ -153,8 +153,7 @@ class AuthPixivApi(object):
                 return True
             else:
                 return False
-        except Exception as e:
-            print (e)
+        except Exception:
             return False
 
     # search_target - 搜索类型
