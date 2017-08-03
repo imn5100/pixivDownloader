@@ -32,7 +32,7 @@ class ImageDownload(object):
         return topic_list
 
     @classmethod
-    def download_topics(cls, url, path, create_path=False):
+    def download_topics(cls, url, path, create_path=False, downloader=None):
         html = HtmlDownloader.download(url)
         illu_list = HtmlDownloader.parse_illustration(html)
         title_des = HtmlDownloader.get_title(html)
@@ -49,7 +49,10 @@ class ImageDownload(object):
             return
         for illu in illu_list:
             id = CommonUtils.get_url_param(illu.image_page, "illust_id")
-            PixivImageDownloader.download_all_by_id(id, path + '/', limit_p=False)
+            if downloader:
+                downloader.download_all_by_id(id, path + '/', limit_p=False)
+            else:
+                PixivImageDownloader.download_all_by_id(id, path + '/', limit_p=False)
         print ('*' * 10)
         print (url + " Download End!")
         return path
@@ -83,11 +86,12 @@ class ImageDownload(object):
 
 
 class IlluDownloadThread(threading.Thread):
-    def __init__(self, url, path=IMAGE_SAVE_BASEPATH, create_path=False):
+    def __init__(self, url, path=IMAGE_SAVE_BASEPATH, create_path=False, downloader=None):
         threading.Thread.__init__(self, name="Download-" + url)
         self.url = url
         self.path = path
         self.create_path = create_path
+        self.downloader = downloader
         self.success = None
         self.fail = None
 
@@ -101,7 +105,7 @@ class IlluDownloadThread(threading.Thread):
                 return
         try:
             path = ImageDownload.download_topics(self.url, self.path,
-                                                 create_path=self.create_path)
+                                                 create_path=self.create_path,downloader=self.downloader)
             if self.success:
                 self.success(CommonUtils.build_callback_msg(path, url=self.url))
         except Exception as e:

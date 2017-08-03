@@ -24,7 +24,8 @@ class PixivDownloadFrame(Frame):
             self.search_handler = PixivDataDownloader.PixivDataHandler(api.username, api.password)
         else:
             raise PixivError('You must set a search_handler for the queue')
-        self.queue = PixivQueue(IllustrationDownloader(api), callback=self.download_callback)
+        self.downloader = IllustrationDownloader(api)
+        self.queue = PixivQueue(self.downloader, callback=self.download_callback)
         self.print_text = None
         self.task_text = None
         self.root = root
@@ -154,7 +155,7 @@ class PixivDownloadFrame(Frame):
         if re.match("htt(p|ps)://www.pixivision.net/(zh|ja|en|zh-tw)/a/\d*", url):
             showinfo("info", "Start download pixivision.net page:" + url)
             print ("info", "Start download pixivision.net page:" + url)
-            IlluDownloadThread(url.strip(), path=path, create_path=True).register_hook(
+            IlluDownloadThread(url.strip(), path=path, create_path=True, downloader=self.downloader).register_hook(
                 success_callback=self.download_callback).start()
             return
         # 插画列表页下载

@@ -12,13 +12,13 @@ config = Config('../config.ini', "pixiv")
 USERNAME = config.get("USERNAME", default_value="*")
 PASSWORD = config.get("PASSWORD", default_value="*")
 # 访问pixiv api的凭证，使用账户密码登录后获得,可重复使用，不需要每次都用账号密码登录。
-ACCESS_TOKEN =  config.get("ACCESS_TOKEN", default_value="")
+ACCESS_TOKEN =config.get("ACCESS_TOKEN", default_value="")
 
 # *****************************  cookie 用于记录网页登录状态。使用搜索功能时：(账号+密码) 或 (Cookie) 必填一项
 # 如果不想反复登录，可以在第一次登陆后，从控制台获取输出的cookie信息。配置于此。（反复重复登陆 除了会收到Pixiv寄出的安全提示邮件外暂无其他影响）
 # 不使用cookies 请保持默认值为"{}"
 PIXIV_COOKIES = eval(config.get("PIXIV_COOKIES",
-                                default_value="{'device_token': '', 'p_ab_id': '9', 'PHPSESSID': '', 'p_ab_id_2': '6'}"))
+                                default_value="{}"))
 
 # 获取代理网页超时时间5s
 TIMEOUT = config.getint("TIMEOUT", default_value=5)
