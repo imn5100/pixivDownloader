@@ -72,30 +72,27 @@ class LoginFrame(Frame):
     def check_config(self):
         success = False
         if ACCESS_TOKEN:
-            api = AuthPixivApi(None, None, ACCESS_TOKEN)
-            if api.check_login_success():
-                self.api = api
+            self.api = AuthPixivApi(None, None, ACCESS_TOKEN)
+            if self.api.check_login_success():
                 success = True
                 print ("Access Token is correct!")
             else:
                 print ("Access Token error or expired!")
 
         if REFRESH_TOKEN and not success:
-            api = AuthPixivApi(None, None, refresh_token=REFRESH_TOKEN)
-            if api.check_login_success():
-                self.api = api
+            self.api = AuthPixivApi(None, None, refresh_token=REFRESH_TOKEN)
+            if self.api.check_login_success():
                 success = True
                 print ("Refresh Token is correct!")
             else:
                 print ("Access Token config error or expired!")
 
         if len(PIXIV_COOKIES) > 3:
-            search_handler = PixivDataDownloader.PixivDataHandler(cookies=PIXIV_COOKIES)
-            if search_handler.check_login_success():
-                self.search_handler = search_handler
+            self.search_handler = PixivDataDownloader.PixivDataHandler(cookies=PIXIV_COOKIES)
+            if self.search_handler.check_login_success():
                 print ("Cookie is correct!")
                 if success:
-                    frame = PixivDownloadFrame(self.root, api, search_handler)
+                    frame = PixivDownloadFrame(self.root, self.api, self.search_handler)
                     sys.stdout = LogRedirection(frame.print_text)
                     self.destroy()
                     return True

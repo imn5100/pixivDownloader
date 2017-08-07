@@ -158,7 +158,7 @@ class PixivDownloadFrame(Frame):
         elif re.match(r"htt(p|ps)://www.pixivision.net/(zh|ja|en|zh-tw)/c/illustration(/|)(\?p=\d+|)", url):
             showinfo("info", "Start download pixivision.net page:" + url)
             print ("info", "Start download pixivision.net page:" + url)
-            PixivisionLauncher(url, save_path=path).register_hook(
+            PixivisionLauncher(url, save_path=path, downloader=self.downloader).register_hook(
                 success_callback=self.download_callback).start()
             return
         elif CommonUtils.set_int(url) != 0:
