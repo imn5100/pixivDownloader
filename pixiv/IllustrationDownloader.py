@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
 
-from pixiv_config import IMAGE_USE_ORG_NAME, P_LIMIT
+from pixiv_config import P_LIMIT
 from utils import CommonUtils
 from utils.LoggerUtil import error_log
 
@@ -10,13 +10,9 @@ class IllustrationDownloader(object):
     def __init__(self, api):
         self.api = api
 
-    def download(self, illust_id, title, path, url):
+    def download(self, illust_id, path, url):
         extension = os.path.splitext(url)[1]
-        if IMAGE_USE_ORG_NAME:
-            save_path = path + "/p_%s_%s%s" % (
-                illust_id, CommonUtils.filter_dir_name(title), extension)
-        else:
-            save_path = path + "/p_%s%s" % (illust_id, extension)
+        save_path = path + "/p_%s%s" % (illust_id, extension)
         print(save_path)
         return self.api.download(url, path=save_path)
 
@@ -33,7 +29,7 @@ class IllustrationDownloader(object):
                             url = detail.meta_single_page.original_image_url
                         except:
                             url = detail.image_urls.large
-                        path = self.download(illust_id, illu.title, path, url)
+                        path = self.download(illust_id, path, url)
                     # 多图插画
                     else:
                         if 0 < p_limit < detail.page_count:
@@ -52,13 +48,7 @@ class IllustrationDownloader(object):
                                     url = urls[index].image_urls.original if \
                                         urls[index].image_urls.has_key("original") else urls[index].image_urls.large
                                     extension = os.path.splitext(url)[1]
-                                    if IMAGE_USE_ORG_NAME:
-                                        save_path = path + "/p_%s_%s_%d%s" % (
-                                            illust_id,
-                                            CommonUtils.filter_dir_name(illu.title),
-                                            index, extension)
-                                    else:
-                                        save_path = path + "/p_%s_%d%s" % (illust_id, index, extension)
+                                    save_path = path + "/p_%s_%d%s" % (illust_id, index, extension)
                                     print(save_path)
                                     self.api.download(url, path=save_path)
                                 except:
@@ -67,7 +57,7 @@ class IllustrationDownloader(object):
                         else:
                             # 获取多图失败,下载大图
                             url = detail.image_urls.large
-                            path = self.download(illust_id, illu.title, path, url)
+                            path = self.download(illust_id, path, url)
                     return path
                 except Exception as e:
                     error_log("Download fail:")

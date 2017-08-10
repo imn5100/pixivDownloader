@@ -14,7 +14,7 @@ PASSWORD = config.get("PASSWORD", default_value="*")
 # 访问pixiv api的凭证，使用账户密码登录后获得,可重复使用，不需要每次都用账号密码登录。
 ACCESS_TOKEN = config.get("ACCESS_TOKEN", default_value="")
 # 刷新token token失效后，使用refresh  token 刷新，可获得新token
-REFRESH_TOKEN = config.get("REFRESH_TOKEN", default_value="3W1T_8NmOun_RISbqjx8jkV2Eo2vdtUde-yP_pnP2A8")
+REFRESH_TOKEN = config.get("REFRESH_TOKEN", default_value="3W1T_8NmOun_RISbqjx8jkV2Eo2vdtUde-")
 # *****************************  cookie 用于记录网页登录状态。使用搜索功能时：(账号+密码) 或 (Cookie) 必填一项
 # 如果不想反复登录，可以在第一次登陆后，从控制台获取输出的cookie信息。配置于此。（反复重复登陆 除了会收到Pixiv寄出的安全提示邮件外暂无其他影响）
 # 不使用cookies 请保持默认值为"{}"
@@ -65,7 +65,8 @@ IMAGE_SAVE_BASEPATH = config.getint("IMAGE_SAVE_BASEPATH",
 # 文件命名是否使用原文件名（即插画作者的命名）
 # 因为插画原名经常出现颜文字和各种奇怪的符号，这里不使用图片标题进行命名，用pixiv 的id进行命名会很大地减少文件错误，提高下载正确率，
 # 缺点是 会丢失原文件名字。
-IMAGE_USE_ORG_NAME = False
+# 弃用配置 文件命名仅支持 pixiv id,方便查询作品详情，追溯作者。
+# IMAGE_USE_ORG_NAME = False
 
 ####################################
 # 以下为pixiv主站网页请求相关配置
