@@ -119,7 +119,7 @@ class PixivDownloadFrame(Frame):
         text1.configure(yscrollcommand=scroll2.set)
         text2.configure(yscrollcommand=scroll.set)
         text2.tag_configure('info', foreground='#3A98FE')
-        text2.tag_configure('warning', foreground='#FEC534')
+        text2.tag_configure('warning', foreground='#ff9900')
         text2.tag_configure('error', foreground='#FF2D21')
         quote = "Console Log:\n"
         text2.insert(END, quote, 'info')
@@ -200,8 +200,6 @@ class PixivDownloadFrame(Frame):
             print ('error', 'No such file or directory')
             return
         path = path + "/" + CommonUtils.filter_dir_name("search_" + keywords)
-        if not os.path.exists(path):
-            os.makedirs(path)
         showinfo("info", "Is searching：")
         search_handler = Thread(target=self.search, args=(keywords, path))
         search_handler.start()
@@ -212,9 +210,11 @@ class PixivDownloadFrame(Frame):
             result = self.search_handler.search(keywords, page=p,
                                                 download_threshold=CommonUtils.set_int(self.fav_num.get(), 0))
             if len(result) == 0:
-                showerror("warning", "Search  result is Empty!")
-                print ('warning', 'Search  result is Empty')
-                break
+                # showerror("warning", "Search  result is Empty!")
+                print ('warning', 'Page:'+str(p)+' Search  result is Empty')
+                continue
+            if not os.path.exists(path):
+                os.makedirs(path)
             for illu in result:
                 if illu.url in set_filter:
                     continue
