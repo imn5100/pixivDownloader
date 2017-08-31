@@ -244,12 +244,20 @@ class AuthPixivApi(object):
         r = self.auth_requests_call('GET', url, params=params)
         return parse_resp(r)
 
-    # 排行榜/过去排行榜 not login
-    # mode week_origin day day_male day_female week_rookie month day_r18
-    # page: [1-n]
-    # date: '2015-04-01' (仅过去排行榜)
+    #  not login
     def app_ranking(self, mode='day', date=None,
                     include_stats=True, include_sanity_level=True, offset=None):
+        """
+        排行榜/过去排行榜
+        :param mode:
+        day(每日）day_male(每日男性) day_female(每日女性) week_original(原创) week_rookie(新人) week(每周)  month(每月) day_r18  week_r18
+        :param date:
+        '2015-04-01' (过去排行榜)
+        :param include_stats:
+        :param include_sanity_level:
+        :param offset:
+        :return:
+        """
         url = 'https://app-api.pixiv.net/v1/illust/ranking?mode='
         params = {
             'mode': mode,
@@ -272,9 +280,9 @@ class AuthPixivApi(object):
     #       for 'ugoira': [daily, weekly, daily_r18, weekly_r18],
     # page: [1-n]
     # date: '2015-04-01' (仅过去排行榜)
-    def raking(self, ranking_type='all', mode='daily', page=1, per_page=50, date=None,
-               image_sizes=['px_128x128', 'px_480mw', 'large'],
-               include_stats=True, include_sanity_level=True):
+    def ranking(self, ranking_type='all', mode='daily', page=1, per_page=10, date=None,
+                image_sizes=['px_128x128', 'px_480mw', 'large'],
+                include_stats=True, include_sanity_level=True):
         url = 'https://public-api.secure.pixiv.net/v1/ranking/%s.json' % ranking_type
         params = {
             'mode': mode,

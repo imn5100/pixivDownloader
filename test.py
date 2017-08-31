@@ -198,5 +198,5 @@ def testPage_search():
 
 if __name__ == '__main__':
     api = AuthPixivApi("", "", refresh_token='-yP_pnP2Q8')
-    for illust in api_search('百合', api, page=4):
-        print (illust)
+    # print (api.ranking())
+    print (api.app_ranking(mode='week_r18'))
