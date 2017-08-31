@@ -31,15 +31,13 @@ def set_int(int_num, default_value=0):
 
 
 def is_not_empty(val):
-    if val and val.strip() != '':
-        return True
-    return False
+    return not is_empty(val)
 
 
 def is_empty(val):
     if not val:
         return True
-    if val.strip() == '':
+    if len(val.strip()) == 0:
         return True
     return False
 

@@ -8,7 +8,7 @@ from pixiv.PixivHtmlParser import PixivHtmlParser
 from pixiv_config import *
 from pixivapi.AuthPixivApi import AuthPixivApi
 from pixivapi.PixivApi import PixivApi
-from pixivapi.PixivUtils import parse_dict
+from pixivapi.PixivUtils import parse_dict, PixivError
 from pixivision.PixivisionTopicDownloader import ImageDownload, IlluDownloadThread
 from pixivision.PixivisionHtmlParser import HtmlDownloader
 from utils import CommonUtils
@@ -154,39 +154,35 @@ def test_str_find():
     CommonUtils.write_topic_des(file_path, data)
 
 
-def test_search_pop():
-    api = AuthPixivApi("", "", access_token='PP7Z39eIV9PKl-XWkz-wy_KgWsxqe5xHGRYfeIDwOOQ')
+def api_search(keyword, api, page=1, download_threshold=DOWNLOAD_THRESHOLD):
+    illusts = []
+    if CommonUtils.is_empty(keyword):
+        raise PixivError('[ERROR] keyword is empty')
     ids = set()
-    # for data in api.search_popular_illust('百合', offset=None).illusts:
-    #     ids.add(data.id)
-    #     print (data.title + ":" + str(data.id))
-    print ("normal search:")
     count = 0
-    for data in api.search_illust('百合').illusts:
-        count = count + 1
-        if data.total_bookmarks >= 200:
+    for data in api.search_popular_illust('百合').illusts:
+        if download_threshold:
+            if data.total_bookmarks >= download_threshold:
+                if data.id not in ids:
+                    ids.add(data.id)
+                    illusts.append(data)
+        elif data.id not in ids:
             ids.add(data.id)
-            print (data.title + ":" + str(data.id))
-    print ("count" + str(count))
-    for data in api.search_illust('百合', offset=count).illusts:
-        count = count + 1
-        if data.total_bookmarks >= 200:
-            ids.add(data.id)
-            print (data.title + ":" + str(data.id))
-    print ("count" + str(count))
-    for data in api.search_illust('百合', offset=count).illusts:
-        count = count + 1
-        if data.total_bookmarks >= 200:
-            ids.add(data.id)
-            print (data.title + ":" + str(data.id))
-    print ("count" + str(count))
-    for data in api.search_illust('百合', offset=count).illusts:
-        count = count + 1
-        if data.total_bookmarks >= 200:
-            ids.add(data.id)
-            print (data.title + ":" + str(data.id))
-    print ("count" + str(count))
-    print len(ids)
+            illusts.append(data)
+    if page:
+        while page > 0:
+            for data in api.search_illust('百合', offset=count).illusts:
+                count = count + 1
+                if download_threshold:
+                    if data.total_bookmarks >= download_threshold:
+                        if data.id not in ids:
+                            ids.add(data.id)
+                            illusts.append(data)
+                elif data.id not in ids:
+                    ids.add(data.id)
+                    illusts.append(data)
+            page = page - 1
+    return illusts
 
 
 def testPage_search():
@@ -201,5 +197,6 @@ def testPage_search():
 
 
 if __name__ == '__main__':
-    test_search_pop()
-    testPage_search()
+    api = AuthPixivApi("", "", refresh_token='-yP_pnP2Q8')
+    for illust in api_search('百合', api, page=4):
+        print (illust)
