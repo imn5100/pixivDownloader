@@ -16,6 +16,50 @@ class IllustrationDownloader(object):
         print(save_path)
         return self.api.download(url, path=save_path)
 
+    def download_by_detail(self, detail, path, p_limit=P_LIMIT):
+        if detail:
+            try:
+                illust_id = detail.id
+                # 普通插画
+                if detail.page_count == 1:
+                    try:
+                        url = detail.meta_single_page.original_image_url
+                    except:
+                        url = detail.image_urls.large
+                    path = self.download(illust_id, path, url)
+                # 多图插画
+                else:
+                    if 0 < p_limit < detail.page_count:
+                        # 该插画P数大于最大限制，放弃下载
+                        print("Pixiv id:%s,name:%s P>limit,Skip download" % (illust_id, detail.title))
+                        return
+                    urls = detail.meta_pages
+                    # 获取多图
+                    if len(urls) > 1:
+                        # 多图放入一个文件夹中
+                        path += "/p_%s" % illust_id
+                        if not os.path.exists(path):
+                            os.mkdir(path)
+                        for index in range(len(urls)):
+                            try:
+                                url = urls[index].image_urls.original if \
+                                    urls[index].image_urls.has_key("original") else urls[index].image_urls.large
+                                extension = os.path.splitext(url)[1]
+                                save_path = path + "/p_%s_%d%s" % (illust_id, index, extension)
+                                print(save_path)
+                                self.api.download(url, path=save_path)
+                            except:
+                                continue
+                        path = path + "/"
+                    else:
+                        # 获取多图失败,下载大图
+                        url = detail.image_urls.large
+                        path = self.download(illust_id, path, url)
+                return path
+            except Exception as e:
+                error_log("Download fail:")
+                error_log(e)
+
     def download_illustration(self, illu, path, p_limit=P_LIMIT):
         if illu.has_key("url") and illu.has_key("title"):
             illust_id = CommonUtils.get_url_param(illu.url, "illust_id")

@@ -6,7 +6,7 @@ from tkMessageBox import showerror, showwarning, showinfo
 
 from gui.WorkQueue import PixivQueue
 from pixiv.IllustrationDownloader import IllustrationDownloader
-from pixiv_config import IMAGE_SAVE_BASEPATH
+from pixiv_config import IMAGE_SAVE_BASEPATH, DOWNLOAD_THRESHOLD
 from pixivapi.PixivUtils import PixivError
 from pixivision.PixivisionLauncher import PixivisionLauncher
 from pixivision.PixivisionTopicDownloader import IlluDownloadThread
@@ -206,12 +206,14 @@ class PixivDownloadFrame(Frame):
 
     def search(self, keywords, path):
         set_filter = set()
-        for p in range(1, CommonUtils.set_int(self.page_number.get(), 2) + 1):
+        page = CommonUtils.set_int(self.page_number.get(), 2)
+        fav_num = CommonUtils.set_int(self.fav_num.get(), 0)
+        for p in range(1, page + 1):
             result = self.search_handler.search(keywords, page=p,
-                                                download_threshold=CommonUtils.set_int(self.fav_num.get(), 0))
+                                                download_threshold=fav_num)
             if len(result) == 0:
                 # showerror("warning", "Search  result is Empty!")
-                print ('warning', 'Page:'+str(p)+' Search  result is Empty')
+                print ('warning', 'Page:' + str(p) + ' Search  results are Empty')
                 continue
             if not os.path.exists(path):
                 os.makedirs(path)
@@ -223,6 +225,16 @@ class PixivDownloadFrame(Frame):
                     illu['p_limit'] = CommonUtils.set_int(self.p_limit.get(), 0)
                     self.queue.add_work(illu)
                     set_filter.add(illu.url)
+        api_search_data = api_search(keywords, self.api, page=page, download_threshold=fav_num)
+        if len(api_search_data) == 0:
+            print ('warning', 'Api search results are empty')
+        else:
+            if not os.path.exists(path):
+                os.makedirs(path)
+            for illu in api_search_data:
+                illu['api_search_path'] = path
+                illu['p_limit'] = CommonUtils.set_int(self.p_limit.get(), 0)
+                self.queue.add_work(illu)
 
     def switch(self):
         if self.search_status:
@@ -241,6 +253,37 @@ class PixivDownloadFrame(Frame):
             self.task_text.insert(END, msg)
         else:
             self.task_text.insert(END, "A work Done")
+
+
+def api_search(keyword, api, page=1, download_threshold=DOWNLOAD_THRESHOLD):
+    illusts = []
+    if CommonUtils.is_empty(keyword):
+        raise PixivError('[ERROR] keyword is empty')
+    ids = set()
+    count = 0
+    for data in api.search_popular_illust(keyword).illusts:
+        if download_threshold:
+            if data.total_bookmarks >= download_threshold:
+                if data.id not in ids:
+                    ids.add(data.id)
+                    illusts.append(data)
+        elif data.id not in ids:
+            ids.add(data.id)
+            illusts.append(data)
+    if page:
+        while page > 0:
+            for data in api.search_illust(keyword, offset=count).illusts:
+                count = count + 1
+                if download_threshold:
+                    if data.total_bookmarks >= download_threshold:
+                        if data.id not in ids:
+                            ids.add(data.id)
+                            illusts.append(data)
+                elif data.id not in ids:
+                    ids.add(data.id)
+                    illusts.append(data)
+            page = page - 1
+    return illusts
 
 
 class LogRedirection:
