@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 import os
 
+import datetime
+
 
 def singleton(cls, *args, **kw):
     instances = {}
@@ -21,6 +23,14 @@ def get_url_param(url, param):
         return urlparse.parse_qs(result.query)[param][0]
     except:
         return None
+
+
+def validate_date_str(date_str):
+    try:
+        datetime.datetime.strptime(date_str, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
 
 
 def set_int(int_num, default_value=0):

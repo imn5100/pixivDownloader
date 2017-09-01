@@ -258,7 +258,7 @@ class AuthPixivApi(object):
         :param offset:
         :return:
         """
-        url = 'https://app-api.pixiv.net/v1/illust/ranking?mode='
+        url = 'https://app-api.pixiv.net/v1/illust/ranking'
         params = {
             'mode': mode,
             'include_stats': include_stats,

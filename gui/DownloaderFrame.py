@@ -4,6 +4,11 @@ from Tkinter import *
 from threading import Thread
 from tkMessageBox import showerror, showwarning, showinfo
 
+import time
+
+import datetime
+from tkinter import ttk
+
 from gui.WorkQueue import PixivQueue
 from pixiv.IllustrationDownloader import IllustrationDownloader
 from pixiv_config import IMAGE_SAVE_BASEPATH, DOWNLOAD_THRESHOLD
@@ -11,6 +16,11 @@ from pixivapi.PixivUtils import PixivError
 from pixivision.PixivisionLauncher import PixivisionLauncher
 from pixivision.PixivisionTopicDownloader import IlluDownloadThread
 from utils import CommonUtils
+
+ranking_mode = ('day', 'week', 'month', 'day_male', 'day_female', 'week_original', 'week_rookie')
+
+
+# 'day_r18', 'week_r18'
 
 
 class PixivDownloadFrame(Frame):
@@ -27,15 +37,17 @@ class PixivDownloadFrame(Frame):
         self.root = root
         self.search_frame = Frame(self)
         self.download_frame = Frame(self)
+        self.ranking_frame = Frame(self)
         self.url_var = StringVar()
         self.keywords = StringVar(value='1000users入り')
         self.page_number = StringVar(value=2)
         self.fav_num = StringVar(value=500)
-        self.p_limit = StringVar(value=20)
+        self.p_limit = StringVar(value=10)
         self.path_var = StringVar(value=IMAGE_SAVE_BASEPATH)
-        # self.account = StringVar(value=USERNAME)
-        # self.password = StringVar(value=PASSWORD)
-        self.search_status = False
+        self.mode_var = StringVar(value='day')
+        #  %H:%M:%S
+        self.date_var = StringVar(
+            value=time.strftime("%Y-%m-%d", (datetime.datetime.now() - datetime.timedelta(days=1)).timetuple()))
         self.switch_menu = None
         self.init_ui()
 
@@ -45,8 +57,44 @@ class PixivDownloadFrame(Frame):
         menubar = Menu(self)
         self.root.config(menu=menubar)
         self.switch_menu = Menu(menubar, tearoff=0)
-        self.switch_menu.add_command(label="ToSearchDownload", command=self.switch)
+        self.switch_menu.add_command(label="By Url or Id", command=self.switch_url)
+        self.switch_menu.add_command(label="By Search", command=self.switch_search)
+        self.switch_menu.add_command(label="By Ranking", command=self.switch_ranking)
         menubar.add_cascade(label="Download Mode Switch", menu=self.switch_menu)
+
+        self.init_url_id()
+        self.init_search()
+        self.init_ranking()
+
+        # 公共组件
+        text1 = Text(self, height=20, width=30, bg='light gray')
+        text1.bind("<Key>", lambda e: "break")
+        text1.insert(END, 'Download Completed:\n')
+        self.task_text = text1
+        text2 = Text(self, height=20, width=40, bg='light gray')
+        scroll = Scrollbar(self, command=text2.yview)
+        scroll2 = Scrollbar(self, command=text1.yview)
+        text1.configure(yscrollcommand=scroll2.set)
+        text2.configure(yscrollcommand=scroll.set)
+        text2.tag_configure('info', foreground='#3A98FE')
+        text2.tag_configure('warning', foreground='#ff9900')
+        text2.tag_configure('error', foreground='#FF2D21')
+        quote = "Console Log:\n"
+        text2.insert(END, quote, 'info')
+        self.print_text = text2
+        text1.grid(row=3, column=0, sticky=W)
+        scroll2.grid(row=3, column=0, sticky=N + S + E)
+        text2.grid(row=3, column=1, sticky=W)
+        scroll.grid(row=3, column=1, sticky=N + S + E)
+
+        banner = Label(self, text="Power by imn5100", width=30, height=5)
+        banner.grid(row=4, columnspan=2)
+
+        self.download_frame.grid(row=1, columnspan=2)
+        self.grid()
+        self.queue.run()
+
+    def init_url_id(self):
         # 基本下载组件
         url_label = Label(self.download_frame, text="Pixiv Or Pixivision Site Or Illustration Id:", width=57, height=1)
         url_label.pack()
@@ -63,6 +111,7 @@ class PixivDownloadFrame(Frame):
         button = Button(self.download_frame, text='Download', height=2, command=self.handle_url)
         button.pack()
 
+    def init_search(self):
         # search组件
         keywords_label = Label(self.search_frame, text="Key Words:", width=57, height=1)
         keywords_label.pack()
@@ -94,47 +143,41 @@ class PixivDownloadFrame(Frame):
         p_limit_entry = Entry(self.search_frame, width=57, textvariable=self.p_limit)
         p_limit_entry.pack()
 
-        # account_label = Label(self.search_frame, text="Pixiv Account(Use cookies ignore this):", width=30,
-        #                       height=1)
-        # account_label.pack()
-        # account_entry = Entry(self.search_frame, width=57, textvariable=self.account)
-        # account_entry.pack()
-        # pwd_label = Label(self.search_frame, text="Password", width=30, height=1)
-        # pwd_label.pack()
-        # pwd_entry = Entry(self.search_frame, width=57, textvariable=self.password)
-        # pwd_entry.pack()
-        # pwd_entry['show'] = '*'
-
         search_button = Button(self.search_frame, text='Start', height=2, command=self.handle_search)
         search_button.pack()
 
-        # 公共组件
-        text1 = Text(self, height=20, width=30, bg='light gray')
-        text1.bind("<Key>", lambda e: "break")
-        text1.insert(END, 'Download Completed:\n')
-        self.task_text = text1
-        text2 = Text(self, height=20, width=40, bg='light gray')
-        scroll = Scrollbar(self, command=text2.yview)
-        scroll2 = Scrollbar(self, command=text1.yview)
-        text1.configure(yscrollcommand=scroll2.set)
-        text2.configure(yscrollcommand=scroll.set)
-        text2.tag_configure('info', foreground='#3A98FE')
-        text2.tag_configure('warning', foreground='#ff9900')
-        text2.tag_configure('error', foreground='#FF2D21')
-        quote = "Console Log:\n"
-        text2.insert(END, quote, 'info')
-        self.print_text = text2
-        text1.grid(row=3, column=0, sticky=W)
-        scroll2.grid(row=3, column=0, sticky=N + S + E)
-        text2.grid(row=3, column=1, sticky=W)
-        scroll.grid(row=3, column=1, sticky=N + S + E)
+    def init_ranking(self):
+        # ranking 组件
+        mode_label = Label(self.ranking_frame, text="Mode:", width=57, height=1)
+        mode_label.pack()
 
-        banner = Label(self, text="Power by imn5100", width=30, height=5)
-        banner.grid(row=4, columnspan=2)
+        mode_box = ttk.Combobox(self.ranking_frame, width=20, textvariable=self.mode_var, state='readonly')
+        mode_box['values'] = ranking_mode
+        mode_box.pack()
+        mode_box.focus_displayof()
 
-        self.download_frame.grid(row=1, columnspan=2)
-        self.grid()
-        self.queue.run()
+        date_label = Label(self.ranking_frame, text="Ranking Date:", width=10, height=1)
+        date_label.pack()
+
+        date_entry = Entry(self.ranking_frame, width=20, textvariable=self.date_var)
+        date_entry.pack()
+
+        p_limit_label = Label(self.ranking_frame, text="Single works P limit(0 does not limit):", width=30, height=1)
+        p_limit_label.pack()
+
+        p_limit_entry = Entry(self.ranking_frame, width=57, textvariable=self.p_limit)
+        p_limit_entry.pack()
+
+        ranking_path_label = Label(self.ranking_frame, text="Download Path:", width=30, height=1)
+        ranking_path_label.pack()
+
+        ranking_path_entry = Entry(self.ranking_frame, width=57, textvariable=self.path_var)
+        ranking_path_entry.pack()
+
+        ranking_button = Button(self.ranking_frame, text='Start', height=2, command=self.handle_ranking)
+        ranking_button.pack()
+
+    # 事件处理 #
 
     def handle_url(self):
         url = self.url_var.get().strip()
@@ -212,7 +255,6 @@ class PixivDownloadFrame(Frame):
             result = self.search_handler.search(keywords, page=p,
                                                 download_threshold=fav_num)
             if len(result) == 0:
-                # showerror("warning", "Search  result is Empty!")
                 print ('warning', 'Page:' + str(p) + ' Search  results are Empty')
                 continue
             if not os.path.exists(path):
@@ -236,19 +278,63 @@ class PixivDownloadFrame(Frame):
                 illu['p_limit'] = CommonUtils.set_int(self.p_limit.get(), 0)
                 self.queue.add_work(illu)
 
-    def switch(self):
-        if self.search_status:
-            self.search_frame.grid_forget()
-            self.download_frame.grid(row=1, columnspan=2)
-            self.search_status = False
-            self.switch_menu.entryconfig(0, label="ToSearchDownload")
+    def handle_ranking(self):
+        mode = self.mode_var.get()
+        path = self.path_var.get().strip()
+        date = self.date_var.get().strip()
+        if CommonUtils.is_empty(path):
+            showwarning("warning", "path can't be empty!")
+            print ("warning", "path can't be empty!")
+            return
+        if not os.path.exists(path):
+            showerror("error", " No such file or directory!")
+            print ('error', 'No such file or directory')
+            return
+        if not CommonUtils.validate_date_str(date):
+            showerror("error", "Date Wrong!")
+            print ('error', 'Date Wrong')
+            return
+        if datetime.datetime.strptime(date, '%Y-%m-%d') > datetime.datetime.now():
+            showerror("error", "The date can not be greater than the day!")
+            print ('error', 'The date can not be greater than the day')
+            return
+        path = path + "/ranking_" + mode + '_' + date
+        ranking_data = self.api.app_ranking(mode=mode, date=date).illusts
+        if len(ranking_data) == 0:
+            print ('warning', 'Ranking results are empty')
+            showerror("warning", "Ranking result is Empty!")
         else:
-            self.search_frame.grid(row=1, columnspan=2)
-            self.download_frame.grid_forget()
-            self.search_status = True
-            self.switch_menu.entryconfig(0, label="ToUrlDownload")
+            print ('Get from ranking:' + str(len(ranking_data)))
+            if not os.path.exists(path):
+                os.makedirs(path)
+            for illu in ranking_data:
+                illu['ranking_path'] = path
+                illu['p_limit'] = CommonUtils.set_int(self.p_limit.get(), 0)
+                self.queue.add_work(illu)
+
+    # 模式切换
+
+    def switch_url(self):
+        self.download_frame.grid(row=1, columnspan=2)
+        self.search_frame.grid_forget()
+        self.ranking_frame.grid_forget()
+
+    def switch_search(self):
+        self.search_frame.grid(row=1, columnspan=2)
+        self.download_frame.grid_forget()
+        self.ranking_frame.grid_forget()
+
+    def switch_ranking(self):
+        self.ranking_frame.grid(row=1, columnspan=2)
+        self.search_frame.grid_forget()
+        self.download_frame.grid_forget()
 
     def download_callback(self, msg=None):
+        """
+        任务完成回调
+        :param msg: 回调消息
+        :return: none
+        """
         if msg:
             self.task_text.insert(END, msg)
         else:
