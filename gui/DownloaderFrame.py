@@ -162,6 +162,12 @@ class PixivDownloadFrame(Frame):
         date_entry = Entry(self.ranking_frame, width=20, textvariable=self.date_var)
         date_entry.pack()
 
+        page_label = Label(self.ranking_frame, text="Number of pages:", width=30, height=1)
+        page_label.pack()
+
+        page_entry = Entry(self.ranking_frame, width=57, textvariable=self.page_number)
+        page_entry.pack()
+
         p_limit_label = Label(self.ranking_frame, text="Single works P limit(0 does not limit):", width=30, height=1)
         p_limit_label.pack()
 
@@ -281,6 +287,7 @@ class PixivDownloadFrame(Frame):
     def handle_ranking(self):
         mode = self.mode_var.get()
         path = self.path_var.get().strip()
+        page = CommonUtils.set_int(self.page_number.get(), 2)
         date = self.date_var.get().strip()
         if CommonUtils.is_empty(path):
             showwarning("warning", "path can't be empty!")
@@ -298,19 +305,30 @@ class PixivDownloadFrame(Frame):
             showerror("error", "The date can not be greater than the day!")
             print ('error', 'The date can not be greater than the day')
             return
+        self.ranking(path, mode, date, pages=page)
+
+    def ranking(self, path, mode, date, pages=1):
         path = path + "/ranking_" + mode + '_' + date
-        ranking_data = self.api.app_ranking(mode=mode, date=date).illusts
-        if len(ranking_data) == 0:
-            print ('warning', 'Ranking results are empty')
-            showerror("warning", "Ranking result is Empty!")
-        else:
-            print ('Get from ranking:' + str(len(ranking_data)))
-            if not os.path.exists(path):
-                os.makedirs(path)
-            for illu in ranking_data:
-                illu['ranking_path'] = path
-                illu['p_limit'] = CommonUtils.set_int(self.p_limit.get(), 0)
-                self.queue.add_work(illu)
+        page = 0
+        offset = 0
+        path_exist = os.path.exists(path)
+        while page < pages:
+            ranking_data = self.api.app_ranking(mode=mode, date=date, offset=offset).illusts
+            page = page + 1
+            if len(ranking_data) > 0:
+                if not path_exist:
+                    os.makedirs(path)
+                    path_exist = True
+                print ('Get from ranking(page=' + str(page) + '):' + str(len(ranking_data)))
+                for illu in ranking_data:
+                    illu['ranking_path'] = path
+                    illu['p_limit'] = CommonUtils.set_int(self.p_limit.get(), 0)
+                    self.queue.add_work(illu)
+                    offset = offset + 1
+            else:
+                print ('warning', 'Ranking(page=' + str(page) + ') results are empty')
+                showerror("error", 'Ranking(page=' + str(page) + ') results are empty')
+                break
 
     # 模式切换
 
