@@ -14,10 +14,6 @@ Pixiv And Pixivision Illustrations Downloader.<br>
      2. 修改IMAGE_SAVE_BASEPATH，指定图片存储位置。<br>
      *. 更多详细配置请看文件注释。
 
-运行菜单:(支持下载方式1-4)
-~~~
-python  launcher.py 
-~~~
 启动图形界面下载工具:(支持下载方式1-5)<br>
 使用方式：1.直接启动，输入Pixiv用户名和密码(如果有配置会自动填充)，验证通过直接进入下载界面。2.配置ACCESS_TOKEN和PIXIV_COOKIES(每次使用用户名和密码登录时控制台会输出)，验证通过后(时间可能略长),直接进入下载界面。
 ~~~
@@ -32,10 +28,6 @@ python launcher_pixivision.py
 &nbsp;&nbsp;&nbsp;&nbsp;用于检查从Pixivision下载的特辑是否完全下载完毕，并补全下载。(注意：这里的补全并不是下载Pixivison的更新的内容)
 ~~~
 python launcher_check_completion.py
-~~~
-启动搜索下载，自动下载Pixiv通过关键字搜索到插画。需要输入或设置：Pixiv邮箱或ID，Pixiv密码,搜索关键字，存储路径，爬取页数，下载的插画的最小收藏数。
-~~~
-python launcher_search.py
 ~~~
 Pixiv Api代码参考了[pixivpy](https://github.com/upbit/pixivpy "pixivpy")<br>
 运行需求：python2.7(3以上版本暂未测试) 扩展库：requests,BeautifulSoup。如果需要运行launcher_plus.py还需要twisted.<br><br>

@@ -14,7 +14,7 @@ PASSWORD = config.get("PASSWORD", default_value="*")
 # 访问pixiv api的凭证，使用账户密码登录后获得,可重复使用，不需要每次都用账号密码登录。
 ACCESS_TOKEN = config.get("ACCESS_TOKEN", default_value="")
 # 刷新token token失效后，使用refresh  token 刷新，可获得新token
-REFRESH_TOKEN = config.get("REFRESH_TOKEN", default_value="3W1T_8NmOun_RISbqjx8jkV2Eo2vdtUde-")
+REFRESH_TOKEN = config.get("REFRESH_TOKEN", default_value="")
 # *****************************  cookie 用于记录网页登录状态。使用搜索功能时：(账号+密码) 或 (Cookie) 必填一项
 # 如果不想反复登录，可以在第一次登陆后，从控制台获取输出的cookie信息。配置于此。（反复重复登陆 除了会收到Pixiv寄出的安全提示邮件外暂无其他影响）
 # 不使用cookies 请保持默认值为"{}"
@@ -51,9 +51,9 @@ BASE_URL = "http://www.pixivision.net"
 # 拉取插画专题 url
 LINK_URL = "http://www.pixivision.net/en/c/illustration/?p=%s"
 ILLUST_DETAIL_PAGE = "http://www.pixiv.net/member_illust.php?mode=medium&illust_id=%s"
-# Pixivision全站总页数,用于全站爬取 2017/5/24
+# Pixivision全站总页数,用于全站爬取 2017/09/09
 # 全站爬取完毕后，如果Pixivsion有更新，可以修改此配置，比如Pixivsion有2页更新未爬取，修改PAGE_NUM=2,全站插画爬虫则会爬取前2页的所有特辑
-PAGE_NUM = config.getint("PAGE_NUM", default_value=77)
+PAGE_NUM = config.getint("PAGE_NUM", default_value=88)
 # illust detail url
 ILLUST_DETAIL = "https://app-api.pixiv.net/v1/illust/detail"
 ILLUST_RELATED = 'https://app-api.pixiv.net/v2/illust/related'
