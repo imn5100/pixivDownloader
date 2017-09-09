@@ -17,7 +17,9 @@ from pixivision.PixivisionLauncher import PixivisionLauncher
 from pixivision.PixivisionTopicDownloader import IlluDownloadThread
 from utils import CommonUtils
 
-ranking_mode = ('day', 'week', 'month', 'day_male', 'day_female', 'week_original', 'week_rookie')
+ranking_mode = ('day', 'week', 'month', 'day_male', 'day_female', 'week_original', 'week_rookie',
+                # 'day_r18', 'week_r18'
+                )
 
 
 # 'day_r18', 'week_r18'
