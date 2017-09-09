@@ -18,7 +18,7 @@ from pixivision.PixivisionTopicDownloader import IlluDownloadThread
 from utils import CommonUtils
 
 ranking_mode = ('day', 'week', 'month', 'day_male', 'day_female', 'week_original', 'week_rookie',
-                # 'day_r18', 'week_r18'
+                'day_r18', 'week_r18'
                 )
 
 
@@ -307,7 +307,9 @@ class PixivDownloadFrame(Frame):
             showerror("error", "The date can not be greater than the day!")
             print ('error', 'The date can not be greater than the day')
             return
-        self.ranking(path, mode, date, pages=page)
+        showinfo("info", "Get ranking...")
+        ranking_handler = Thread(target=self.ranking, args=(path, mode, date, page))
+        ranking_handler.start()
 
     def ranking(self, path, mode, date, pages=1):
         path = path + "/ranking_" + mode + '_' + date
