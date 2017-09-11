@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 import re
+import threading
 
 from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 from pixiv import PixivDataDownloader
 from pixiv_config import PIXIV_COOKIES
+from utils.AtomicInteger import AtomicInteger
 from utils.Config import Config
 import time
 from PIL import Image
@@ -40,7 +42,7 @@ def testMatch():
 
 def testImage(file):
     # im = Image.open("/Users/imn5100/Downloads/p_51695014.jpg")
-    print file[-4:].lower()
+    print (file[-4:].lower())
     print (file[-4:].lower() in ('.jpg', '.png', '.gif'))
     print (time.time())
     im2 = Image.open(file)
@@ -60,13 +62,34 @@ def testWalk(path):
             print(os.path.join(root, name))
             # for name in dirs:
             #     print(os.path.join(root, name))
-    print count
+    print (count)
 
 
 def test_search():
     # print  PixivDataDownloader.search_nologin(u"2000users入り")
     search_handler = PixivDataDownloader.PixivDataHandler(cookies=PIXIV_COOKIES)
     search_handler.check_login_success()
+
+
+global_num = AtomicInteger()  # 0
+
+
+def thread_cal():
+    global global_num
+    for i in xrange(10000):
+        global_num.getAndInc()
+
+
+def test_atomic_int2():
+    # Get 10 threads, run them and wait them all finished.
+    threads = []
+    for i in range(10):
+        threads.append(threading.Thread(target=thread_cal))
+        threads[i].start()
+    for i in range(10):
+        threads[i].join()
+    # Value of global variable can be confused.
+    print (global_num == 100000)
 
 
 if __name__ == '__main__':
@@ -77,4 +100,5 @@ if __name__ == '__main__':
     # print reader.read()
     # im = Image.open('/Users/imn5100/Downloads/pixiv/z_pixivision_download/一生追随！“超凡的反派”特辑/p_10208070.jpg')
     # print im
-    test_search()
+    # test_atomic_int()
+    test_atomic_int2()

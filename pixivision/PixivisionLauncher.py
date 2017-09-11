@@ -3,15 +3,21 @@ import threading
 
 from pixiv_config import *
 from pixivision.PixivisionTopicDownloader import ImageDownload, IlluDownloadThread
+from utils.AtomicInteger import AtomicInteger
 
 
 def start(url, save_path=IMAGE_SAVE_BASEPATH, downloader=None, success_callback=None, fail_callback=None):
     topics = ImageDownload.get_pixivision_topics(url, save_path)
     ts = []
+    callback_params = {
+        'all_count': len(topics),
+        'current_count': AtomicInteger(),
+        'url': url
+    }
     for topic in topics:
         if topic.has_key("save_path"):
             t = IlluDownloadThread(topic.href, path=topic.save_path, downloader=downloader).register_hook(
-                success_callback=success_callback, fail_callback=fail_callback)
+                success_callback=success_callback, fail_callback=fail_callback, params=callback_params)
             t.start()
             ts.append(t)
     for t in ts:

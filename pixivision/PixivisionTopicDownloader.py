@@ -94,6 +94,7 @@ class IlluDownloadThread(threading.Thread):
         self.downloader = downloader
         self.success = None
         self.fail = None
+        self.callback_params = None
 
     def run(self):
         if not os.path.exists(self.path):
@@ -105,17 +106,26 @@ class IlluDownloadThread(threading.Thread):
                 return
         try:
             path = ImageDownload.download_topics(self.url, self.path,
-                                                 create_path=self.create_path,downloader=self.downloader)
+                                                 create_path=self.create_path, downloader=self.downloader)
             if self.success:
                 self.success(CommonUtils.build_callback_msg(path, url=self.url))
+                if self.callback_params and self.callback_params.has_key(
+                        'current_count') and self.callback_params.has_key('all_count'):
+                    self.callback_params['current_count'].getAndInc()
+                    if self.callback_params['all_count'] == self.callback_params['current_count']:
+                        self.success("{\nDownload from Pixivision:\n" +
+                                     self.callback_params['url'] +
+                                     "\nAll tasks are complete!\n}\n")
         except Exception as e:
-            print e
+            print(e)
             if self.fail:
                 self.fail()
 
-    def register_hook(self, success_callback=None, fail_callback=None):
+    def register_hook(self, success_callback=None, fail_callback=None, params=None):
         if success_callback:
             self.success = success_callback
         if fail_callback:
             self.fail = fail_callback
+        if params:
+            self.callback_params = params
         return self
