@@ -51,7 +51,7 @@ def check_image(dir):
     dir = dir.strip()
     if os.path.exists(dir):
         image_fls = os.listdir(dir)
-        print 'Dir Count:' + str(len(image_fls))
+        print ('Dir Count:' + str(len(image_fls)))
         for image_fl in image_fls:
             image_fl = image_fl
             # 检查是否有特辑描述文件
