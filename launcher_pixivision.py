@@ -8,8 +8,7 @@ from utils.LoggerUtil import error_log
 
 # 使用线程池，不需要等到线程池顺序执行完毕再开启下个线程
 def run_by_pool():
-    from twisted.python.threadpool import ThreadPool
-    urls = [LINK_URL % n for n in range(1, 1 + 1)]
+    urls = [LINK_URL % n for n in range(1, PAGE_NUM + 1)]
     print (urls)
     # 5*20 最大100线程在运行
     error_log("start：" + str(time.time()))
@@ -49,4 +48,9 @@ def run_by_list():
 
 
 if __name__ == '__main__':
-    run_by_pool()
+    try:
+        from twisted.python.threadpool import ThreadPool
+    except:
+        run_by_list()
+    else:
+        run_by_pool()

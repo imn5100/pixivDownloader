@@ -9,11 +9,7 @@ Pixiv And Pixivision Illustrations Downloader.<br>
           4.  通过Pixiv插画ID下载<br>
           5.  通过关键字搜索下载<br>
            6.  排行榜下载<br>
- 
-* 核心配置文件pixiv_config.py和config.ini<br>
-     1. USERNAME和PASSWORD 必填,或填写ACCESS_TOKEN代替,否者无法正常使用<br>
-     2. 修改IMAGE_SAVE_BASEPATH，指定图片存储位置。<br>
-     *. 更多详细配置请看文件注释。
+
 
 启动图形界面下载工具:(支持下载方式1-6)<br>
 使用方式：1.直接启动，输入Pixiv用户名和密码(如果有配置会自动填充)，验证通过直接进入下载界面。2.配置ACCESS_TOKEN和PIXIV_COOKIES(每次使用用户名和密码登录时控制台会输出)，验证通过后(时间可能略长),直接进入下载界面。
@@ -25,22 +21,28 @@ python launcher_gui.py
 ~~~
 python launcher_pixivision.py
 ~~~
-运行Pixivision全站插画爬虫补全脚本：<br>
-&nbsp;&nbsp;&nbsp;&nbsp;用于检查从Pixivision下载的特辑是否完全下载完毕，并补全下载。(注意：这里的补全并不是下载Pixivison的更新的内容)
+运行Pixivision插画特辑补全脚本：<br>
+&nbsp;&nbsp;&nbsp;&nbsp;用于检查从Pixivision下载的特辑是否完全下载完毕，文件是否完整，并补全下载。(注意：这里的补全并不是下载Pixivison的更新的内容)
 ~~~
 python launcher_check_completion.py
 ~~~
 Pixiv Api代码参考了[pixivpy](https://github.com/upbit/pixivpy "pixivpy")<br>
-运行需求：python2.7(3以上版本暂未测试) 扩展库：requests,BeautifulSoup。如果需要运行launcher_plus.py还需要twisted.<br><br>
+运行需求：python2.7(3以上版本暂未测试) 必要扩展库：requests(用于网页爬取,api请求),BeautifulSoup(用于网页html数据解析)。<br>
+非必要扩展库：<br>
+&nbsp;twisted 如果需要运行launcher_pixivision.py,使用twisted线程池管理下载可以获取更快下载速度。<br>
+&nbsp;Pillow  可检查Pixivision下载的插画文件是否完整。<br><br>
+
 UPDATE:<br>
 2017.05.11  新增项目目录外的配置文件config.ini,避免更新代码后原配置被覆盖<br>
 2017.05.24  添加了一个简单的图形界面下载工具<br>
 2017.06.20  完善图像界面下载工具,支持通过关键字搜索下载插画<br>
-2017.07.06  由于Pixiv Api更改,原本拉取插画详情的接口需要登录才能使用,Pixiv账号和密码设置变为必填项。<br>
+2017.07.06  由于Pixiv Api更改,原本拉取插画详情的接口需要登录才能使用,直接使用控制台命令下载时,Pixiv账号和密码设置变为必填项。<br>
 2017.07.16  Pixivision专辑页支持多图下载，所有下载图片默认为原图画质<br>
-2017.07.27  补全脚本,新增检查文件完整性：需要设置配置：CHECK_IMAGE_VERIFY=True 并安装 Pillow 生效<br>
+2017.07.27  Pixivision补全脚本,新增检查文件完整性：需要修改配置：CHECK_IMAGE_VERIFY=True 并安装 Pillow 生效<br>
 2017.08.03  图形界面下载工具需要登录或配置Token和Cookie才能启动下载界面<br>
+2017.08.31  优化图形界面下载工具搜索下载，同时使用网页搜索爬虫和API搜索搜集下载数据<br>
 2017.09.02  图形界面下载工具新增排行榜下载<br>
+
 
 PS①:推荐直接使用图形界面下载工具下载<br>
 
