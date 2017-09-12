@@ -2,6 +2,7 @@
 import time
 
 from pixiv_config import LINK_URL, PAGE_NUM, IMAGE_SAVE_BASEPATH
+from pixivapi.PixivApi import PixivApi
 from pixivision.PixivisionLauncher import PixivisionLauncher, start
 from utils.LoggerUtil import error_log
 
@@ -48,6 +49,7 @@ def run_by_list():
 
 
 if __name__ == '__main__':
+    PixivApi.check_api()
     try:
         from twisted.python.threadpool import ThreadPool
     except:

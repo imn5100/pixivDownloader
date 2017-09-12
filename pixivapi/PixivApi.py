@@ -1,8 +1,9 @@
 # -*- coding:utf-8 -*-
 import threading
 
-import pixiv_config
+from pixiv_config import USERNAME, PASSWORD, ACCESS_TOKEN, REFRESH_TOKEN
 from pixivapi.AuthPixivApi import AuthPixivApi
+from pixivapi.PixivUtils import PixivError
 
 
 class PixivApi(object):
@@ -26,8 +27,29 @@ class PixivApi(object):
             return
         try:
             cls.__lock.acquire()
+            success = False
             if not cls.__apiClient:
-                cls.__apiClient = AuthPixivApi(pixiv_config.USERNAME, pixiv_config.PASSWORD,
-                                               access_token=pixiv_config.ACCESS_TOKEN)
+                if ACCESS_TOKEN:
+                    try:
+                        cls.__apiClient = AuthPixivApi(None, None, access_token=ACCESS_TOKEN)
+                    except Exception as e:
+                        print (e)
+                    else:
+                        if cls.__apiClient and cls.__apiClient.check_login_success():
+                            success = True
+
+                if not success:
+                    try:
+                        cls.__apiClient = AuthPixivApi(USERNAME, PASSWORD, refresh_token=REFRESH_TOKEN)
+                    except Exception as e:
+                        print (e)
+                    else:
+                        if cls.__apiClient and cls.__apiClient.check_login_success():
+                            success = True
+
+                if not success:
+                    raise PixivError("[ERROR] auth() failed! Please check username and password or token")
+        except Exception as e:
+            raise e
         finally:
             cls.__lock.release()
