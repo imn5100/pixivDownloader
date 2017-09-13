@@ -9,6 +9,8 @@ import time
 import datetime
 from tkinter import ttk
 
+from gui.DownloadTask import Task, TASK_TYPE_ID, TASK_TYPE_URL, TASK_TYPE_SEARCH_API, TASK_TYPE_SEARCH, \
+    TASK_TYPE_RANKING
 from gui.WorkQueue import PixivQueue
 from pixiv.IllustrationDownloader import IllustrationDownloader
 from pixiv_config import IMAGE_SAVE_BASEPATH, DOWNLOAD_THRESHOLD
@@ -215,10 +217,10 @@ class PixivDownloadFrame(Frame):
         elif CommonUtils.set_int(url) != 0:
             showinfo("info", "Downloading id:" + str(CommonUtils.set_int(url)) + " illustration")
             print ("info", "Downloading id:" + str(CommonUtils.set_int(url)) + " illustration")
-            self.queue.add_work({
+            self.queue.add_work(Task(TASK_TYPE_ID, **{
                 'id': CommonUtils.set_int(url),
                 'path': path + "/"
-            })
+            }))
             return
         elif url.startswith("http"):
             # 无法解析的pixivison站 或非 pixiv站 不支持
@@ -228,10 +230,10 @@ class PixivDownloadFrame(Frame):
                 return
             showinfo("info", "Downloading  url:" + url)
             print ("info", "Downloading  url:" + url)
-            self.queue.add_work({
+            self.queue.add_work(Task(TASK_TYPE_URL, **{
                 'url': url,
                 'path': path + "/"
-            })
+            }))
         else:
             showerror("error", "")
 
@@ -257,6 +259,7 @@ class PixivDownloadFrame(Frame):
 
     def search(self, keywords, path):
         set_filter = set()
+        id_set = set()
         page = CommonUtils.set_int(self.page_number.get(), 2)
         fav_num = CommonUtils.set_int(self.fav_num.get(), 0)
         for p in range(1, page + 1):
@@ -271,20 +274,24 @@ class PixivDownloadFrame(Frame):
                 if illu.url in set_filter:
                     continue
                 else:
-                    illu['search_path'] = path
-                    illu['p_limit'] = CommonUtils.set_int(self.p_limit.get(), 0)
-                    self.queue.add_work(illu)
+                    task = Task(TASK_TYPE_SEARCH, **{
+                        'path': path,
+                        'p_limit': CommonUtils.set_int(self.p_limit.get(), 0),
+                        'illu': illu
+                    })
+                    self.queue.add_work(task)
+                    id_set.add(CommonUtils.get_url_param(illu.url, "illust_id"))
                     set_filter.add(illu.url)
-        api_search_data = api_search(keywords, self.api, page=page, download_threshold=fav_num)
+        api_search_data = api_search(keywords, self.api, page=page, download_threshold=fav_num, id_set=id_set)
         if len(api_search_data) == 0:
             print ('warning', 'Api search results are empty')
         else:
             if not os.path.exists(path):
                 os.makedirs(path)
             for illu in api_search_data:
-                illu['api_search_path'] = path
-                illu['p_limit'] = CommonUtils.set_int(self.p_limit.get(), 0)
-                self.queue.add_work(illu)
+                task = Task(TASK_TYPE_SEARCH_API, path=path, p_limit=CommonUtils.set_int(self.p_limit.get(), 0),
+                            illu=illu)
+                self.queue.add_work(task)
 
     def handle_ranking(self):
         mode = self.mode_var.get()
@@ -325,9 +332,9 @@ class PixivDownloadFrame(Frame):
                     path_exist = True
                 print ('Get from ranking(page=' + str(page) + '):' + str(len(ranking_data)))
                 for illu in ranking_data:
-                    illu['ranking_path'] = path
-                    illu['p_limit'] = CommonUtils.set_int(self.p_limit.get(), 0)
-                    self.queue.add_work(illu)
+                    task = Task(TASK_TYPE_RANKING, path=path, p_limit=CommonUtils.set_int(self.p_limit.get(), 0),
+                                illu=illu)
+                    self.queue.add_work(task)
                     offset = offset + 1
             else:
                 print ('warning', 'Ranking(page=' + str(page) + ') results are empty')
@@ -363,11 +370,14 @@ class PixivDownloadFrame(Frame):
             self.task_text.insert(END, "A work Done")
 
 
-def api_search(keyword, api, page=1, download_threshold=DOWNLOAD_THRESHOLD):
+def api_search(keyword, api, page=1, download_threshold=DOWNLOAD_THRESHOLD, id_set=None):
     illusts = []
     if CommonUtils.is_empty(keyword):
         raise PixivError('[ERROR] keyword is empty')
-    ids = set()
+    if id_set:
+        ids = id_set
+    else:
+        ids = set()
     count = 0
     for data in api.search_popular_illust(keyword).illusts:
         if download_threshold:
