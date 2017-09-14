@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
 
-from pixiv_config import P_LIMIT
 from utils import CommonUtils
 from utils.LoggerUtil import error_log
 
@@ -40,7 +39,7 @@ class IllustrationDownloader(object):
                 else:
                     if 0 < p_limit < detail.page_count:
                         # 该插画P数大于最大限制，放弃下载
-                        print("Pixiv id:%s,name:%s P>limit,Skip download" % (illust_id, detail.title))
+                        print("Pixiv id:%s P>limit,Skip download" % (illust_id,))
                         return PAGE_LIMIT_CONTINUE
                     urls = detail.meta_pages
                     # 获取多图
@@ -94,7 +93,7 @@ class IllustrationDownloader(object):
                     else:
                         if 0 < p_limit < detail.page_count:
                             # 该插画P数大于最大限制，放弃下载
-                            print("Pixiv id:%s,name:%s P>limit,Skip download" % (illust_id, illu.title))
+                            print("Pixiv id:%s, P>limit,Skip download" % (illust_id,))
                             return PAGE_LIMIT_CONTINUE
                         urls = detail.meta_pages
                         # 获取多图
@@ -127,12 +126,12 @@ class IllustrationDownloader(object):
         else:
             return
 
-    def download_all_by_id(self, illust_id, path, limit_p=True):
+    def download_all_by_id(self, illust_id, path, p_limit=0):
         """
         通过pixiv id下载插画
         :param illust_id: id
         :param path:  下载路径
-        :param limit_p: 是否限制插画p数(页数)  取配置中的P_LIMIT作为最大限制
+        :param p_limit: 是否限制插画p数(页数)
         :return:
         """
         detail = self.api.illust_detail(illust_id)
@@ -151,7 +150,7 @@ class IllustrationDownloader(object):
                     path = self.api.download(url, path=save_path)
                 # 多图插画
                 else:
-                    if detail.page_count > P_LIMIT and limit_p:
+                    if 0 < p_limit < detail.page_count:
                         # 该插画P数大于最大限制，放弃下载
                         print("Pixiv id:%s P>limit,Skip download" % (illust_id,))
                         return PAGE_LIMIT_CONTINUE

@@ -7,6 +7,7 @@ from pixiv.PixivHtmlParser import PixivHtmlParser
 from pixiv_config import PIXIV_LOGIN_KEY, PIXIV_PAGE_HEADERS, PIXIV_LOGIN_URL, RETRY_TIME, TIMEOUT, PIXIV_SEARCH_URL, \
     DOWNLOAD_THRESHOLD
 from pixivapi.PixivUtils import parse_resp, PixivError
+from utils import CommonUtils
 
 
 def get_post_key(content):
@@ -122,10 +123,13 @@ class PixivDataHandler(object):
         if not pop_result:
             pop_result = []
         if search_result:
-            # 过滤数据不完整和收藏数不超过阈值的插画信息
-            search_result = filter(
+            pop_result.append(search_result)
+        # 过滤数据不完整和收藏数不超过阈值的插画信息
+        if len(pop_result) > 0:
+            pop_result = filter(
                 lambda data: (data.has_key("url") and data.has_key("title") and data.has_key("mark_count") and int(
                     data.mark_count) >= download_threshold),
-                search_result)
-            pop_result.extend(search_result)
+                pop_result)
+            for result in pop_result:
+                result['id'] = CommonUtils.get_url_param(result['url'], "illust_id")
         return pop_result

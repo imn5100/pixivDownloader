@@ -50,11 +50,11 @@ class PixivQueue(object):
                         msg = CommonUtils.build_callback_msg(illu_file, url=str(task.url))
                         callback(msg)
                 elif task.task_type == TASK_TYPE_SEARCH:
-                    illu_file = self.downloader.download_illustration(task.illu, task.path, p_limit=task.p_limit)
+                    illu_file = self.downloader.download_all_by_id(task.illu.id, task.path, p_limit=task.p_limit)
                     if callback:
                         if illu_file:
                             if illu_file != PAGE_LIMIT_CONTINUE:
-                                callback("{\n%s:%s\nFile:%s\n}\n" % ("search get", task.illu.get('title'), illu_file))
+                                callback("{\n%s:%s\nFile:%s\n}\n" % ("search get", task.illu.get('id'), illu_file))
                         else:
                             callback("{\n%s:%s\nFile:%s\n}\n" % ("search get", task.illu.get('url'), 'Download Fail'))
                 elif task.task_type == TASK_TYPE_SEARCH_API:
@@ -62,7 +62,7 @@ class PixivQueue(object):
                     if callback:
                         if illu_file:
                             if illu_file != PAGE_LIMIT_CONTINUE:
-                                callback("{\n%s:%s\nFile:%s\n}\n" % ("search get", task.illu.get('title'), illu_file))
+                                callback("{\n%s:%s\nFile:%s\n}\n" % ("search get", task.illu.get('id'), illu_file))
                         else:
                             callback("{\n%s:%s\nFile:%s\n}\n" % ("search get", task.illu.get('id'), 'Download Fail'))
                 elif task.task_type == TASK_TYPE_RANKING:
@@ -70,7 +70,7 @@ class PixivQueue(object):
                     if callback:
                         if illu_file:
                             if illu_file != PAGE_LIMIT_CONTINUE:
-                                callback("{\n%s:%s\nFile:%s\n}\n" % ("ranking get", task.illu.get('title'), illu_file))
+                                callback("{\n%s:%s\nFile:%s\n}\n" % ("ranking get", task.illu.get('id'), illu_file))
                         else:
                             callback("{\n%s:%s\nFile:%s\n}\n" % ("ranking get", task.illu.get('id'), 'Download Fail'))
             except Exception as e:
@@ -82,7 +82,6 @@ class PixivQueue(object):
                     if illu_file:
                         current_count = task.current_count.getAndInc()
                         if current_count + 1 == task.all_count:
-                            print ('Ranking')
                             afterEndCallback(task, callback)
 
 

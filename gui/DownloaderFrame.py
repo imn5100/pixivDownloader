@@ -253,7 +253,6 @@ class PixivDownloadFrame(Frame):
         search_handler.start()
 
     def search(self, keywords, path):
-        set_filter = set()
         id_set = set()
         page = CommonUtils.set_int(self.page_number.get(), 2)
         fav_num = CommonUtils.set_int(self.fav_num.get(), 0)
@@ -265,7 +264,7 @@ class PixivDownloadFrame(Frame):
                 print ('warning', 'Page:' + str(p) + ' Search  results are Empty')
                 continue
             for illu in result:
-                if illu.url in set_filter:
+                if illu.id in id_set:
                     continue
                 else:
                     task = Task(TASK_TYPE_SEARCH, **{
@@ -274,9 +273,8 @@ class PixivDownloadFrame(Frame):
                         'p_limit': CommonUtils.set_int(self.p_limit.get(), 0),
                         'illu': illu
                     })
+                    id_set.add(illu.id)
                     tasks.append(task)
-                    id_set.add(CommonUtils.get_url_param(illu.url, "illust_id"))
-                    set_filter.add(illu.url)
         print ('Search ' + keywords + ' from web page get:' + str(len(tasks)))
         api_search_data = api_search(keywords, self.api, page=page, download_threshold=fav_num, id_set=id_set)
         if len(api_search_data) == 0:
