@@ -20,3 +20,5 @@ if __name__ == '__main__':
     print (task.path)
     print (task.id)
     print (task.url)
+    task.current_count = 100
+    print (task.current_count)

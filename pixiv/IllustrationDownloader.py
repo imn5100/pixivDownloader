@@ -5,6 +5,8 @@ from pixiv_config import P_LIMIT
 from utils import CommonUtils
 from utils.LoggerUtil import error_log
 
+PAGE_LIMIT_CONTINUE = "P>limit"
+
 
 class IllustrationDownloader(object):
     def __init__(self, api):
@@ -16,7 +18,14 @@ class IllustrationDownloader(object):
         print(save_path)
         return self.api.download(url, path=save_path)
 
-    def download_by_detail(self, detail, path, p_limit=P_LIMIT):
+    def download_by_detail(self, detail, path, p_limit=0):
+        """
+        通过api获取的插画详情 下载
+        :param detail: 插画详情
+        :param path:   下载路径
+        :param p_limit: 插画p数(页数)限制 0代表不限制
+        :return:
+        """
         if detail:
             try:
                 illust_id = detail.id
@@ -32,7 +41,7 @@ class IllustrationDownloader(object):
                     if 0 < p_limit < detail.page_count:
                         # 该插画P数大于最大限制，放弃下载
                         print("Pixiv id:%s,name:%s P>limit,Skip download" % (illust_id, detail.title))
-                        return
+                        return PAGE_LIMIT_CONTINUE
                     urls = detail.meta_pages
                     # 获取多图
                     if len(urls) > 1:
@@ -60,7 +69,14 @@ class IllustrationDownloader(object):
                 error_log("Download fail:")
                 error_log(e)
 
-    def download_illustration(self, illu, path, p_limit=P_LIMIT):
+    def download_illustration(self, illu, path, p_limit=0):
+        """
+        通过程序构造的插画详情下载
+        :param illu:  插画详情
+        :param path:  下载路径
+        :param p_limit: 插画p数(页数)限制 0代表不限制
+        :return:
+        """
         if illu.has_key("url") and illu.has_key("title"):
             illust_id = CommonUtils.get_url_param(illu.url, "illust_id")
             detail = self.api.illust_detail(illust_id)
@@ -79,7 +95,7 @@ class IllustrationDownloader(object):
                         if 0 < p_limit < detail.page_count:
                             # 该插画P数大于最大限制，放弃下载
                             print("Pixiv id:%s,name:%s P>limit,Skip download" % (illust_id, illu.title))
-                            return
+                            return PAGE_LIMIT_CONTINUE
                         urls = detail.meta_pages
                         # 获取多图
                         if len(urls) > 1:
@@ -112,6 +128,13 @@ class IllustrationDownloader(object):
             return
 
     def download_all_by_id(self, illust_id, path, limit_p=True):
+        """
+        通过pixiv id下载插画
+        :param illust_id: id
+        :param path:  下载路径
+        :param limit_p: 是否限制插画p数(页数)  取配置中的P_LIMIT作为最大限制
+        :return:
+        """
         detail = self.api.illust_detail(illust_id)
         if detail:
             try:
@@ -131,7 +154,7 @@ class IllustrationDownloader(object):
                     if detail.page_count > P_LIMIT and limit_p:
                         # 该插画P数大于最大限制，放弃下载
                         print("Pixiv id:%s P>limit,Skip download" % (illust_id,))
-                        return
+                        return PAGE_LIMIT_CONTINUE
                     urls = detail.meta_pages
                     # 获取多图
                     if len(urls) > 1:
