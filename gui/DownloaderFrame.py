@@ -25,9 +25,6 @@ ranking_mode = ('day', 'week', 'month', 'day_male', 'day_female', 'week_original
                 )
 
 
-# 'day_r18', 'week_r18'
-
-
 class PixivDownloadFrame(Frame):
     def __init__(self, root, api, search_handler):
         Frame.__init__(self, root)
@@ -73,7 +70,7 @@ class PixivDownloadFrame(Frame):
 
         # 公共组件
         text1 = ScrolledText(self, height=20, width=30, bg='light gray')
-        text1.bind("<Key>", lambda e: "break")
+        # text1.bind("<Key>", lambda e: "break")
         text1.insert(END, 'Download Completed:\n')
         self.task_text = text1
         text2 = ScrolledText(self, height=20, width=40, bg='light gray')

@@ -107,7 +107,7 @@ def build_callback_msg(path, id=None, url=None, keywords=None):
         show2 = path
     else:
         show2 = "Download Fail"
-    msg = "{\n%s:%s\nFile:%s\n}\n"
+    msg = "%s:%s\nFile:%s\n\n"
     return msg % (show, show1, show2)
 
 
