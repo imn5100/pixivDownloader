@@ -80,6 +80,7 @@ class LoginFrame(Frame):
                 success = True
                 print ("Access Token is correct!")
             else:
+                self.api = None
                 print ("Access Token error or expired!")
 
         if REFRESH_TOKEN and not success:
@@ -91,6 +92,7 @@ class LoginFrame(Frame):
                 success = True
                 print ("Refresh Token is correct!")
             else:
+                self.api = None
                 print ("Access Token config error or expired!")
 
         if len(PIXIV_COOKIES) > 3:
@@ -106,6 +108,7 @@ class LoginFrame(Frame):
                     self.destroy()
                     return True
             else:
+                self.search_handler = None
                 print ("Cookie error or expired!")
 
         return False
