@@ -113,9 +113,9 @@ class IlluDownloadThread(threading.Thread):
                         'current_count') and self.callback_params.has_key('all_count'):
                     current_count = self.callback_params['current_count'].getAndInc()
                     if self.callback_params['all_count'] == (current_count + 1):
-                        self.success("{\nDownload from Pixivision:\n" +
+                        self.success("Download from Pixivision:\n" +
                                      self.callback_params['url'] +
-                                     "\nAll tasks are complete!\n}\n")
+                                     "\nAll tasks are complete!\n\n")
         except Exception as e:
             print(e)
             if self.fail:
