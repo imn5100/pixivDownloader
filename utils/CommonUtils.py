@@ -21,7 +21,7 @@ def get_url_param(url, param):
     try:
         result = urlparse.urlparse(url)
         return urlparse.parse_qs(result.query)[param][0]
-    except:
+    except Exception:
         return None
 
 

@@ -40,7 +40,9 @@ class AuthPixivApi(object):
         if self.access_token is None:
             raise PixivError('Authentication required! Call login() first!')
 
-    def auth_requests_call(self, method, url, headers={}, **kwargs):
+    def auth_requests_call(self, method, url, headers=None, **kwargs):
+        if headers is None:
+            headers = {}
         self.require_auth()
         headers['Referer'] = 'http://spapi.pixiv.net/'
         headers['User-Agent'] = 'PixivIOSApp/6.0.9'
@@ -97,8 +99,9 @@ class AuthPixivApi(object):
             self.access_token = token.response.access_token
             self.user_id = token.response.user.id
             self.refresh_token = token.response.refresh_token
-        except:
-            raise PixivError('Get access_token error! Response: %s' % (token), header=r.headers, body=r.text)
+        except Exception as e:
+            print (e)
+            raise PixivError('Get access_token error! Response: %s' % token, header=r.headers, body=r.text)
         print ("ACCESS TOKEN " + self.access_token)
         print ("ACCESS Refresh Token " + self.refresh_token)
         return token
@@ -163,29 +166,29 @@ class AuthPixivApi(object):
     # sort: [date_desc, date_asc]
     # duration: [within_last_day, within_last_week, within_last_mont
     def search_illust(self, word, search_target='partial_match_for_tags', sort='date_desc', duration=None,
-                      filter='for_ios', offset=None):
+                      illust_filter='for_ios', offset=None):
         url = 'https://app-api.pixiv.net/v1/search/illust'
         params = {
             'word': word,
             'search_target': search_target,
             'sort': sort,
-            'filter': filter,
+            'filter': illust_filter,
         }
-        if (duration):
+        if duration:
             params['duration'] = duration
-        if (offset):
+        if offset:
             params['offset'] = offset
         r = self.auth_requests_call('GET', url, params=params)
         return parse_resp(r)
 
     def search_popular_illust(self, word, search_target='partial_match_for_tags', sort='date_desc', duration=None,
-                              filter='for_ios', offset=None):
+                              illust_filter='for_ios', offset=None):
         url = 'https://app-api.pixiv.net/v1/search/popular-preview/illust'
         params = {
             'word': word,
             'search_target': search_target,
             'sort': sort,
-            'filter': filter,
+            'filter': illust_filter,
         }
         if duration:
             params['duration'] = duration
@@ -195,10 +198,10 @@ class AuthPixivApi(object):
         return parse_resp(r)
 
     # spotlight rename  to  pixivision  category = illust
-    def spotlight(self, category='all', filter='for_ios', offset=None):
+    def spotlight(self, category='all', illust_filter='for_ios', offset=None):
         url = 'https://app-api.pixiv.net/v1/spotlight/articles'
         params = {
-            'filter': filter,
+            'filter': illust_filter,
         }
         if category:
             params['category'] = category
@@ -208,13 +211,13 @@ class AuthPixivApi(object):
         return parse_resp(r)
 
     # 相关作品列表 filter : for_ios or for_android   not login
-    def illust_related(self, illust_id, filter=None, seed_illust_ids=None):
+    def illust_related(self, illust_id, illust_filter=None, seed_illust_ids=None):
         url = 'https://app-api.pixiv.net/v2/illust/related'
         params = {
             'illust_id': illust_id,
         }
-        if filter:
-            params['filter'] = filter
+        if illust_filter:
+            params['filter'] = illust_filter
         if type(seed_illust_ids) == str:
             params['seed_illust_ids[]'] = [seed_illust_ids]
         if type(seed_illust_ids) == list:
@@ -223,14 +226,14 @@ class AuthPixivApi(object):
         return parse_resp(r)
 
     # 推荐作品
-    def illust_recommended(self, content_type='illust', include_ranking_label=True, filter='for_ios',
+    def illust_recommended(self, content_type='illust', include_ranking_label=True, illust_filter='for_ios',
                            max_bookmark_id_for_recommend=None, min_bookmark_id_for_recent_illust=None,
                            offset=None, include_ranking_illusts=None):
         url = 'https://app-api.pixiv.net/v1/illust/recommended'
         params = {
             'content_type': content_type,
             'include_ranking_label': format_bool(include_ranking_label),
-            'filter': filter,
+            'filter': illust_filter,
         }
         if max_bookmark_id_for_recommend:
             params['max_bookmark_id_for_recommend'] = max_bookmark_id_for_recommend
@@ -239,7 +242,7 @@ class AuthPixivApi(object):
         if offset:
             params['offset'] = offset
         if include_ranking_illusts:
-            params['include_ranking_illusts'] = self.format_bool(include_ranking_illusts)
+            params['include_ranking_illusts'] = CommonUtils.format_bool(include_ranking_illusts)
 
         r = self.auth_requests_call('GET', url, params=params)
         return parse_resp(r)
@@ -271,7 +274,7 @@ class AuthPixivApi(object):
         r = self.auth_requests_call('GET', url, params=params)
         return parse_resp(r)
 
-    ######### pixiv public api ##############
+    # pixiv public api
 
     # 排行榜/过去排行榜
     # ranking_type: [all, illust, manga, ugoira]
@@ -281,8 +284,10 @@ class AuthPixivApi(object):
     # page: [1-n]
     # date: '2015-04-01' (仅过去排行榜)
     def ranking(self, ranking_type='all', mode='daily', page=1, per_page=10, date=None,
-                image_sizes=['px_128x128', 'px_480mw', 'large'],
+                image_sizes=None,
                 include_stats=True, include_sanity_level=True):
+        if image_sizes is None:
+            image_sizes = ['px_128x128', 'px_480mw', 'large']
         url = 'https://public-api.secure.pixiv.net/v1/ranking/%s.json' % ranking_type
         params = {
             'mode': mode,
@@ -301,9 +306,13 @@ class AuthPixivApi(object):
     # search
     def search_works(self, query, page=1, per_page=10, mode='text',
                      period='all', order='desc', sort='date',
-                     types=['illustration', 'manga', 'ugoira'],
-                     image_sizes=['large'],  # 'px_128x128', 'px_480mw',
+                     types=None,
+                     image_sizes=None,
                      include_stats=True, include_sanity_level=True):
+        if image_sizes is None:
+            image_sizes = ['large']
+        if types is None:
+            types = ['illustration', 'manga', 'ugoira']
         url = 'https://public-api.secure.pixiv.net/v1/search/works.json'
         params = {
             'q': query,

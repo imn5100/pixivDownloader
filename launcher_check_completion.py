@@ -12,7 +12,7 @@ try:
     from PIL import Image
 
     can_verify = True
-except:
+except Exception:
     can_verify = False
 
 

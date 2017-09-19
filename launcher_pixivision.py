@@ -52,7 +52,7 @@ if __name__ == '__main__':
     PixivApi.check_api()
     try:
         from twisted.python.threadpool import ThreadPool
-    except:
+    except Exception:
         run_by_list()
     else:
         run_by_pool()
