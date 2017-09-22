@@ -218,11 +218,19 @@ def test_proxy_by_requesocks():
 def test_proxy_by_urllib2():
     import urllib2
     import socks
+    import urllib
     from sockshandler import SocksiPyHandler
+    headers = {'Host': 'app-api.pixiv.net', 'User-Agent': 'PixivIOSApp/6.0.9', 'Accept-Language': 'zh',
+               'Authorization': 'Bearer %s' % 'uMzgoLH6TysDAvu8594IvustucSHz0hwThlMYG3uHY0', 'Accept-Encoding': 'gzip'}
+    httpHandler = urllib2.HTTPHandler(debuglevel=1)
+    httpsHandler = urllib2.HTTPSHandler(debuglevel=1)
 
-    opener = urllib2.build_opener(SocksiPyHandler(socks.SOCKS5, "127.0.0.1", 1080))
-    req = urllib2.Request("https://app-api.pixiv.net/v1/illust/detail", headers=PIXIV_PAGE_HEADERS)
-    x = opener.open(req)
+    opener = urllib2.build_opener(httpHandler, httpsHandler,SocksiPyHandler(socks.SOCKS5, "127.0.0.1", 1080))
+    urllib2.install_opener(opener)
+
+    req = urllib2.Request("https://app-api.pixiv.net/v1/illust/detail?illust_id=55418", data=urllib.urlencode({'illust_id': 55418}),
+                          headers=headers)
+    x = urllib2.urlopen(req)
     print (x.read())
 
 
@@ -237,4 +245,4 @@ def unzip(data):
 
 
 if __name__ == '__main__':
-    test_proxy_by_requesocks()
+    test_proxy_by_urllib2()
