@@ -196,7 +196,45 @@ def testPage_search():
     print (len(urls))
 
 
+proxy = {
+    'ip': '127.0.0.1',
+    'port': '1080'
+}
+proxies = {
+    "https": r"socks5://%s:%s" % (proxy['ip'], proxy['port']),
+    "http": r"socks5://%s:%s" % (proxy['ip'], proxy['port'])
+}
+
+
+def test_proxy_by_requesocks():
+    import requesocks as requests
+
+    session = requests.session()
+    session.proxies = proxies
+    m = session.get('https://pixiv.net', headers=PIXIV_PAGE_HEADERS)
+    print (m.content)
+
+
+def test_proxy_by_urllib2():
+    import urllib2
+    import socks
+    from sockshandler import SocksiPyHandler
+
+    opener = urllib2.build_opener(SocksiPyHandler(socks.SOCKS5, "127.0.0.1", 1080))
+    req = urllib2.Request("https://app-api.pixiv.net/v1/illust/detail", headers=PIXIV_PAGE_HEADERS)
+    x = opener.open(req)
+    print (x.read())
+
+
+def unzip(data):
+    import gzip
+    import StringIO
+    data = StringIO.StringIO(data)
+    gz = gzip.GzipFile(fileobj=data)
+    data = gz.read()
+    gz.close()
+    return data
+
+
 if __name__ == '__main__':
-    api = AuthPixivApi("", "", refresh_token='-yP_pnP2Q8')
-    # print (api.ranking())
-    print (api.app_ranking(mode='week_r18'))
+    test_proxy_by_requesocks()

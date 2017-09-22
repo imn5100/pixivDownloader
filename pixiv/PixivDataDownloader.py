@@ -105,7 +105,7 @@ class PixivDataHandler(object):
                 return True
             else:
                 return False
-        except:
+        except Exception:
             return False
 
     def search(self, word, page=1, search_type='illust', download_threshold=DOWNLOAD_THRESHOLD):
