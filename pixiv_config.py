@@ -109,3 +109,9 @@ SEARCH_SAVE_PATH = config.get("SEARCH_SAVE_PATH", default_value="/Users/imn5100/
 SEARCH_KEYWORD = config.get("SEARCH_KEYWORD", default_value="夕立")
 # 是否检查文件下载完整 需要安装 pillow
 CHECK_IMAGE_VERIFY = config.getboolean("CHECK_IMAGE_VERIFY", default_value=True)
+#######################################
+# 代理设置 proxy
+PROXY_HOST = '127.0.0.1'
+PROXY_PORT = 1080
+# 代理类型 HTTP = 3    SOCKS5 = 2    SOCKS4 = 1
+PROXY_TYPE = 2

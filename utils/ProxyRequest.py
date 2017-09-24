@@ -19,6 +19,8 @@ class ProxyRequests(object):
         SOCKS5 = 2
         HTTP = 3
         """
+        if proxy_type not in (socks.SOCKS5, socks.SOCKS4, socks.HTTP):
+            raise RuntimeError("Not support proxy type")
         proxy = urllib2.ProxyHandler({'http': host + ":" + port}) if proxy_type == 1 \
             else SocksiPyHandler(proxy_type, host, port)
         opener = urllib2.build_opener(urllib2.HTTPHandler(debuglevel=1), urllib2.HTTPSHandler(debuglevel=1), proxy)
