@@ -32,7 +32,7 @@ class IllustrationDownloader(object):
                 if detail.page_count == 1:
                     try:
                         url = detail.meta_single_page.original_image_url
-                    except:
+                    except Exception:
                         url = detail.image_urls.large
                     path = self.download(illust_id, path, url)
                 # 多图插画
@@ -56,7 +56,7 @@ class IllustrationDownloader(object):
                                 save_path = path + "/p_%s_%d%s" % (illust_id, index, extension)
                                 print(save_path)
                                 self.api.download(url, path=save_path)
-                            except:
+                            except Exception:
                                 continue
                         path = path + "/"
                     else:
@@ -110,7 +110,7 @@ class IllustrationDownloader(object):
                                     save_path = path + "/p_%s_%d%s" % (illust_id, index, extension)
                                     print(save_path)
                                     self.api.download(url, path=save_path)
-                                except:
+                                except Exception:
                                     continue
                             path = path + "/"
                         else:
@@ -169,7 +169,7 @@ class IllustrationDownloader(object):
                                 save_path = path + "/p_%s_%d%s" % (illust_id, index, extension)
                                 print("Downloading:" + save_path)
                                 self.api.download(url, path=save_path)
-                            except:
+                            except Exception:
                                 continue
                         path = path + "/"
                     else:
