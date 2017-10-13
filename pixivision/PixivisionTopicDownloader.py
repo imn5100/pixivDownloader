@@ -66,18 +66,18 @@ class ImageDownload(object):
             try:
                 download_url = detail.illust.image_urls.large
                 flag = 1
-            except:
+            except Exception:
                 download_url = illu.image
                 flag = 2
         else:
             try:
                 download_url = detail.illust.meta_single_page.original_image_url
-            except:
+            except Exception:
                 try:
                     # 获取原图失败 获取大图
                     download_url = detail.illust.image_urls.large
                     flag = 1
-                except:
+                except Exception:
                     # 获取大图失败，直接使用展示图
                     download_url = illu.image
                     flag = 2
@@ -117,7 +117,8 @@ class IlluDownloadThread(threading.Thread):
                                      self.callback_params['url'] +
                                      "\nAll tasks are complete!\n\n")
         except Exception as e:
-            print(e)
+            print ("Download topics fail")
+            print (e)
             if self.fail:
                 self.fail()
 
