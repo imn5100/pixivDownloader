@@ -42,7 +42,7 @@ UPDATE:<br>
 2017.08.03  图形界面下载工具需要登录或配置Token和Cookie才能启动下载界面<br>
 2017.08.31  优化图形界面下载工具的搜索下载，同时使用网页搜索爬虫和API搜索搜集下载数据<br>
 2017.09.02  图形界面下载工具新增排行榜下载<br>
-2017.09.22  Pixiv因DNS污染，无法直接访问。需要修改DNS或hosts文件才能正常使用。[Pixiv DNS污染解决方案](https://shawblog.me/blog/YTgxYzBiYjg5OGZiYTgzNTI1M2EzMTc2ZTY1Zjg0Zjg=.html "")<br>
+2017.09.22  Pixiv因DNS污染，无法直接访问。需要修改DNS或hosts文件才能正常使用。<br>
 
 
 PS①:推荐直接使用图形界面下载工具下载<br>
