@@ -16,7 +16,7 @@ Pixiv And Pixivision Illustrations Downloader.<br>
 ~~~
 python launcher_gui.py
 ~~~
-![gui](readmeFile/gui.png)
+![GUI](readmeFile/gui.png)
 运行Pixivision全站插画爬虫:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;全站爬取完毕后，如果Pixivsion有更新，可以修改配置文件中的PAGE_NUM为更新的页数，比如Pixivsion有2页更新未爬取，修改PAGE_NUM=2,全站插画爬虫则会爬取前2页的所有特辑
 ~~~
