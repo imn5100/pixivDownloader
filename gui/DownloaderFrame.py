@@ -133,7 +133,7 @@ class PixivDownloadFrame(Frame):
         page_entry = Entry(self.search_frame, width=57, textvariable=self.page_number)
         page_entry.pack()
 
-        p_limit_label = Label(self.search_frame, text="Single works P limit(0 does not limit):", width=30, height=1)
+        p_limit_label = Label(self.search_frame, text="Single works P limit(0 means no Limit):", width=30, height=1)
         p_limit_label.pack()
 
         p_limit_entry = Entry(self.search_frame, width=57, textvariable=self.p_limit)

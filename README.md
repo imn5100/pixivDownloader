@@ -16,6 +16,7 @@ Pixiv And Pixivision Illustrations Downloader.<br>
 ~~~
 python launcher_gui.py
 ~~~
+![gui](readmeFile/gui.png)
 运行Pixivision全站插画爬虫:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;全站爬取完毕后，如果Pixivsion有更新，可以修改配置文件中的PAGE_NUM为更新的页数，比如Pixivsion有2页更新未爬取，修改PAGE_NUM=2,全站插画爬虫则会爬取前2页的所有特辑
 ~~~
@@ -42,7 +43,7 @@ UPDATE:<br>
 2017.08.03  图形界面下载工具需要登录或配置Token和Cookie才能启动下载界面<br>
 2017.08.31  优化图形界面下载工具的搜索下载，同时使用网页搜索爬虫和API搜索搜集下载数据<br>
 2017.09.02  图形界面下载工具新增排行榜下载<br>
-2017.09.22  Pixiv因DNS污染，无法直接访问。需要修改DNS或hosts文件才能正常使用。hosts文件修改:复制[pixiv_host](pixiv_host.txt)内容到hosts中<br>
+2017.09.22  Pixiv因DNS污染，部分地区无法直接访问。需要修改DNS或hosts文件才能正常使用。hosts文件修改:复制[pixiv_host](readmeFile/pixiv_host.txt)内容到hosts中<br>
 
 
 PS①:推荐直接使用图形界面下载工具下载<br>
