@@ -5,8 +5,19 @@ from __future__ import unicode_literals
 import os
 import re
 
+from pixiv.IllustrationDownloader import IllustrationDownloader
 from pixiv_config import CHECK_IMAGE_VERIFY, IMAGE_SAVE_BASEPATH
+from pixivapi.AuthPixivApi import AuthPixivApi
+from pixivapi.PixivUtils import PixivError
 from pixivision.PixivisionTopicDownloader import IlluDownloadThread
+from pixiv_config import USERNAME, PASSWORD
+
+auth_api = AuthPixivApi.get_authApi_by_token()
+if auth_api is None:
+    auth_api = AuthPixivApi(USERNAME, PASSWORD)
+    if auth_api and not auth_api.check_login_success():
+        raise PixivError('[ERROR] auth() failed! Please check username and password')
+downloader = IllustrationDownloader(auth_api)
 
 try:
     from PIL import Image
@@ -95,7 +106,7 @@ def completion(base_path, content):
     if href_str:
         href = re.search(r"Href = [a-zA-z]+://[^\s]*", content).group().split(" ")[-1]
         print("start:" + href)
-        IlluDownloadThread(href.strip(), path=base_path).start()
+        IlluDownloadThread(href.strip(), path=base_path, downloader=downloader).start()
     else:
         print(base_path + " not find topic url")
 

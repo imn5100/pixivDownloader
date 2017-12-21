@@ -65,7 +65,7 @@ ILLUST_RELATED = 'https://app-api.pixiv.net/v2/illust/related'
 OVERRIDE_IMAGE = config.getboolean("OVERRIDE_IMAGE", default_value=False)
 # 存储插画的基本目录
 IMAGE_SAVE_BASEPATH = config.get("IMAGE_SAVE_BASEPATH",
-                                 default_value=' /Users/imn5100/Downloads/pixiv/z_pixivision_download')
+                                 default_value=' /Users/imn5100/Downloads/pixiv/')
 # 文件命名是否使用原文件名（即插画作者的命名）
 # 因为插画原名经常出现颜文字和各种奇怪的符号，这里不使用图片标题进行命名，用pixiv 的id进行命名会很大地减少文件错误，提高下载正确率，
 # 缺点是 会丢失原文件名字。

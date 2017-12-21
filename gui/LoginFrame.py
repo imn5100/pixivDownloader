@@ -5,6 +5,7 @@ from tkMessageBox import showerror
 from gui.DownloaderFrame import PixivDownloadFrame, LogRedirection
 from pixiv import PixivDataDownloader
 from pixiv_config import USERNAME, PASSWORD, ACCESS_TOKEN, PIXIV_COOKIES, REFRESH_TOKEN
+from pixivapi import PixivUtils
 from pixivapi.AuthPixivApi import AuthPixivApi
 from utils.CommonUtils import is_empty
 
@@ -71,30 +72,9 @@ class LoginFrame(Frame):
 
     def check_config(self):
         success = False
-        if ACCESS_TOKEN:
-            try:
-                self.api = AuthPixivApi(None, None, ACCESS_TOKEN)
-            except Exception as e:
-                print (e)
-            if self.api and self.api.check_login_success():
-                success = True
-                print ("Access Token is correct!")
-            else:
-                self.api = None
-                print ("Access Token error or expired!")
-
-        if REFRESH_TOKEN and not success:
-            try:
-                self.api = AuthPixivApi(None, None, refresh_token=REFRESH_TOKEN)
-            except Exception as e:
-                print (e)
-            if self.api and self.api.check_login_success():
-                success = True
-                print ("Refresh Token is correct!")
-            else:
-                self.api = None
-                print ("Access Token config error or expired!")
-
+        self.api = AuthPixivApi.get_authApi_by_token()
+        if self.api:
+            success = True
         if len(PIXIV_COOKIES) > 3:
             try:
                 self.search_handler = PixivDataDownloader.PixivDataHandler(cookies=PIXIV_COOKIES)

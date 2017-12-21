@@ -339,3 +339,31 @@ class AuthPixivApi(object):
         }
         r = self.auth_requests_call('GET', url, params=params)
         return parse_resp(r)
+
+    @staticmethod
+    def get_authApi_by_token():
+        api = None
+        success = False
+        if pixiv_config.ACCESS_TOKEN:
+            try:
+                api = AuthPixivApi(None, None, pixiv_config.ACCESS_TOKEN)
+            except Exception as e:
+                print (e)
+            if api and api.check_login_success():
+                success = True
+                print ("Access Token is correct!")
+            else:
+                api = None
+                print ("Access Token error or expired!")
+
+        if pixiv_config.REFRESH_TOKEN and not success:
+            try:
+                api = AuthPixivApi(None, None, refresh_token=pixiv_config.REFRESH_TOKEN)
+            except Exception as e:
+                print (e)
+            if api and api.check_login_success():
+                print ("Refresh Token is correct!")
+            else:
+                api = None
+                print ("Access Token config error or expired!")
+        return api
