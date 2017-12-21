@@ -123,7 +123,7 @@ class PixivDataHandler(object):
         if not pop_result:
             pop_result = []
         if search_result:
-            pop_result.append(search_result)
+            pop_result.extend(search_result)
         # 过滤数据不完整和收藏数不超过阈值的插画信息
         if len(pop_result) > 0:
             pop_result = filter(
@@ -131,5 +131,6 @@ class PixivDataHandler(object):
                     data.mark_count) >= download_threshold),
                 pop_result)
             for result in pop_result:
-                result['id'] = CommonUtils.get_url_param(result['url'], "illust_id")
+                if not result.has_key('id'):
+                    result['id'] = CommonUtils.get_url_param(result['url'], "illust_id")
         return pop_result

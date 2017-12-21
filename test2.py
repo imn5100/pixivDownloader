@@ -2,7 +2,7 @@
 import re
 import threading
 
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+import requests
 
 from pixiv import PixivDataDownloader
 from pixiv_config import PIXIV_COOKIES
@@ -92,13 +92,14 @@ def test_atomic_int2():
     print (global_num == 100000)
 
 
+def test_proxy():
+    proxies = {'http': 'socks5://127.0.0.1:1080', 'https': 'socks5://127.0.0.1:1080'}
+    session = requests.session()
+    session.proxies = proxies
+    r = session.get('https://www.google.com/', proxies=proxies)
+    print (r.text)
+
+
 if __name__ == '__main__':
-    # testImage("/Users/imn5100/Downloads/p_51695014.jpg")
-    # testImage("/Users/imn5100/Downloads/p_63414362_4.png")
-    # testWalk('/Users/imn5100/Downloads/pixiv/search')
-    # reader = open('/Users/imn5100/Downloads/pixiv/z_pixivision_download/一生追随！“超凡的反派”特辑/p_10208070.jpg', 'r')
-    # print reader.read()
-    # im = Image.open('/Users/imn5100/Downloads/pixiv/z_pixivision_download/一生追随！“超凡的反派”特辑/p_10208070.jpg')
-    # print im
-    # test_atomic_int()
-    test_atomic_int2()
+    # test_atomic_int2()
+    test_proxy()

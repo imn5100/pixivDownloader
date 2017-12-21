@@ -104,8 +104,10 @@ def download_thread_test():
 
 def test_html_parse_byfile_for_search():
     html = open("test.html").read()
-    print(PixivHtmlParser.parse_popular_introduction(html))
-    print(PixivHtmlParser.parse_search_result(html))
+    search_result = PixivHtmlParser.parse_search_result(html)
+    pop_result = PixivHtmlParser.parse_popular_introduction(html)
+    print(search_result)
+    print(pop_result)
 
 
 def testbs4():
@@ -244,4 +246,4 @@ def unzip(data):
 
 
 if __name__ == '__main__':
-    test_proxy_by_urllib2()
+    test_html_parse_byfile_for_search()
