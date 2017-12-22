@@ -108,7 +108,7 @@ def download_all_by_id(illust_id, path, limit_p=True):
                             save_path = path + "/p_%s_%d%s" % (illust_id, index, extension)
                             print("Downloading:" + save_path)
                             PixivApi.download(url, path=save_path)
-                        except:
+                        except Exception:
                             continue
                     path = path + "/"
                 else:

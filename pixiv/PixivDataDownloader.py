@@ -26,6 +26,7 @@ def search_nologin(word, page=1, search_type='illust', download_threshold=DOWNLO
         raise PixivError('search word can not be null')
     print(url)
     response = requests.get(url, timeout=10, headers=PIXIV_PAGE_HEADERS)
+    html = None
     if response and response.ok:
         response.encoding = 'utf-8'
         html = response.content

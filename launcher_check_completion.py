@@ -5,19 +5,8 @@ from __future__ import unicode_literals
 import os
 import re
 
-from pixiv.IllustrationDownloader import IllustrationDownloader
 from pixiv_config import CHECK_IMAGE_VERIFY, IMAGE_SAVE_BASEPATH
-from pixivapi.AuthPixivApi import AuthPixivApi
-from pixivapi.PixivUtils import PixivError
 from pixivision.PixivisionTopicDownloader import IlluDownloadThread
-from pixiv_config import USERNAME, PASSWORD
-
-auth_api = AuthPixivApi.get_authApi_by_token()
-if auth_api is None:
-    auth_api = AuthPixivApi(USERNAME, PASSWORD)
-    if auth_api and not auth_api.check_login_success():
-        raise PixivError('[ERROR] auth() failed! Please check username and password')
-downloader = IllustrationDownloader(auth_api)
 
 try:
     from PIL import Image
@@ -106,12 +95,10 @@ def completion(base_path, content):
     if href_str:
         href = re.search(r"Href = [a-zA-z]+://[^\s]*", content).group().split(" ")[-1]
         print("start:" + href)
-        IlluDownloadThread(href.strip(), path=base_path, downloader=downloader).start()
+        IlluDownloadThread(href.strip(), path=base_path, downloader=None).start()
     else:
         print(base_path + " not find topic url")
 
 
 if __name__ == '__main__':
-    # 运行补全检查 前请保证下载时和检查时的命名规范相同，否则会下载两次同样的插画 不同的命名
     check_image(IMAGE_SAVE_BASEPATH)
-    # 有几个 精选热门特辑 的详情页没有具体插画内容 而是跳转到另外的特辑页，所以忽视 不爬取。

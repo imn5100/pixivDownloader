@@ -4,8 +4,7 @@ from tkMessageBox import showerror
 
 from gui.DownloaderFrame import PixivDownloadFrame, LogRedirection
 from pixiv import PixivDataDownloader
-from pixiv_config import USERNAME, PASSWORD, ACCESS_TOKEN, PIXIV_COOKIES, REFRESH_TOKEN
-from pixivapi import PixivUtils
+from pixiv_config import USERNAME, PASSWORD, PIXIV_COOKIES
 from pixivapi.AuthPixivApi import AuthPixivApi
 from utils.CommonUtils import is_empty
 
