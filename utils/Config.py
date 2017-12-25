@@ -38,7 +38,7 @@ class Config:
         if default_value is not None:
             try:
                 return self.cf.getint(section, key)
-            except:
+            except Exception:
                 return default_value
         else:
             return self.cf.get(section, key)

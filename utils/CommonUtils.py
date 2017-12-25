@@ -36,7 +36,7 @@ def validate_date_str(date_str):
 def set_int(int_num, default_value=0):
     try:
         return int(int_num)
-    except:
+    except Exception:
         return default_value
 
 
