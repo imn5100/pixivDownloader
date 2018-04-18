@@ -3,7 +3,7 @@ from Queue import Queue
 from threading import Thread
 
 from gui.DownloadTask import TASK_TYPE_ID, TASK_TYPE_SEARCH_API, TASK_TYPE_URL, TASK_TYPE_RANKING, TASK_TYPE_SEARCH, \
-    DOWNLOAD_MODE_ID, DOWNLOAD_MODE_DETAIL, DOWNLOAD_MODE_URL
+    DOWNLOAD_MODE_ID, DOWNLOAD_MODE_DETAIL, DOWNLOAD_MODE_URL, TASK_TYPE_RELATED
 from pixiv.IllustrationDownloader import PAGE_LIMIT_CONTINUE
 from pixivapi.PixivUtils import PixivError
 from utils import CommonUtils
@@ -80,4 +80,6 @@ def afterEndCallback(task, callback):
     if task.task_type == TASK_TYPE_SEARCH or task.task_type == TASK_TYPE_SEARCH_API:
         callback("***%s***\n%s\n\n" % ("Search:" + task.title, "The download task is complete",))
     if task.task_type == TASK_TYPE_RANKING:
+        callback("***%s***\n%s\n\n" % (task.title, "The download task is complete",))
+    if task.task_type == TASK_TYPE_RELATED:
         callback("***%s***\n%s\n\n" % (task.title, "The download task is complete",))

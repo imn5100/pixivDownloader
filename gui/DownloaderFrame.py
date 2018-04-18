@@ -5,6 +5,7 @@ from Tkinter import *
 from gui.WorkQueue import PixivQueue
 from gui.frame.DownloadFrame import DownloadFrame
 from gui.frame.RankingFrame import RankingFrame
+from gui.frame.RelatedFrame import RelatedFrame
 from gui.frame.SearchFrame import SearchFrame
 from pixiv.IllustrationDownloader import IllustrationDownloader
 from pixivapi.PixivUtils import PixivError
@@ -24,7 +25,9 @@ class PixivDownloadFrame(Frame):
         self.root = root
         self.frames = [DownloadFrame(self, 'By Url or Id', self.queue, self.api, self.task_text),
                        SearchFrame(self, 'By Search', self.queue, self.api, self.search_handler),
-                       RankingFrame(self, 'By Ranking', self.queue, self.api)]
+                       RankingFrame(self, 'By Ranking', self.queue, self.api),
+                       RelatedFrame(self, 'By Related', self.queue, self.api)
+                       ]
         self.switch_menu = None
         self.init_ui()
 

@@ -367,3 +367,6 @@ class AuthPixivApi(object):
                 api = None
                 print ("Access Token config error or expired!")
         return api
+
+    def get(self, url):
+        return parse_resp(self.auth_requests_call('GET', url))
