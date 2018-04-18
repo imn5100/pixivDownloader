@@ -5,7 +5,7 @@ from tkMessageBox import showwarning, showerror, showinfo
 
 import os
 
-from gui.DownloadTask import TASK_TYPE_SEARCH_API, TASK_TYPE_SEARCH, Task
+from gui.DownloadTask import TASK_TYPE_SEARCH_API, TASK_TYPE_SEARCH, Task, DOWNLOAD_MODE_ID, DOWNLOAD_MODE_DETAIL
 from gui.frame.PixivFrame import PixivFrame
 from pixiv_config import DOWNLOAD_THRESHOLD, IMAGE_SAVE_BASEPATH
 from pixivapi.PixivUtils import PixivError
@@ -97,8 +97,9 @@ class SearchFrame(PixivFrame):
                 if illu.id in id_set:
                     continue
                 else:
-                    task = Task(TASK_TYPE_SEARCH, title=keywords, path=path,
-                                p_limit=CommonUtils.set_int(self.p_limit.get(), 0), illu=illu)
+                    task = Task(TASK_TYPE_SEARCH, DOWNLOAD_MODE_ID, title=keywords, path=path,
+                                p_limit=CommonUtils.set_int(self.p_limit.get(), 0), id=illu.id, illu=illu,
+                                get_from='search_page')
                     id_set.add(illu.id)
                     tasks.append(task)
         print ('Search ' + keywords + ' from web page get:' + str(len(tasks)))
@@ -108,8 +109,9 @@ class SearchFrame(PixivFrame):
         else:
             print ('Search ' + keywords + ' from pixiv Api get:' + str(len(api_search_data)))
             for illu in api_search_data:
-                task = Task(TASK_TYPE_SEARCH_API, path=path, p_limit=CommonUtils.set_int(self.p_limit.get(), 0),
-                            illu=illu, title=keywords)
+                task = Task(TASK_TYPE_SEARCH_API, DOWNLOAD_MODE_DETAIL, path=path,
+                            p_limit=CommonUtils.set_int(self.p_limit.get(), 0),
+                            illu=illu, title=keywords, get_from='search_api')
                 tasks.append(task)
         all_count = len(tasks)
         if all_count > 0:

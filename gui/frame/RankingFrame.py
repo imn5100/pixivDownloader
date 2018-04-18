@@ -8,7 +8,7 @@ from tkMessageBox import showwarning, showerror, showinfo
 
 from tkinter import ttk
 
-from gui.DownloadTask import Task, TASK_TYPE_RANKING
+from gui.DownloadTask import Task, TASK_TYPE_RANKING, DOWNLOAD_MODE_DETAIL
 from gui.frame.PixivFrame import PixivFrame
 from pixiv_config import IMAGE_SAVE_BASEPATH
 from utils import CommonUtils, AtomicInteger
@@ -107,8 +107,9 @@ class RankingFrame(PixivFrame):
             if len(ranking_data) > 0:
                 print ('Get from ranking(page=' + str(page) + '):' + str(len(ranking_data)))
                 for illu in ranking_data:
-                    task = Task(TASK_TYPE_RANKING, path=path, p_limit=CommonUtils.set_int(self.p_limit.get(), 0),
-                                illu=illu, title="ranking_" + mode + "_" + date)
+                    task = Task(TASK_TYPE_RANKING, DOWNLOAD_MODE_DETAIL, path=path,
+                                p_limit=CommonUtils.set_int(self.p_limit.get(), 0),
+                                illu=illu, title="ranking_" + mode + "_" + date, get_from='ranking')
                     tasks.append(task)
                     offset = offset + 1
             else:

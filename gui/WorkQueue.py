@@ -2,7 +2,8 @@
 from Queue import Queue
 from threading import Thread
 
-from gui.DownloadTask import TASK_TYPE_ID, TASK_TYPE_SEARCH_API, TASK_TYPE_URL, TASK_TYPE_RANKING, TASK_TYPE_SEARCH
+from gui.DownloadTask import TASK_TYPE_ID, TASK_TYPE_SEARCH_API, TASK_TYPE_URL, TASK_TYPE_RANKING, TASK_TYPE_SEARCH, \
+    DOWNLOAD_MODE_ID, DOWNLOAD_MODE_DETAIL, DOWNLOAD_MODE_URL
 from pixiv.IllustrationDownloader import PAGE_LIMIT_CONTINUE
 from pixivapi.PixivUtils import PixivError
 from utils import CommonUtils
@@ -39,40 +40,30 @@ class PixivQueue(object):
                 if not task:
                     continue
                 illu_file = None
-                if task.task_type == TASK_TYPE_ID:
-                    illu_file = self.downloader.download_all_by_id(task.id, task.path)
-                    if callback:
-                        msg = CommonUtils.build_callback_msg(illu_file, id=str(task.id))
-                        callback(msg)
-                elif task.task_type == TASK_TYPE_URL:
+                # download
+                if task.download_mode == DOWNLOAD_MODE_ID:
+                    illu_file = self.downloader.download_all_by_id(task.id, task.path,
+                                                                   p_limit=task.p_limit if task.has_key(
+                                                                       'p_limit') else 0)
+                elif task.download_mode == DOWNLOAD_MODE_URL:
                     illu_file = self.downloader.download_all_by_url(task.url, task.path)
-                    if callback:
-                        msg = CommonUtils.build_callback_msg(illu_file, url=str(task.url))
-                        callback(msg)
-                elif task.task_type == TASK_TYPE_SEARCH:
-                    illu_file = self.downloader.download_all_by_id(task.illu.id, task.path, p_limit=task.p_limit)
-                    if callback:
-                        if illu_file:
-                            if illu_file != PAGE_LIMIT_CONTINUE:
-                                callback("%s:%s\nFile:%s\n\n" % ("search get", task.illu.get('id'), illu_file))
-                        else:
-                            callback("%s:%s\nFile:%s\n\n" % ("search get", task.illu.get('url'), 'Download Fail'))
-                elif task.task_type == TASK_TYPE_SEARCH_API:
+                elif task.download_mode == DOWNLOAD_MODE_DETAIL:
                     illu_file = self.downloader.download_by_detail(task.illu, task.path, p_limit=task.p_limit)
-                    if callback:
-                        if illu_file:
-                            if illu_file != PAGE_LIMIT_CONTINUE:
-                                callback("%s:%s\nFile:%s\n\n" % ("search get", task.illu.get('id'), illu_file))
-                        else:
-                            callback("%s:%s\nFile:%s\n\n" % ("search get", task.illu.get('id'), 'Download Fail'))
-                elif task.task_type == TASK_TYPE_RANKING:
-                    illu_file = self.downloader.download_by_detail(task.illu, task.path, p_limit=task.p_limit)
-                    if callback:
-                        if illu_file:
-                            if illu_file != PAGE_LIMIT_CONTINUE:
-                                callback("%s:%s\nFile:%s\n\n" % ("ranking get", task.illu.get('id'), illu_file))
-                        else:
-                            callback("%s:%s\nFile:%s\n\n" % ("ranking get", task.illu.get('id'), 'Download Fail'))
+                # callback
+                if task.task_type == TASK_TYPE_ID and callback:
+                    msg = CommonUtils.build_callback_msg(illu_file, id=str(task.id))
+                    callback(msg)
+                elif task.task_type == TASK_TYPE_URL and callback:
+                    msg = CommonUtils.build_callback_msg(illu_file, url=str(task.url))
+                    callback(msg)
+                elif callback:
+                    if illu_file:
+                        if illu_file != PAGE_LIMIT_CONTINUE:
+                            callback(
+                                "%s:%s\nFile:%s\n\n" % (task.get_from + " get", task.illu.get('id'), illu_file))
+                    else:
+                        callback(
+                            "%s:%s\nFile:%s\n\n" % (task.get_from + " get", task.illu.get('id'), 'Download Fail'))
             except Exception as e:
                 print ("error", e)
             finally:

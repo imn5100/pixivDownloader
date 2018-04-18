@@ -246,4 +246,9 @@ def unzip(data):
 
 
 if __name__ == '__main__':
-    test_html_parse_byfile_for_search()
+    api = AuthPixivApi(None, None, access_token='')
+    result = api.illust_related(67874620)
+    next_url = result.next_url
+    datas = result.illusts
+    print(next_url)
+    print(datas)

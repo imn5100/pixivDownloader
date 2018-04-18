@@ -4,7 +4,7 @@ from tkMessageBox import showwarning, showerror, showinfo
 
 import os
 
-from gui.DownloadTask import TASK_TYPE_ID, Task, TASK_TYPE_URL
+from gui.DownloadTask import TASK_TYPE_ID, Task, TASK_TYPE_URL, DOWNLOAD_MODE_URL, DOWNLOAD_MODE_ID
 from gui.frame.PixivFrame import PixivFrame
 from pixiv.IllustrationDownloader import IllustrationDownloader
 from pixiv_config import IMAGE_SAVE_BASEPATH
@@ -71,7 +71,7 @@ class DownloadFrame(PixivFrame):
         elif CommonUtils.set_int(url) != 0:
             showinfo("info", "Downloading id:" + str(CommonUtils.set_int(url)) + " illustration")
             print ("info", "Downloading id:" + str(CommonUtils.set_int(url)) + " illustration")
-            self.queue.add_work(Task(TASK_TYPE_ID, id=CommonUtils.set_int(url), path=path))
+            self.queue.add_work(Task(TASK_TYPE_ID, DOWNLOAD_MODE_ID, id=CommonUtils.set_int(url), path=path))
             return
         elif url.startswith("http"):
             # 无法解析的pixivison站 或非 pixiv站 不支持
@@ -81,7 +81,7 @@ class DownloadFrame(PixivFrame):
                 return
             showinfo("info", "Downloading  url:" + url)
             print ("info", "Downloading  url:" + url)
-            self.queue.add_work(Task(TASK_TYPE_URL, url=url, path=path))
+            self.queue.add_work(Task(TASK_TYPE_URL, DOWNLOAD_MODE_URL, url=url, path=path))
         else:
             showerror("error", "")
 

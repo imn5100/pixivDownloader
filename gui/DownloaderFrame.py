@@ -19,8 +19,8 @@ class PixivDownloadFrame(Frame):
         self.search_handler = search_handler
         self.downloader = IllustrationDownloader(api)
         self.queue = PixivQueue(self.downloader, callback=self.download_callback)
-        self.print_text = None
-        self.task_text = None
+        self.task_text = ScrolledText(self, height=20, width=30, bg='light gray')
+        self.print_text = ScrolledText(self, height=20, width=40, bg='light gray')
         self.root = root
         self.frames = [DownloadFrame(self, 'By Url or Id', self.queue, self.api, self.task_text),
                        SearchFrame(self, 'By Search', self.queue, self.api, self.search_handler),
@@ -40,19 +40,15 @@ class PixivDownloadFrame(Frame):
             self.switch_menu.add_command(label=frame.name, command=frame.switch)
         menubar.add_cascade(label="Download Mode Switch", menu=self.switch_menu)
         # 公共组件
-        text1 = ScrolledText(self, height=20, width=30, bg='light gray')
         # text1.bind("<Key>", lambda e: "break")
-        text1.insert(END, 'Download Completed:\n')
-        self.task_text = text1
-        text2 = ScrolledText(self, height=20, width=40, bg='light gray')
-        text2.tag_configure('info', foreground='#3A98FE')
-        text2.tag_configure('warning', foreground='#ff9900')
-        text2.tag_configure('error', foreground='#FF2D21')
+        self.task_text.insert(END, 'Download Completed:\n')
+        self.print_text.tag_configure('info', foreground='#3A98FE')
+        self.print_text.tag_configure('warning', foreground='#ff9900')
+        self.print_text.tag_configure('error', foreground='#FF2D21')
         quote = "Console Log:\n"
-        text2.insert(END, quote, 'info')
-        self.print_text = text2
-        text1.grid(row=3, column=0, sticky=W)
-        text2.grid(row=3, column=1, sticky=W)
+        self.print_text.insert(END, quote, 'info')
+        self.task_text.grid(row=3, column=0, sticky=W)
+        self.print_text.grid(row=3, column=1, sticky=W)
 
         banner = Label(self, text="Power by imn5100", width=30, height=5)
         banner.grid(row=4, columnspan=2)
