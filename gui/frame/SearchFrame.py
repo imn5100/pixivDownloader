@@ -97,7 +97,7 @@ class SearchFrame(PixivFrame):
                 if illu.id in id_set:
                     continue
                 else:
-                    task = Task(TASK_TYPE_SEARCH, DOWNLOAD_MODE_ID, title=keywords, path=path,
+                    task = Task(TASK_TYPE_SEARCH, DOWNLOAD_MODE_ID, title='search '+keywords, path=path,
                                 p_limit=CommonUtils.set_int(self.p_limit.get(), 0), id=illu.id, illu=illu,
                                 get_from='search_page')
                     id_set.add(illu.id)
@@ -111,7 +111,7 @@ class SearchFrame(PixivFrame):
             for illu in api_search_data:
                 task = Task(TASK_TYPE_SEARCH_API, DOWNLOAD_MODE_DETAIL, path=path,
                             p_limit=CommonUtils.set_int(self.p_limit.get(), 0),
-                            illu=illu, title=keywords, get_from='search_api')
+                            illu=illu, title='search '+keywords, get_from='search_api')
                 tasks.append(task)
         all_count = len(tasks)
         if all_count > 0:

@@ -109,7 +109,7 @@ class RankingFrame(PixivFrame):
                 for illu in ranking_data:
                     task = Task(TASK_TYPE_RANKING, DOWNLOAD_MODE_DETAIL, path=path,
                                 p_limit=CommonUtils.set_int(self.p_limit.get(), 0),
-                                illu=illu, title="ranking_" + mode + "_" + date, get_from='ranking')
+                                illu=illu, title="Ranking_" + mode + "_" + date, get_from='ranking')
                     tasks.append(task)
                     offset = offset + 1
             else:

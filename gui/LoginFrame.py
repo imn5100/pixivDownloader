@@ -2,7 +2,7 @@
 from Tkinter import *
 from tkMessageBox import showerror
 
-from gui.DownloaderFrame import PixivDownloadFrame, LogRedirection
+from gui.DownloaderFrame import PixivDownloadFrame
 from pixiv import PixivDataDownloader
 from pixiv_config import USERNAME, PASSWORD, PIXIV_COOKIES
 from pixivapi.AuthPixivApi import AuthPixivApi
@@ -91,3 +91,31 @@ class LoginFrame(Frame):
                 print ("Cookie error or expired!")
 
         return False
+
+
+class LogRedirection:
+    def __init__(self, text):
+        self.text = text
+        self.__console__ = sys.stdout
+
+    def write(self, output_stream):
+        try:
+            # 如果有必要可以在错误日志打印所有输出
+            # LoggerUtil.error_log(output_stream)
+            if output_stream.startswith('(') and output_stream.endswith(')'):
+                output = eval(output_stream)
+                if output and len(output) == 2:
+                    self.text.insert(END, output[1], output[0])
+                    return
+            if output_stream.startswith('{"error":'):
+                self.text.insert(END, output_stream, 'error')
+                return
+            self.text.insert(END, output_stream, 'info')
+        except Exception:
+            self.text.insert(END, output_stream, 'error')
+
+    def reset(self):
+        sys.stdout = self.__console__
+
+    def set_out(self):
+        sys.stdout = self

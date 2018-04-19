@@ -87,7 +87,7 @@ class RelatedFrame(PixivFrame):
         next_url = result.next_url
         datas = result.illusts
         if len(datas) == 0:
-            print ('warning', 'Get related illus of' + str(id_var) + ' are empty')
+            print ('warning', 'Get related illus of ' + str(id_var) + ' are empty')
             return
         illusts.extend(datas)
         page -= 1
@@ -108,14 +108,14 @@ class RelatedFrame(PixivFrame):
                 if illust.total_bookmarks < fav_num:
                     continue
             task = Task(TASK_TYPE_RELATED, DOWNLOAD_MODE_DETAIL, path=path, p_limit=p_limit, illu=illust,
-                        title="related by id " + str(id_var), get_from='related')
+                        title="Related by id " + str(id_var), get_from='related')
             tasks.append(task)
             id_set.add(illust.id)
         if len(tasks) == 0:
             print ('warning', 'Get related illus of ' + str(id_var) + ' are empty')
             return
         else:
-            print ('Get related illus of' + str(id_var) + ' All:' + str(len(tasks)))
+            print ('Get related illus of ' + str(id_var) + ' All:' + str(len(tasks)))
         all_count = len(tasks)
         current_count = AtomicInteger.AtomicInteger()
         if not os.path.exists(path):
