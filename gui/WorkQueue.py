@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import threading
 from Queue import Queue
 from threading import Thread
 
@@ -17,7 +18,7 @@ class PixivQueue(object):
         self.workers = []
         self.thread_num = thread_num
         for i in range(1, thread_num + 1):
-            self.workers.append(Thread(target=self.worker_run, args=(self.queue, callback)))
+            self.workers.append(Thread(target=self.worker_run, name='Worker' + str(i), args=(self.queue, callback)))
 
     def run(self):
         for worker in self.workers:
@@ -67,7 +68,7 @@ class PixivQueue(object):
                 print ("error", e)
             finally:
                 queue.task_done()
-                print ("Current Task Number:" + str(queue.qsize()))
+                print (threading.currentThread().getName() + ":Current Task Number:" + str(queue.qsize()))
                 if callback and task and task.has_key('all_count') and task.all_count > 0:
                     if illu_file:
                         current_count = task.current_count.getAndInc()

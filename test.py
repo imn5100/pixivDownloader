@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
+import threading
 import time
 from threading import Thread
 
@@ -11,7 +12,7 @@ from pixivapi.PixivApi import PixivApi
 from pixivapi.PixivUtils import parse_dict, PixivError
 from pixivision.PixivisionTopicDownloader import ImageDownload, IlluDownloadThread
 from pixivision.PixivisionHtmlParser import HtmlDownloader
-from utils import CommonUtils
+from utils import CommonUtils, LoggerUtil
 
 
 def test_pixivision():
@@ -245,10 +246,19 @@ def unzip(data):
     return data
 
 
-if __name__ == '__main__':
+def test_relate():
     api = AuthPixivApi(None, None, access_token='')
     result = api.illust_related(67874620)
     next_url = result.next_url
     datas = result.illusts
     print(next_url)
     print(datas)
+
+
+def test_thread():
+    worker = Thread(target=lambda: LoggerUtil.error_log(threading.currentThread().getName()), name='worker' + str(1))
+    worker.start()
+
+
+if __name__ == '__main__':
+    test_thread()
