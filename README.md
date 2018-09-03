@@ -46,16 +46,5 @@ UPDATE:<br>
 2017.09.02  图形界面下载工具新增排行榜下载<br>
 2017.09.22  Pixiv因DNS污染，部分地区无法直接访问。需要修改DNS或hosts文件才能正常使用。hosts文件修改:复制[pixiv_host](readmeFile/pixiv_host.txt)内容到hosts中<br>
 2018.04.18  新增通过插画ID下载关联作品<br>
+2018.09.03  旧hosts文件已失效，修改pixiv_host。新增windows环境下项目启动流程[windows](readmeFile/windows.md)
 
-
-PS①:推荐直接使用图形界面下载工具下载<br>
-
-PS②:关于搜索下载，在没有高级会员账号的情况下，很难搜到高质量的人气作品。<br>
-常见的做法：在关键字后加 1000users入り ，即"1000以上用户收藏"，表示搜索tag中或描述中包含关键字"1000users入り"，1000可替换为其他数值。
-这样搜出来的作品的确能基本保证是人气作品，但只对大类目有效（比如東方project,艦これ 这类搜索）且会遗漏很多优秀作品,小类目的作品则会一幅都搜不出。<br>
-&nbsp;&nbsp;&nbsp;&nbsp;在使用小类目搜索下载时，你可以尝试以下方法下载人气作品：<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1.增加爬取页数。 <br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2.适当调小——下载的插画的最小收藏数的设置。<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3.减小搜索关键字范围。 <br>
-
-PS③:如果出现了在控制台运行输入中文||日文出现字符编码异常情况，请设置控制台运行环境字符编码为UTF-8后重试。Windows系统下推荐直接使用IDE运行,或直接使用图形界面下载工具。
