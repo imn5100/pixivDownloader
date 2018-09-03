@@ -1,26 +1,9 @@
 #pixiv
-#页面有3个ip可随意配置 41,43,44,多配置IP无效,网页访问只取第一条
-#pc主页
-210.129.120.44 www.pixiv.net
-#pc主页 登录页面
-210.129.120.43 accounts.pixiv.net
-#触屏版页面
-210.129.120.41 touch.pixiv.net
-
-#页面静态资源 144-147 可选
-210.140.131.147 source.pixiv.net
-
+210.129.120.52  www.pixiv.net
+210.129.120.52  accounts.pixiv.net
+210.129.120.52  touch.pixiv.net
+210.140.131.153 source.pixiv.net
 #api配置
-#可选 41,43,44
-210.129.120.41 app-api.pixiv.net
-#可选 41 43
-210.129.120.41 public-api.secure.pixiv.net
-210.129.120.43 oauth.secure.pixiv.net
-#可选41 43 44 46
-210.129.120.41 spapi.pixiv.net
-
-#广告 安装了AdBlock会自动拦截该域名下内容
-#修改成本地ip也可以去除广告,但是原来的广告位置会保留，界面变得难看。
-#210.140.131.160 d.pixiv.org
-#127.0.0.1  d.pixiv.org
-# i.pximg.net pixiv的图片cdn，没有被污染，不需要做任何操作。
+210.129.120.46  app-api.pixiv.net
+210.129.120.50  public-api.secure.pixiv.net
+210.129.120.50  oauth.secure.pixiv.net
