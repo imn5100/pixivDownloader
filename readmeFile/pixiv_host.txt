@@ -7,4 +7,4 @@
 210.129.120.46  app-api.pixiv.net
 210.129.120.50  public-api.secure.pixiv.net
 210.129.120.50  oauth.secure.pixiv.net
-#hosts可能因网址配置失效，失效后可以重新通过dns解析网址获取：https://www.robtex.com/dns-lookup/www.pixiv.net
+#hosts可能因域名修改配置而失效，失效后可以重新通过dns解析网址获取：https://www.robtex.com/dns-lookup/www.pixiv.net
