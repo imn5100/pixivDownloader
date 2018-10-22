@@ -11,18 +11,18 @@ from pixivapi.AuthPixivApi import AuthPixivApi
 from pixivapi.PixivApi import PixivApi
 from pixivapi.PixivUtils import parse_dict, PixivError
 from pixivision.PixivisionTopicDownloader import ImageDownload, IlluDownloadThread
-from pixivision.PixivisionHtmlParser import HtmlDownloader
+from pixivision.PixivisionHtmlParser import PixivisionHtmlParser
 from utils import CommonUtils, LoggerUtil
 
 
 def test_pixivision():
-    topic_list = HtmlDownloader.parse_illustration_topic(
-        HtmlDownloader.download("http://www.pixivision.net/en/c/illustration/?p=1"))
+    topic_list = PixivisionHtmlParser.parse_illustration_topic(
+        PixivisionHtmlParser.download("http://www.pixivision.net/en/c/illustration/?p=1"))
     for topic in topic_list:
         print(topic)
     # 创建特辑文件夹，写入特辑信息。
     href = topic_list[0].href
-    illu_list = HtmlDownloader.parse_illustration(HtmlDownloader.download(href))
+    illu_list = PixivisionHtmlParser.parse_illustration(PixivisionHtmlParser.download(href))
     for illu in illu_list:
         print(illu)
 
@@ -48,7 +48,7 @@ def test_image_download():
 
 def test_html_parse_byfile():
     html = open("test.html").read()
-    print(HtmlDownloader.parse_illustration(html))
+    print(PixivisionHtmlParser.parse_illustration(html))
 
 
 def test_pixiv_html_parse_byfile():

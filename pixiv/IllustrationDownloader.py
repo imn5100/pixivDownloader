@@ -178,7 +178,7 @@ class IllustrationDownloader(object):
                         path = self.api.download(url, prefix=path)
                 return path
             except Exception as e:
-                error_log("Download fail:" + detail)
+                error_log("Download fail:" + str(detail))
                 error_log(e)
         else:
             print(" can't get detail id :" + str(illust_id))

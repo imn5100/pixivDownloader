@@ -49,11 +49,11 @@ class PixivHtmlParser(object):
         section = main.find("div", attrs={"class": "_premium-lead-popular-d-body"})
         datas = []
         if not section:
-            print("search popular result is empty")
+            # print("search popular result is empty")
             return datas
         lis = section.findAll("li", attrs={"class": re.compile("image-item\s*")})
         if not lis:
-            print("search popular result is empty")
+            # print("search popular result is empty")
             return datas
         for li in lis:
             try:

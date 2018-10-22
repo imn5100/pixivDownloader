@@ -4,17 +4,20 @@ import re
 import requests
 from BeautifulSoup import BeautifulSoup
 
-from pixiv_config import *
+from pixiv_config import RETRY_TIME, PIXIVISION_USE_PROXY, CRAWLER_HEADER, TIMEOUT, PROXIES, BASE_URL
 from pixivapi.PixivUtils import parse_dict
 
 
-class HtmlDownloader(object):
+class PixivisionHtmlParser(object):
     @classmethod
     def download(cls, url, encoding='utf-8'):
         count = 0  # 失败重试次数
         while count <= RETRY_TIME:
             try:
-                r = requests.get(url=url, headers=CRAWLER_HEADER, timeout=TIMEOUT)
+                if PIXIVISION_USE_PROXY:
+                    r = requests.get(url=url, headers=CRAWLER_HEADER, timeout=TIMEOUT, proxies=PROXIES)
+                else:
+                    r = requests.get(url=url, headers=CRAWLER_HEADER, timeout=TIMEOUT)
                 r.encoding = encoding
                 if (not r.ok) or len(r.content) < 300:
                     count += 1

@@ -4,7 +4,7 @@ import threading
 
 from pixiv import PixivImageDownloader
 from pixiv_config import IMAGE_SAVE_BASEPATH
-from pixivision.PixivisionHtmlParser import HtmlDownloader
+from pixivision.PixivisionHtmlParser import PixivisionHtmlParser
 from utils import CommonUtils
 from utils.LoggerUtil import error_log
 
@@ -12,7 +12,7 @@ from utils.LoggerUtil import error_log
 class ImageDownload(object):
     @classmethod
     def get_pixivision_topics(cls, url, path):
-        topic_list = HtmlDownloader.parse_illustration_topic(HtmlDownloader.download(url))
+        topic_list = PixivisionHtmlParser.parse_illustration_topic(PixivisionHtmlParser.download(url))
         if not topic_list:
             error_log(url + " not find any illustration topic")
             return
@@ -33,9 +33,9 @@ class ImageDownload(object):
 
     @classmethod
     def download_topics(cls, url, path, create_path=False, downloader=None):
-        html = HtmlDownloader.download(url)
-        illu_list = HtmlDownloader.parse_illustration(html)
-        title_des = HtmlDownloader.get_title(html)
+        html = PixivisionHtmlParser.download(url)
+        illu_list = PixivisionHtmlParser.parse_illustration(html)
+        title_des = PixivisionHtmlParser.get_title(html)
         # # 是否由该线程自主创建文件夹
         if create_path and title_des and title_des.has_key('title'):
             path = path + "/" + title_des['title']

@@ -31,6 +31,10 @@ python launcher_check_completion.py
 Pixiv Api代码参考了[pixivpy](https://github.com/upbit/pixivpy "pixivpy")<br>
 运行需求：python2.7(3以上版本暂未测试) 必要扩展库：future,requests(用于网页爬取,api请求),BeautifulSoup(用于网页html数据解析)<br>
 非必要扩展库：<br>
+&nbsp;requests[socks] 提供socks5代理支持
+~~~
+pip install 'requests[socks]'
+~~~
 &nbsp;twisted 如果需要运行launcher_pixivision.py,使用twisted线程池管理下载可以获取更快下载速度。<br>
 &nbsp;Pillow  可检查Pixivision下载的插画文件是否完整。<br><br>
 
@@ -46,5 +50,6 @@ UPDATE:<br>
 2017.09.02  图形界面下载工具新增排行榜下载<br>
 2017.09.22  Pixiv因DNS污染，部分地区无法直接访问。需要修改DNS或hosts文件才能正常使用。hosts文件修改:复制[pixiv_host](readmeFile/pixiv_host.txt)内容到hosts中<br>
 2018.04.18  新增通过插画ID下载关联作品<br>
-2018.09.03  旧hosts文件已失效，修改pixiv_host。新增windows环境下项目启动流程[windows](readmeFile/windows.md)
+2018.09.03  旧hosts文件已失效，修改pixiv_host。新增windows环境下项目启动流程[windows](readmeFile/windows.md)<br>
+2018.10.22  pixiv已经完全被墙，提供代理配置支持(详见pixiv_config配置项：USE_PROXY和PROXIES)<br>
 

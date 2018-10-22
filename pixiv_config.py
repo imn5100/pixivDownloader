@@ -111,7 +111,25 @@ SEARCH_KEYWORD = config.get("SEARCH_KEYWORD", default_value="夕立")
 CHECK_IMAGE_VERIFY = config.getboolean("CHECK_IMAGE_VERIFY", default_value=True)
 #######################################
 # 代理设置 proxy
+# pip install 'requests[socks]'
 PROXY_HOST = '127.0.0.1'
-PROXY_PORT = 1080
-# 代理类型 HTTP = 3    SOCKS5 = 2    SOCKS4 = 1
-PROXY_TYPE = 2
+# shadowsocks:默认socks代理端口1080  shadowsocksX-NG默认socks代理端口1086
+PROXY_PORT = 1086
+# 服务代理地址，默认socks5代理，需要使用其他协议，自行修改
+PROXY_SERVER = 'socks5://' + PROXY_HOST + ':' + str(PROXY_PORT)
+
+# 是否使用代理，设置为True时，PROXIES必须设置正确
+USE_PROXY = config.getboolean("USE_PROXY", True)
+# 下载图片是否使用代理。(在中国大陆环境获取插画数据必须使用代理,但绝大部分插画图片地址不需要代理即能访问(2018/10/22)，设置为False有利于节约代理流量-如果代理开启了全局模式则此配置无效)
+DOWNLOAD_USE_PROXY = config.getboolean("DOWNLOAD_USE_PROXY", False)
+# pixivision是否使用代理，pixivision和pixiv是独立域名，没被墙时，不需要使用代理
+PIXIVISION_USE_PROXY = config.getboolean("DOWNLOAD_USE_PROXY", False)
+# 代理地址
+PROXIES = eval('{}')
+try:
+    PROXIES = eval(config.get("PROXIES",
+                              default_value='{"http": "' + PROXY_SERVER + '", "https": "' + PROXY_SERVER + '"}'))
+except Exception:
+    pass
+# 代理设置结束
+#######################################

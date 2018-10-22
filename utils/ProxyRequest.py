@@ -7,6 +7,8 @@ import socks
 from sockshandler import SocksiPyHandler
 import gzip
 
+import pixiv_config
+
 
 class ProxyRequests(object):
     @staticmethod
@@ -49,7 +51,13 @@ class ProxyRequests(object):
 
 
 if __name__ == '__main__':
-    ProxyRequests.install_proxy('127.0.0.1', 1080, socks.SOCKS5)
+    # ProxyRequests.install_proxy('127.0.0.1', 1080, socks.SOCKS5)
     # ProxyRequests.install_proxy('127.0.0.1', 8888, socks.HTTP)
-    response = ProxyRequests.request('https://google.com')
-    print (response.read())
+    # response = ProxyRequests.request('https://google.com')
+    # print (response.read())
+
+    import requests
+
+    proxies = {'http': 'socks5://127.0.0.1:1086', 'https': 'socks5://127.0.0.1:1086'}
+    resp = requests.get('https://www.pixiv.net', headers=pixiv_config.CRAWLER_HEADER, proxies=proxies, timeout=10)
+    print resp.text

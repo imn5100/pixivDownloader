@@ -27,12 +27,15 @@ def requests_call(method, url, **kwargs):
 
 # 需要经过登录后才能使用的api端
 class AuthPixivApi(object):
-    def __init__(self, username, password, access_token=None, refresh_token=None):
+    def __init__(self, username, password, access_token=None, refresh_token=None, use_proxy=pixiv_config.USE_PROXY):
         self.username = username
         self.password = password
         self.user_id = None
         self.refresh_token = refresh_token
         self.access_token = access_token
+        self.use_proxy = use_proxy
+        if use_proxy and len(pixiv_config.PROXIES) == 0:
+            raise PixivError('Proxy config Error')
         if CommonUtils.is_empty(access_token):
             self.login(username, password, refresh_token)
 
@@ -40,7 +43,7 @@ class AuthPixivApi(object):
         if self.access_token is None:
             raise PixivError('Authentication required! Call login() first!')
 
-    def auth_requests_call(self, method, url, headers=None, **kwargs):
+    def auth_requests_call(self, method, url, headers=None, use_proxy_method=True, **kwargs):
         if headers is None:
             headers = {}
         self.require_auth()
@@ -53,7 +56,14 @@ class AuthPixivApi(object):
         # en 或空或其他无法解析语言 英文
         headers['Accept-Language'] = 'zh'
         headers['Authorization'] = 'Bearer %s' % self.access_token
-        response = requests_call(method, url, headers=headers, **kwargs)
+        # 先判断全局是否使用代理，再判断方法是否使用代理
+        if self.use_proxy:
+            if use_proxy_method:
+                response = requests_call(method, url, proxies=pixiv_config.PROXIES, headers=headers, **kwargs)
+            else:
+                response = requests_call(method, url, headers=headers, **kwargs)
+        else:
+            response = requests_call(method, url, headers=headers, **kwargs)
         if response.status_code != 200:
             raise PixivError(response.content)
         response.encoding = 'utf-8'
@@ -84,7 +94,7 @@ class AuthPixivApi(object):
             data['refresh_token'] = refresh_token or self.refresh_token
         else:
             raise PixivError('[ERROR] auth() but no password or refresh_token is set.')
-        r = requests.post(url, headers=headers, data=data)
+        r = requests.post(url, headers=headers, data=data, proxies=pixiv_config.PROXIES)
         if r.status_code not in [200, 301, 302]:
             if data['grant_type'] == 'password':
                 raise PixivError(
@@ -112,7 +122,8 @@ class AuthPixivApi(object):
         if os.path.exists(path) and (not pixiv_config.OVERRIDE_IMAGE):
             print("continue!")
             return path
-        response = self.auth_requests_call("get", url, timeout=60, stream=True)
+        response = self.auth_requests_call("get", url, use_proxy_method=pixiv_config.DOWNLOAD_USE_PROXY, timeout=60,
+                                           stream=True)
         with open(path, 'wb') as out_file:
             shutil.copyfileobj(response.raw, out_file)
         del response

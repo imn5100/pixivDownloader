@@ -5,7 +5,7 @@ import requests
 
 from pixiv.PixivHtmlParser import PixivHtmlParser
 from pixiv_config import PIXIV_LOGIN_KEY, PIXIV_PAGE_HEADERS, PIXIV_LOGIN_URL, RETRY_TIME, TIMEOUT, PIXIV_SEARCH_URL, \
-    DOWNLOAD_THRESHOLD
+    DOWNLOAD_THRESHOLD, PROXIES, USE_PROXY
 from pixivapi.PixivUtils import parse_resp, PixivError
 from utils import CommonUtils
 
@@ -48,8 +48,13 @@ def search_nologin(word, page=1, search_type='illust', download_threshold=DOWNLO
 
 
 class PixivDataHandler(object):
-    def __init__(self, username=None, password=None, cookies=None):
+    def __init__(self, username=None, password=None, cookies=None, use_proxy=USE_PROXY):
         self.session = requests.session()
+        self.use_proxy = use_proxy
+        if use_proxy and len(PROXIES) == 0:
+            raise PixivError('Proxy config Error')
+        if use_proxy:
+            self.session.proxies = PROXIES
         if username and password:
             self.username = username
             self.password = password
