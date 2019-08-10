@@ -17,12 +17,23 @@ ACCESS_TOKEN = config.get("ACCESS_TOKEN", default_value="")
 REFRESH_TOKEN = config.get("REFRESH_TOKEN", default_value="")
 # *****************************  cookie 用于记录网页登录状态。使用搜索功能时：(账号+密码) 或 (Cookie) 必填一项
 # 如果不想反复登录，可以在第一次登陆后，从控制台获取输出的cookie信息。配置于此。（反复重复登陆 除了会收到Pixiv寄出的安全提示邮件外暂无其他影响）
-# 不使用cookies 请保持默认值为"{}"
+# 直接网页上获取到的原始cookie字符串，不配置PIXIV_COOKIES时，这里直接通过SimpleCookie转化为json 格式通常是 : cookie: p_ab_id=3; p_ab_id_2=1;
+RAW_PIXIV_COOKIES = config.get("RAW_PIXIV_COOKIES", '')
+# 不使用cookies 请保持默认值为"{}" 优先级比RAW_PIXIV_COOKIES高，使用RAW_PIXIV_COOKIES时需要使用默认值
 PIXIV_COOKIES = eval("{}")
 try:
     PIXIV_COOKIES = eval(config.get("PIXIV_COOKIES",
                                     default_value="{}"))
-except Exception:
+    if len(PIXIV_COOKIES) == 0:
+        from http.cookies import SimpleCookie
+
+        cookie = SimpleCookie()
+        cookie.load(str(RAW_PIXIV_COOKIES))
+        for key, morsel in cookie.items():
+            PIXIV_COOKIES[key] = morsel.value
+except Exception as e:
+    print ('parse cookie fail:')
+    print e
     pass
 
 # 获取代理网页超时时间5s

@@ -42,7 +42,7 @@ UPDATE:<br>
 2017.05.11  新增项目目录外的配置文件config.ini,避免更新代码后原配置被覆盖<br>
 2017.05.24  添加了一个简单的图形界面下载工具<br>
 2017.06.20  完善图像界面下载工具,支持通过关键字搜索下载插画<br>
-2017.07.06  由于Pixiv Api更新,原本拉取插画详情的接口需要登录才能使用,直接使用控制台命令下载时,Pixiv账号和密码设置变为必填项。<br>
+2017.07.06  由于Pixiv Api更新,原本拉取插画详情的接口需要登录才能使用,直接使用控制台命令下载时,Pixiv账号和密码设置变为必填项<br>
 2017.07.16  Pixivision专辑页支持多图下载，所有下载图片默认为原图画质<br>
 2017.07.27  Pixivision补全脚本,新增检查文件完整性：需要修改配置：CHECK_IMAGE_VERIFY=True 并安装 Pillow 生效<br>
 2017.08.03  图形界面下载工具需要登录或配置Token和Cookie才能启动下载界面<br>
@@ -52,4 +52,7 @@ UPDATE:<br>
 2018.04.18  新增通过插画ID下载关联作品<br>
 2018.09.03  旧hosts文件已失效，修改pixiv_host。新增windows环境下项目启动流程[windows](readmeFile/windows.md)<br>
 2018.10.22  pixiv已经完全被墙，提供代理配置支持(详见pixiv_config配置项：USE_PROXY和PROXIES)<br>
+2019.08.10  新增Pixiv Web Page Ranking 下载，支持下载Pixiv网页版排行榜<br>
+2019.08.11  目前发现模拟登录网页版需要进行机器人验证，暂未解决，目前解决方式为直接网页登录后，复制浏览器的cookie，配置在RAW_PIXIV_COOKIES配置项上，可以绕开登录验证<br>
+
 
