@@ -4,6 +4,7 @@ from Tkinter import *
 
 from gui.WorkQueue import PixivQueue
 from gui.frame.DownloadFrame import DownloadFrame
+from gui.frame.PixivWebPageRankingFrame import PixivWebPageRankingFrame
 from gui.frame.RankingFrame import RankingFrame
 from gui.frame.RelatedFrame import RelatedFrame
 from gui.frame.SearchFrame import SearchFrame
@@ -12,20 +13,21 @@ from pixivapi.PixivUtils import PixivError
 
 
 class PixivDownloadFrame(Frame):
-    def __init__(self, root, api, search_handler):
+    def __init__(self, root, api, pixiv_data_handler):
         Frame.__init__(self, root)
-        if not search_handler or not api:
+        if not pixiv_data_handler or not api:
             raise PixivError('You must set  authPixivApi and search_handler for the DownloadFrame')
         self.api = api
-        self.search_handler = search_handler
+        self.pixiv_data_handler = pixiv_data_handler
         self.downloader = IllustrationDownloader(api)
         self.queue = PixivQueue(self.downloader, callback=self.download_callback)
         self.task_text = ScrolledText(self, height=20, width=30, bg='light gray')
         self.print_text = ScrolledText(self, height=20, width=40, bg='light gray')
         self.root = root
         self.frames = [DownloadFrame(self, 'By Url or Id', self.queue, self.api, self.task_text),
-                       SearchFrame(self, 'By Search', self.queue, self.api, self.search_handler),
-                       RankingFrame(self, 'By Ranking', self.queue, self.api),
+                       SearchFrame(self, 'By Search', self.queue, self.api, self.pixiv_data_handler),
+                       PixivWebPageRankingFrame(self, 'By WebPageRanking', self.queue, self.pixiv_data_handler),
+                       RankingFrame(self, 'By Api Ranking', self.queue, self.api),
                        RelatedFrame(self, 'By Related', self.queue, self.api)
                        ]
         self.switch_menu = None

@@ -13,7 +13,7 @@ class LoginFrame(Frame):
     def __init__(self, root):
         Frame.__init__(self, root)
         self.api = None
-        self.search_handler = None
+        self.pixiv_data_handler = None
         self.root = root
         self.account = StringVar(value=USERNAME)
         self.password = StringVar(value=PASSWORD)
@@ -55,13 +55,13 @@ class LoginFrame(Frame):
                     showerror("error",
                               "[ERROR] auth() failed! Please check username and password")
                     return
-            if not self.search_handler:
-                self.search_handler = PixivDataDownloader.PixivDataHandler(username=username, password=password)
-                if not self.search_handler.check_login_success():
+            if not self.pixiv_data_handler:
+                self.pixiv_data_handler = PixivDataDownloader.PixivDataHandler(username=username, password=password)
+                if not self.pixiv_data_handler.check_login_success():
                     showerror("error",
                               "[ERROR] auth() failed! Please check username and password")
                     return
-            frame = PixivDownloadFrame(self.root, self.api, self.search_handler)
+            frame = PixivDownloadFrame(self.root, self.api, self.pixiv_data_handler)
             sys.stdout = LogRedirection(frame.print_text)
             self.destroy()
         except Exception as e:
@@ -76,18 +76,18 @@ class LoginFrame(Frame):
             success = True
         if len(PIXIV_COOKIES) > 3:
             try:
-                self.search_handler = PixivDataDownloader.PixivDataHandler(cookies=PIXIV_COOKIES)
+                self.pixiv_data_handler = PixivDataDownloader.PixivDataHandler(cookies=PIXIV_COOKIES)
             except Exception as e:
                 print (e)
-            if self.search_handler and self.search_handler.check_login_success():
+            if self.pixiv_data_handler and self.pixiv_data_handler.check_login_success():
                 print ("Cookie is correct!")
                 if success:
-                    frame = PixivDownloadFrame(self.root, self.api, self.search_handler)
+                    frame = PixivDownloadFrame(self.root, self.api, self.pixiv_data_handler)
                     sys.stdout = LogRedirection(frame.print_text)
                     self.destroy()
                     return True
             else:
-                self.search_handler = None
+                self.pixiv_data_handler = None
                 print ("Cookie error or expired!")
 
         return False
