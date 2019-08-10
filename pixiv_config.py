@@ -93,6 +93,7 @@ PIXIV_PAGE_HEADERS = {
 }
 # 关键字搜索页面search  page type in(illust,ugoira,manga) &scd=2016-11-26&order=date
 PIXIV_SEARCH_URL = "https://www.pixiv.net/search.php?word=%s&type=%s&p=%d"
+PIXIV_RANKING_URL = "https://www.pixiv.net/ranking.php?mode=%s&type=%s&date=%s"
 PIXIV_LOGIN_KEY = "https://accounts.pixiv.net/login"
 PIXIV_LOGIN_URL = "https://accounts.pixiv.net/api/login"
 #######################################
@@ -114,9 +115,9 @@ CHECK_IMAGE_VERIFY = config.getboolean("CHECK_IMAGE_VERIFY", default_value=True)
 # pip install 'requests[socks]'
 PROXY_HOST = '127.0.0.1'
 # shadowsocks:默认socks代理端口1080  shadowsocksX-NG默认socks代理端口1086
-PROXY_PORT = 1086
+PROXY_PORT = 1087
 # 服务代理地址，默认socks5代理，需要使用其他协议，自行修改
-PROXY_SERVER = 'socks5://' + PROXY_HOST + ':' + str(PROXY_PORT)
+PROXY_SERVER = 'http://' + PROXY_HOST + ':' + str(PROXY_PORT)
 
 # 是否使用代理，设置为True时，PROXIES必须设置正确
 USE_PROXY = config.getboolean("USE_PROXY", True)

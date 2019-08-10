@@ -5,7 +5,7 @@ import requests
 
 from pixiv.PixivHtmlParser import PixivHtmlParser
 from pixiv_config import PIXIV_LOGIN_KEY, PIXIV_PAGE_HEADERS, PIXIV_LOGIN_URL, RETRY_TIME, TIMEOUT, PIXIV_SEARCH_URL, \
-    DOWNLOAD_THRESHOLD, PROXIES, USE_PROXY
+    DOWNLOAD_THRESHOLD, PROXIES, USE_PROXY, PIXIV_RANKING_URL
 from pixivapi.PixivUtils import parse_resp, PixivError
 from utils import CommonUtils
 
@@ -83,7 +83,7 @@ class PixivDataHandler(object):
                 print("Login Success getCookies:" + str(requests.utils.dict_from_cookiejar(self.session.cookies)))
                 return self.session
             else:
-                raise PixivError('username or password wrong!.')
+                raise PixivError('username or password wrong!.' + response.text if response else '')
         else:
             print('get post_key error')
 
@@ -140,3 +140,28 @@ class PixivDataHandler(object):
                 if not result.has_key('id'):
                     result['id'] = CommonUtils.get_url_param(result['url'], "illust_id")
         return pop_result
+
+    # https://www.pixiv.net/ranking.php?mode=male_r18&date=20190807&type=illust
+    # 'daily','weekly','monthly','rookie','original','male','female'
+    # 'male_r18', 'female_r18','weekly_r18','daily_r18'
+    def ranking(self, mode, date_str, type='illust', download_threshold=DOWNLOAD_THRESHOLD):
+        if mode:
+            url = (PIXIV_RANKING_URL % (mode, type, date_str))
+        else:
+            raise PixivError('ranking mode can not be null')
+        print(url)
+        html = self.request_page(url)
+        if not html:
+            print("Get Page is None!URL:" + url)
+            return []
+        search_result = PixivHtmlParser.parse_ranking_result(html)
+        # 过滤数据不完整和收藏数不超过阈值的插画信息
+        if len(search_result) > 0:
+            search_result = filter(
+                lambda data: (data.has_key("url") and data.has_key("title") and data.has_key("mark_count") and int(
+                    data.mark_count) >= download_threshold),
+                search_result)
+            for result in search_result:
+                if not result.has_key('id'):
+                    result['id'] = CommonUtils.get_url_param(result['url'], "illust_id")
+        return search_result

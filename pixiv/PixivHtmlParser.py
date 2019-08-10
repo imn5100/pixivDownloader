@@ -16,7 +16,7 @@ class PixivHtmlParser(object):
         main = BeautifulSoup(html)
         result_list = main.find("input", attrs={"id": "js-mount-point-search-result-list"})
         datas = []
-        if input:
+        if result_list:
             try:
                 json_str = str(result_list['data-items']).replace('&quot;', '"').replace("&quotquot;", '"')
                 if not json_str or len(json_str) <= 0:
@@ -39,6 +39,34 @@ class PixivHtmlParser(object):
                         datas.append(parse_dict(data))
             except Exception:
                 print("search normal result is empty")
+        return datas
+
+    @classmethod
+    def parse_ranking_result(cls, html):
+        if not html:
+            return None
+        main = BeautifulSoup(html)
+        result_list = main.findAll("section", attrs={"class": "ranking-item"})
+        datas = []
+        if result_list:
+            for section in result_list:
+                work_a = section.find("a", attrs={"class": re.compile("work  _work\w*")})
+                user_a = section.find("a", attrs={"class": "user-container ui-profile-popup"})
+                try:
+                    user = {
+                        "name": section['data-user-name'],
+                        'id': user_a['data-user_id']
+                    }
+                    data = {
+                        'url': work_a['href'],
+                        "title": section['data-title'],
+                        "id": section['data-id'],
+                        "mark_count": section['data-rating-count'],
+                        'user': user
+                    }
+                    datas.append(parse_dict(data))
+                except Exception:
+                    print("parse ranking result section parese fail")
         return datas
 
     @classmethod
